@@ -73,7 +73,8 @@ project(":kornyakov-kirill-lab3/Infrastructure").name = "kornyakov-kirill-Infras
 // Syainova Diana
 
 // Tsarev Mikhail
-
+include "tsarev-mikhail"
+project(":tsarev-mikhail").name = "tsarev-mikhail"
 // Vilchinskii Aleksandr
 
 // Zolotov Andrey
