@@ -72,4 +72,8 @@ public class Fraction {
     public int hashCode() {
         return 0;
     }
+
+    public Fraction multiplyBy(final Fraction other) {
+        return new Fraction(numerator * other.numerator, denominator * other.denominator);
+    }
 }

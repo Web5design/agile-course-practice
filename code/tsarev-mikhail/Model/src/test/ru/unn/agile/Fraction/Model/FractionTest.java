@@ -58,4 +58,11 @@ public class FractionTest {
         Fraction fraction2 = new Fraction(1, 3);
         assertTrue(fraction2.lessThan(fraction1));
     }
+
+    @Test
+    public void multiplyBy() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(2, 3);
+        assertEquals(new Fraction(2, 6), fraction1.multiplyBy(fraction2));
+    }
 }
