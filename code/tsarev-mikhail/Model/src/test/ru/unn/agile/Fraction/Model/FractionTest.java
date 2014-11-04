@@ -27,4 +27,12 @@ public class FractionTest {
         Fraction fraction2 = new Fraction(1, 1);
         assertNotEquals(fraction1, fraction2);
     }
+
+    @Test
+    public void addFractions() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(1, 3);
+        assertEquals(new Fraction(5, 6),
+                    fraction1.add(fraction2));
+    }
 }
