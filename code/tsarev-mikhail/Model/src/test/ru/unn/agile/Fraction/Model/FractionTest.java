@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FractionTest {
 
@@ -42,5 +43,12 @@ public class FractionTest {
         Fraction fraction2 = new Fraction(1, 3);
         assertEquals(new Fraction(1, 2),
                 fraction1.subtract(fraction2));
+    }
+
+    @Test
+    public void fractionGreaterThan() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(1, 3);
+        assertTrue(fraction1.greaterThan(fraction2));
     }
 }

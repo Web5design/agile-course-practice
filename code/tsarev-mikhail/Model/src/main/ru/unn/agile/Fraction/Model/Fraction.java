@@ -59,6 +59,10 @@ public class Fraction {
         return numerator == other.numerator && denominator == other.denominator;
     }
 
+    public boolean greaterThan(final Fraction other) {
+        return subtract(other).numerator > 0;
+    }
+
     public int hashCode() {
         return 0;
     }
