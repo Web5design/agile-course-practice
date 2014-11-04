@@ -8,7 +8,7 @@ public class FractionTest {
 
     @Test
     public void canCreateFraction() {
-        Fraction fraction = new Fraction();
+        Fraction fraction = new Fraction(1, 2);
         assertNotNull(fraction);
     }
 }
