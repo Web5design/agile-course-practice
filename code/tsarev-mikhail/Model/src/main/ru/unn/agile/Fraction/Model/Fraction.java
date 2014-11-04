@@ -18,7 +18,11 @@ public class Fraction {
     }
 
     public boolean equals(final Object object) {
-        return true;
+        if (this.getClass() != object.getClass()) {
+            return false;
+        }
+        Fraction other = (Fraction) object;
+        return numerator == other.numerator && denominator == other.denominator;
     }
 
     public int hashCode() {
