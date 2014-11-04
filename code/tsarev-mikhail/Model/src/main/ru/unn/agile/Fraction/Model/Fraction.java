@@ -15,12 +15,14 @@ public class Fraction {
     }
 
     private static int gcd(final int a, final int b) {
-        if (a > b) {
-            return gcd(a - b, b);
-        } else if (b > a) {
-            return gcd(a, b - a);
+        int x1 = Math.abs(a);
+        int x2 = Math.abs(b);
+        if (x1 > x2) {
+            return gcd(x1 - x2, x2);
+        } else if (x2 > x1) {
+            return gcd(x1, x2 - x1);
         } else {
-            return a;
+            return x1;
         }
     }
 
@@ -61,6 +63,10 @@ public class Fraction {
 
     public boolean greaterThan(final Fraction other) {
         return subtract(other).numerator > 0;
+    }
+
+    public boolean lessThan(final Fraction other) {
+        return subtract(other).numerator < 0;
     }
 
     public int hashCode() {

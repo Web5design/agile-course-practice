@@ -51,4 +51,11 @@ public class FractionTest {
         Fraction fraction2 = new Fraction(1, 3);
         assertTrue(fraction1.greaterThan(fraction2));
     }
+
+    @Test
+    public void fractionLessThan() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(1, 3);
+        assertTrue(fraction2.lessThan(fraction1));
+    }
 }
