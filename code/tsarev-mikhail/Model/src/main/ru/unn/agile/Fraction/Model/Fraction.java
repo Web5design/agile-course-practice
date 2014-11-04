@@ -5,16 +5,23 @@ public class Fraction {
     private final int denominator;
 
     public Fraction(final int numerator, final int denominator) {
-        this.numerator = numerator;
-        this.denominator = denominator;
+        if (numerator == 0) {
+            this.numerator = 0;
+            this.denominator = 1;
+        } else {
+            this.numerator = numerator / gcd(numerator, denominator);
+            this.denominator = denominator / gcd(numerator, denominator);
+        }
     }
 
-    public int getNumerator() {
-        return numerator;
-    }
-
-    public int getDenominator() {
-        return denominator;
+    private static int gcd(final int a, final int b) {
+        if (a > b) {
+            return gcd(a - b, b);
+        } else if (b > a) {
+            return gcd(a, b - a);
+        } else {
+            return a;
+        }
     }
 
     private static int lcm(final int a, final int b) {
@@ -35,6 +42,13 @@ public class Fraction {
         return new Fraction(numerator * (commonDenominator / denominator)
                             + other.numerator * (commonDenominator / other.denominator),
                             commonDenominator);
+    }
+
+    public Fraction subtract(final Fraction other) {
+        int commonDenominator = lcm(denominator, other.denominator);
+        return new Fraction(numerator * (commonDenominator / denominator)
+                - other.numerator * (commonDenominator / other.denominator),
+                commonDenominator);
     }
 
     public boolean equals(final Object object) {

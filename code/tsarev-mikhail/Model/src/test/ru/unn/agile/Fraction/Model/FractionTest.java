@@ -35,4 +35,12 @@ public class FractionTest {
         assertEquals(new Fraction(5, 6),
                     fraction1.add(fraction2));
     }
+
+    @Test
+    public void subtractFractions() {
+        Fraction fraction1 = new Fraction(5, 6);
+        Fraction fraction2 = new Fraction(1, 3);
+        assertEquals(new Fraction(1, 2),
+                fraction1.subtract(fraction2));
+    }
 }
