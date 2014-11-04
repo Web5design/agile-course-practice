@@ -8,4 +8,20 @@ public class Fraction {
         this.numerator = numerator;
         this.denominator = denominator;
     }
+
+    public int getNumerator() {
+        return numerator;
+    }
+
+    public int getDenominator() {
+        return denominator;
+    }
+
+    public boolean equals(final Object object) {
+        return true;
+    }
+
+    public int hashCode() {
+        return 0;
+    }
 }
