@@ -53,6 +53,14 @@ public class Fraction {
                 commonDenominator);
     }
 
+    public Fraction multiplyBy(final Fraction other) {
+        return new Fraction(numerator * other.numerator, denominator * other.denominator);
+    }
+
+    public Fraction divideBy(final Fraction other) {
+        return new Fraction(numerator * other.denominator, denominator * other.numerator);
+    }
+
     public boolean equals(final Object object) {
         if (this.getClass() != object.getClass()) {
             return false;
@@ -71,9 +79,5 @@ public class Fraction {
 
     public int hashCode() {
         return 0;
-    }
-
-    public Fraction multiplyBy(final Fraction other) {
-        return new Fraction(numerator * other.numerator, denominator * other.denominator);
     }
 }

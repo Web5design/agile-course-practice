@@ -65,4 +65,11 @@ public class FractionTest {
         Fraction fraction2 = new Fraction(2, 3);
         assertEquals(new Fraction(2, 6), fraction1.multiplyBy(fraction2));
     }
+
+    @Test
+    public void divideBy() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(2, 3);
+        assertEquals(new Fraction(3, 4), fraction1.divideBy(fraction2));
+    }
 }
