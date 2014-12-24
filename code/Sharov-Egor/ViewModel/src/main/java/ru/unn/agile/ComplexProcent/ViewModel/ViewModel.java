@@ -24,16 +24,25 @@ public class ViewModel {
 
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
 
-    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+    private final List<DataValueChangeListener> dateChangedListeners = new ArrayList<>();
+    private final List<ValueCachingChangeListener> valueChangedListeners = new ArrayList<>();
+
+    private ILogger logger;
+    private final StringProperty logs = new SimpleStringProperty();
+
+    public ViewModel(final ILogger logger) {
+        setLogger(logger);
+        Init();
+    }
 
     public ViewModel() {
-        Locale.setDefault(Locale.ENGLISH);
-        dtPkrStart.set(LocalDate.now());
-        bindDeterminateDisable();
-        createFieldsValueChangingListeners();
+        Init();
     }
 
     public void calculate() {
+        if (calculationDisabled.get()) {
+            return;
+        }
         GregorianCalendar startDate = convertToGregorian(dtPkrStart.get());
         GregorianCalendar endDate = convertToGregorian(dtPkrEnd.get());
         ComplexDeposit calcDeposit = new ComplexDeposit();
@@ -44,6 +53,66 @@ public class ViewModel {
                     .setFinishDate(endDate);
         result.set(String.format("%.2f", calcDeposit.getCapitalizedBase()));
         status.set(Status.SUCCESS.toString());
+
+        StringBuilder message = new StringBuilder(LogMessages.CALCULATE_WAS_PRESSED);
+        message.append("Arguments")
+                .append(": IntCount = ").append(txtIntCount.get())
+                .append("; Percents = ").append(txtPercent.get())
+                .append("; Base = ").append(txtBase.get())
+                .append("; Start = ").append(dtPkrStart.get())
+                .append("; End = ").append(dtPkrEnd.get());
+        logger.log(message.toString());
+        updateLogs();
+    }
+
+    public void onFocusChanged(final Boolean oldValue, final Boolean newValue) {
+        if (!oldValue && newValue) {
+            return;
+        }
+
+        for (ValueCachingChangeListener listener : valueChangedListeners) {
+            if (listener.isChanged()) {
+                StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
+                message.append("Input arguments are: [")
+                        .append(txtIntCount.get()).append("; ")
+                        .append(txtPercent.get()).append("; ")
+                        .append(txtBase.get()).append("; ")
+                        .append(dtPkrStart.get()).append(";")
+                        .append(dtPkrEnd.get()).append("]");
+                logger.log(message.toString());
+                updateLogs();
+                listener.cache();
+                break;
+            }
+        }
+
+        for (DataValueChangeListener listener : dateChangedListeners) {
+            if (listener.isChanged()) {
+                StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
+                message.append("Input arguments are: [")
+                        .append(txtIntCount.get()).append("; ")
+                        .append(txtPercent.get()).append("; ")
+                        .append(txtBase.get()).append("; ")
+                        .append(dtPkrStart.get()).append(";")
+                        .append(dtPkrEnd.get()).append("]");
+                logger.log(message.toString());
+                updateLogs();
+                listener.cache();
+                break;
+            }
+        }
+    }
+
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    public final String getLogs() {
+        return logs.get();
+    }
+
+    public List<String> getLog() {
+        return logger.getLog();
     }
 
     public final boolean getCalculationDisabled() {
@@ -58,15 +127,15 @@ public class ViewModel {
         return dtPkrEnd;
     }
 
-    public StringProperty getTxtBaseProperty() {
+    public StringProperty txtBaseProperty() {
         return txtBase;
     }
 
-    public StringProperty getTxtInterestCountProperty() {
+    public StringProperty txtInterestCountProperty() {
         return txtIntCount;
     }
 
-    public StringProperty getTxtPercentProperty() {
+    public StringProperty txtPercentProperty() {
         return txtPercent;
     }
 
@@ -90,10 +159,28 @@ public class ViewModel {
         return status.get();
     }
 
+    private void updateLogs() {
+        List<String> fullLog = logger.getLog();
+        String record = new String();
+        for (String log : fullLog) {
+            record += log + "\n";
+        }
+        logs.set(record);
+    }
+
+
     private GregorianCalendar convertToGregorian(final LocalDate dtPkr) {
+        if(dtPkr==null) return null;
         GregorianCalendar startDate = new GregorianCalendar();
         startDate.set(dtPkr.getYear(), dtPkr.getMonthValue(), dtPkr.getDayOfMonth());
         return startDate;
+    }
+
+    private void Init() {
+        Locale.setDefault(Locale.ENGLISH);
+        dtPkrStart.set(LocalDate.now());
+        bindDeterminateDisable();
+        createFieldsValueChangingListeners();
     }
 
     private boolean hasNegativeFields() {
@@ -113,7 +200,6 @@ public class ViewModel {
 
     private boolean isIncorrectDate() {
         if (!(dtPkrEnd.getValue() == null || dtPkrEnd.getValue() == null)) {
-            Integer.parseInt(txtIntCount.get());
             return dtPkrEnd.get().compareTo(dtPkrStart.get()) < 0;
         }
         return false;
@@ -150,14 +236,6 @@ public class ViewModel {
         return inputStatus;
     }
 
-    private class ValueChangeListener implements ChangeListener<String> {
-        @Override
-        public void changed(final ObservableValue<? extends String> observable,
-                            final String oldValue, final String newValue) {
-            status.set(getInputStatus().toString());
-        }
-    }
-
     private void createFieldsValueChangingListeners() {
         final List<StringProperty> fields = new ArrayList<StringProperty>() {
             {
@@ -167,14 +245,23 @@ public class ViewModel {
             }
         };
         for (StringProperty field : fields) {
-            final ValueChangeListener listener = new ValueChangeListener();
+            final ValueCachingChangeListener listener = new ValueCachingChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
         final DataValueChangeListener endDataListener = new DataValueChangeListener();
         dtPkrEnd.addListener(endDataListener);
+        dateChangedListeners.add(endDataListener);
         final DataValueChangeListener startDataListener = new DataValueChangeListener();
         dtPkrEnd.addListener(startDataListener);
+        dateChangedListeners.add(startDataListener);
+    }
+
+    public void setLogger(final ILogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger parameter can't be null");
+        }
+        this.logger = logger;
     }
 
     private void bindDeterminateDisable() {
@@ -191,13 +278,64 @@ public class ViewModel {
         calculationDisabled.bind(couldCalculate.not());
     }
 
+    private class ValueCachingChangeListener implements ChangeListener<String> {
+        private String prevValue = new String();
+        private String curValue = new String();
+
+        @Override
+        public void changed(final ObservableValue<? extends String> observable,
+                            final String oldValue, final String newValue) {
+            if (oldValue.equals(newValue)) {
+                return;
+            }
+            status.set(getInputStatus().toString());
+            curValue = newValue;
+        }
+
+        public boolean isChanged() {
+
+            return !prevValue.equals(curValue);
+        }
+
+        public void cache() {
+            prevValue = curValue;
+        }
+    }
+
+    //isEqual doesn't work when LocalDate is null -> throws an exception
+    private boolean isEqualWithNullDate(final LocalDate oldValue,final LocalDate newValue) {
+        if (oldValue==null) return false;
+        return oldValue.isEqual(newValue);
+    }
+
     private class DataValueChangeListener implements ChangeListener<LocalDate> {
+        private LocalDate prevValue;
+        private LocalDate curValue;
         @Override
         public void changed(final ObservableValue<? extends LocalDate> observable,
                             final LocalDate oldValue, final LocalDate newValue) {
+            if (isEqualWithNullDate(oldValue,newValue)) {
+                return;
+            }
             status.set(getInputStatus().toString());
+            curValue = newValue;
+        }
+        public boolean isChanged() {
+            if(prevValue == null && curValue == null ) return false;
+            return !isEqualWithNullDate(prevValue,curValue);
+        }
+
+        public void cache() {
+            prevValue = curValue;
         }
     }
+}
+
+final class LogMessages {
+    public static final String CALCULATE_WAS_PRESSED = "Calculate. ";
+    public static final String EDITING_FINISHED = "Updated input. ";
+
+    private LogMessages() { }
 }
 
 enum Status {
@@ -217,3 +355,4 @@ enum Status {
         return name;
     }
 }
+

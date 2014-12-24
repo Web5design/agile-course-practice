@@ -1,69 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import ru.unn.agile.ComplexProcent.ViewModel.*?>
-
-<AnchorPane prefHeight="411.0" prefWidth="588.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.ComplexProcent.View.ComplexPercent">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.unn.agile.ComplexProcent.View.ComplexPercent">
    <fx:define>
       <ViewModel fx:id="viewModel" />
    </fx:define>
    <children>
-      <Button fx:id="btnCount" layoutX="83.0" layoutY="310.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="133.0" text="Рассчитать" disable="${viewModel.calculationDisabled}"/>
-      <Label fx:id="lbResult" layoutX="391.0" layoutY="307.0" text="${viewModel.result}">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <HBox layoutX="24.0" layoutY="25.0" prefHeight="263.0" prefWidth="564.0">
+      <VBox alignment="TOP_CENTER" layoutX="6.0" spacing="10.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </padding>
          <children>
-            <VBox prefHeight="263.0" prefWidth="309.0">
+            <VBox spacing="10.0">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <Label minWidth="-Infinity" text="Plane:"/>
+                  <HBox alignment="TOP_LEFT" spacing="30">
                      <children>
-                        <TextField fx:id="txtBase" layoutX="14.0" layoutY="44.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="163.0" text="сумма вклада" textAlignment="CENTER" />
+                        <HBox spacing="10">
+                           <children>
+                              <Label minWidth="-Infinity" text="Base"/>
+                              <TextField fx:id="txtBase" maxWidth="50.0"/>
+                           </children>
+                        </HBox>
+                        <HBox spacing="10">
+                           <children>
+                              <Label minWidth="-Infinity" text="Percent"/>
+                              <TextField fx:id="txtPercent" maxWidth="50.0"/>
+                           </children>
+                        </HBox>
+                        <HBox spacing="10">
+                           <children>
+                              <Label minWidth="-Infinity" text="Interest Count"/>
+                              <TextField fx:id="txtInterestCount" maxWidth="50.0"/>
+                           </children>
+                        </HBox>
                      </children>
-                  </Pane>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="185.0" text="Начало вклада" textAlignment="CENTER">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <DatePicker fx:id="dtPkrStart">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin>
-                  </DatePicker>
+                  </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="263.0" prefWidth="291.0">
+            <VBox layoutX="6.0" spacing="10.0">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <HBox layoutX="6.0" spacing="50">
                      <children>
-                        <TextField fx:id="txtInterestCount" layoutX="16.0" layoutY="44.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="190.0" text="количество начислений в год" textAlignment="CENTER" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="91.0" prefHeight="25.0" prefWidth="190.0" text="процентная ставка" textAlignment="CENTER" />
-                        <TextField fx:id="txtPercent" layoutX="16.0" layoutY="127.0" />
+                        <VBox spacing="10.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Label minWidth="-Infinity" text="Start"/>
+                                    <Separator prefWidth="10.0" visible="false"/>
+                                    <DatePicker fx:id="dtPkrStart">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </DatePicker>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label minWidth="-Infinity" text="End"/>
+                                    <Separator prefWidth="10.0" visible="false"/>
+                                    <DatePicker fx:id="dtPkrEnd">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </VBox.margin>
+                                    </DatePicker>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Separator prefWidth="30.0" visible="false"/>
                      </children>
-                  </Pane>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="185.0" text="Конец вклада" textAlignment="CENTER">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <DatePicker fx:id="dtPkrEnd">
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin>
-                  </DatePicker>
+                  </HBox>
                </children>
             </VBox>
+            <Button fx:id="btnCount" defaultButton="true" disable="${viewModel.calculationDisabled}" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                    text="Расчитать" HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10">
+               <children>
+                  <Label minWidth="-Infinity" text="Result:"/>
+                  <Label fx:id="lbResult" text="${viewModel.result}" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+               </children>
+            </HBox>
+            <HBox spacing="10">
+               <children>
+                  <Label minWidth="-Infinity" text="Status:"/>
+                  <Label fx:id="lblStatus" text="${viewModel.status}" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+               </children>
+            </HBox>
          </children>
-      </HBox>
-      <Label fx:id="lblStatus" layoutX="183.0" layoutY="369.0" text="${viewModel.status}" />
+         <TextArea fx:id="areaLog" text="${viewModel.logs}" editable="false" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      </VBox>
    </children>
 </AnchorPane>
