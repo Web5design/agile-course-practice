@@ -1,9 +1,6 @@
-apply from:   rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
-
 dependencies {
     compile project(':Sharov-Egor-ViewModel')
-    compile project(':Sharov-Egor-Infrastructure')
-
+    testCompile project(':Sharov-Egor-ViewModel').sourceSets.test.output
 }
 
 sourceSets {
