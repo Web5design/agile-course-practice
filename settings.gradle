@@ -295,6 +295,8 @@ include "code/vilchinskii-aleksandr/ViewModel"
 project(":code/vilchinskii-aleksandr/ViewModel").name = "vilchinskii-aleksandr-ViewModel"
 include "code/vilchinskii-aleksandr/View"
 project(":code/vilchinskii-aleksandr/View").name = "vilchinskii-aleksandr-View"
+include "code/vilchinskii-aleksandr/Infrastructure"
+project(":code/vilchinskii-aleksandr/Infrastructure").name = "vilchinskii-aleksandr-Infrastructure"
 
 // Zolotov Andrey
 include "code/Zolotov-Andrey/Model"
