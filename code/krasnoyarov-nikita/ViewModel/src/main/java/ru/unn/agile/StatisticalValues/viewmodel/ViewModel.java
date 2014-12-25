@@ -9,10 +9,16 @@ import javafx.collections.ObservableList;
 import ru.unn.agile.StatisticalValues.model.StatisticalValues;
 import ru.unn.agile.StatisticalValues.model.Operation;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ViewModel {
+
+    private SimpleLogger logger;
+
+    private final StringProperty logs = new SimpleStringProperty();
 
     private final ObjectProperty<ObservableList<ProbabilityValuePair>> probabilityValueList =
             new SimpleObjectProperty<>(FXCollections.observableArrayList());
@@ -28,6 +34,13 @@ public class ViewModel {
     private final StringProperty result = new SimpleStringProperty();
     private final StringProperty operationStatus = new SimpleStringProperty();
 
+    public StringProperty getLogsProperty() {
+        return logs;
+    }
+
+    public String getLogs() {
+        return logs.get();
+    }
 
     public ObjectProperty<ObservableList<Operation>> getOperationsProperty() {
         return operations;
@@ -39,6 +52,10 @@ public class ViewModel {
 
     public ObjectProperty<Operation> operationProperty() {
         return operation;
+    }
+
+    public Operation getCurrentOperation() {
+        return operationProperty().get();
     }
 
     public BooleanProperty calculationDisabledProperty() {
@@ -77,6 +94,17 @@ public class ViewModel {
         return probabilityValueList;
     }
 
+    public List<String> getLog() {
+        if (logger == null) {
+            return new ArrayList<>();
+        }
+        return logger.getLog();
+    }
+
+    public void setLogger(final SimpleLogger logger) {
+        this.logger = logger;
+    }
+
     public StringProperty vectDimensionProperty() {
         return vectDimension;
     }
@@ -84,11 +112,16 @@ public class ViewModel {
         return vectDimension.get();
     }
 
-    private Boolean isVectorsDimensionEmpty() {
-        return getVectDimension().equals("");
+    public ViewModel() {
+        init();
     }
 
-    public ViewModel() {
+    public ViewModel(final SimpleLogger logger) {
+        init();
+        setLogger(logger);
+    }
+
+    private void init() {
         operation.set(Operation.EXPECTED_VALUE);
         result.set("");
         operationStatus.set(Status.READY.toString());
@@ -97,13 +130,23 @@ public class ViewModel {
             @Override
             public void changed(final ObservableValue<? extends String> observable,
                                 final String oldValue, final String newValue) {
+                addLogMessage("Dimension changed to: " + newValue);
                 changeStatus();
+            }
+        });
+
+        operation.addListener(new ChangeListener<Operation>() {
+            @Override
+            public void changed(final ObservableValue<? extends Operation> observable,
+                                final Operation oldValue, final Operation newValue) {
+                addLogMessage("Operation changed to: " + newValue);
             }
         });
 
         getProbabilityValuePair().addListener(new ListChangeListener<ProbabilityValuePair>() {
             @Override
             public void onChanged(final Change<? extends ProbabilityValuePair> c) {
+                addLogMessage("Probability and values changed to: " + probabilityValuesToString());
                 changeStatus();
             }
         });
@@ -119,9 +162,9 @@ public class ViewModel {
         List<Double> values = new ArrayList<Double>();
         List<Double> probabilities = new ArrayList<Double>();
 
-        for (ProbabilityValuePair vectorsValue : probabilityValueList.get()) {
-            probabilities.add(Double.parseDouble(vectorsValue.getProbability()));
-            values.add(Double.parseDouble(vectorsValue.getValue()));
+        for (ProbabilityValuePair pairsValue : probabilityValueList.get()) {
+            probabilities.add(Double.parseDouble(pairsValue.getProbability()));
+            values.add(Double.parseDouble(pairsValue.getValue()));
         }
 
         StatisticalValues calculator = new StatisticalValues(values, probabilities);
@@ -133,6 +176,66 @@ public class ViewModel {
             return;
         }
         operationStatus.set(Status.SUCCESS.toString());
+
+        addLogMessage("Calculated operation: " + getCurrentOperation() + " for:"
+                + probabilityValuesToString() + "\nCalculated result: " + getResult());
+    }
+
+    public String getLoggedMessage(final Integer index) {
+        if (logger == null) {
+            return "";
+        }
+        return logger.getLoggedMessage(index);
+    }
+
+    public String getLoggedMessageText(final Integer index) {
+        if (logger == null) {
+            return "";
+        }
+        return logger.getLoggedMessageText(index);
+    }
+
+    public Date getLoggedMessageDate(final Integer index) throws ParseException {
+        if (logger == null) {
+            return new Date();
+        }
+        return logger.getLoggedMessageDate(index);
+    }
+
+
+    private void addLogMessage(final String logMessage) {
+        if (logger == null) {
+            return;
+        }
+        logger.log(logMessage);
+        updateLogs();
+    }
+
+    private Boolean isVectorsDimensionEmpty() {
+        return getVectDimension().equals("");
+    }
+
+    private String probabilityValuesToString() {
+        List<ProbabilityValuePair> probabilityValuePair = getProbabilityValuePair();
+        String probabilities = "";
+        String values = "";
+        for (ProbabilityValuePair pairsValue : probabilityValuePair) {
+            probabilities += pairsValue.getProbability() + ", ";
+            values +=  pairsValue.getValue() + ", ";
+        }
+        probabilities = probabilities.substring(0, probabilities.length() - 2);
+        values = values.substring(0, values.length() - 2);
+        return "\n" + "Probabilities\n" + "[" + probabilities + "]"
+                + "\n" + "Values\n" + "[" + values + "]";
+    }
+
+    private void updateLogs() {
+        List<String> fullLog = logger.getLog();
+        String newLog = "";
+        for (String logMessage : fullLog) {
+            newLog += logMessage + "\n";
+        }
+        logs.set(newLog);
     }
 
     private StringProperty changeStatus() {
@@ -149,9 +252,9 @@ public class ViewModel {
                 resizeVectors(size);
             }
             if (!isProbabilityValuePairEmpty()) {
-                for (ProbabilityValuePair vectorsValue : probabilityValueList.get()) {
-                    Double.parseDouble(vectorsValue.getProbability());
-                    Double.parseDouble(vectorsValue.getValue());
+                for (ProbabilityValuePair pairsValue : probabilityValueList.get()) {
+                    Double.parseDouble(pairsValue.getProbability());
+                    Double.parseDouble(pairsValue.getValue());
                 }
             }
         } catch (NumberFormatException nfe) {
