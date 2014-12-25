@@ -290,8 +290,8 @@ public class ViewModel {
 
         @Override
         public void changed(final ObservableValue<? extends String> observable,
-                            final String lastValue, final String newValue) {
-            if (lastValue.equals(newValue)) {
+                            final String prevValue, final String newValue) {
+            if (prevValue.equals(newValue)) {
                 return;
             }
             status.set(getInputStatus().toString());
