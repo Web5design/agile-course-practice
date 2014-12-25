@@ -10,7 +10,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 import static ru.unn.agile.BitArray.viewModel.RegexMatcher.matchesPattern;
 
 public class TxtLoggerTests {
@@ -28,12 +27,8 @@ public class TxtLoggerTests {
     }
 
     @Test
-    public void canCreateFileForLog() {
-        try {
-            new BufferedReader(new FileReader(FILENAME));
-        } catch (FileNotFoundException e) {
-            fail("File " + FILENAME + " was not found!");
-        }
+    public void canCreateFileForLog() throws FileNotFoundException {
+        new BufferedReader(new FileReader(FILENAME));
     }
 
     @Test
@@ -57,15 +52,16 @@ public class TxtLoggerTests {
     }
 
     @Test
-    public void canWriteFewLogMessages() {
-        String[] textMessages = {"Text message 1", "Text message 2"};
-        txtLogger.log(textMessages[0]);
-        txtLogger.log(textMessages[1]);
+    public void canWriteFewLogMessage() {
+        String[] testMessages = {"Message One", "Message Two", "Message Three"};
+
+        txtLogger.log(testMessages[0]);
+        txtLogger.log(testMessages[1]);
+        txtLogger.log(testMessages[2]);
 
         List<String> lastMessages = txtLogger.getLog();
-
-        for (int i = 0; i < lastMessages.size(); i++) {
-            assertThat(lastMessages.get(i), matchesPattern(".*" + textMessages[i] + "$"));
-        }
+        assertThat(lastMessages.get(0), matchesPattern(".*" + testMessages[0] + "$"));
+        assertThat(lastMessages.get(1), matchesPattern(".*" + testMessages[1] + "$"));
+        assertThat(lastMessages.get(2), matchesPattern(".*" + testMessages[2] + "$"));
     }
 }
