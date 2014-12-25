@@ -284,16 +284,12 @@ public class ViewModel {
         private String currentValue = new String();
 
         public boolean wasChanged() {
-
             return !currentValue.equals(lastValue);
         }
 
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String prevValue, final String newValue) {
-            if (prevValue.equals(newValue)) {
-                return;
-            }
             status.set(getInputStatus().toString());
             currentValue = newValue;
         }
@@ -315,9 +311,6 @@ public class ViewModel {
         @Override
         public void changed(final ObservableValue<? extends LocalDate> observable,
                             final LocalDate lastValue, final LocalDate newValue) {
-            if (isEqualWithNullDate(lastValue , newValue)) {
-                return;
-            }
             status.set(getInputStatus().toString());
             currentValue = newValue;
         }
