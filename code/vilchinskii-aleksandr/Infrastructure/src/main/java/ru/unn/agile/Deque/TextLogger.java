@@ -26,10 +26,9 @@ public class TextLogger implements ILogger{
     }
 
     @Override
-    public void log(Level level, String s) {
-        s = level + s;
+    public void log(Level level, String msg) {
         try {
-            writer.write(now() + s);
+            writer.write(now() + level + msg);
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
