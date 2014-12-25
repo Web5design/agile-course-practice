@@ -69,4 +69,7 @@
                                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Calculate" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
+                <HBox GridPane.rowIndex="7" prefWidth="200" prefHeight="200">
+                    <TextArea fx:id="areaLog" text="${viewModel.logs}" editable="false" VBox.vgrow="ALWAYS" />
+                </HBox>
 </GridPane>

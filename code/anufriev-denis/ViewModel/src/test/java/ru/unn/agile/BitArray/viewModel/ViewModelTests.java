@@ -4,15 +4,22 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.unn.agile.BitArray.model.BitArray.Operation;
+import java.util.List;
 
 import static org.junit.Assert.*;
+import static ru.unn.agile.BitArray.viewModel.RegexMatcher.matchesPattern;
 
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        FakeLogger fakeLogger = new FakeLogger();
+        viewModel = new ViewModel(fakeLogger);
     }
 
     @After
@@ -21,7 +28,7 @@ public class ViewModelTests {
     }
 
     @Test
-    public void canSetDefaultValues() {
+    public void canSetDefaultValuesForInputFields() {
         assertEquals("", viewModel.bitArray1StrValue().get());
         assertEquals("", viewModel.bitArray2StrValue().get());
         assertEquals(Operation.AND, viewModel.firstBitOperation().get());
@@ -162,8 +169,190 @@ public class ViewModelTests {
         assertEquals("1000", viewModel.resultProperty().get());
     }
 
+    @Test
+    public void canCreateViewModelWithLogger() {
+        FakeLogger logger = new FakeLogger();
+        ViewModel viewModelLogged = new ViewModel(logger);
+
+        assertNotNull(viewModelLogged);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void viewModelConstructorThrowsExceptionWithNullLogger() {
+        new ViewModel(null);
+        fail("Exception wasn't thrown");
+    }
+
+    @Test
+    public void isLogEmptyInTheBeginning() {
+        List<String> log = viewModel.getLog();
+
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void isCalculatePuttingSomething() {
+        setInputDataForTwoArrays();
+        viewModel.calculate();
+
+        List<String> log = viewModel.getLog();
+        assertNotEquals(0, log.size());
+    }
+
+    @Test
+    public void isLogContainsProperMessageAfterCalculation() {
+        setInputDataForTwoArrays();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+
+        assertThat(message,
+                matchesPattern(".*" + ViewModel.LogMessages.CALCULATE_WAS_PRESSED + ".*"));
+    }
+
+    @Test
+    public void isLogContainsInputArguments() {
+        setInputDataForTwoArrays();
+
+        viewModel.calculate();
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*" + viewModel.bitArray1StrValue().get()
+                        + ".*" + viewModel.bitArray2StrValue().get()
+                        + ".*"
+        ));
+    }
+
+    @Test
+    public void isProperlyFormattingInfoAboutArguments() {
+        setInputDataForTwoArrays();
+
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+
+        assertThat(message, matchesPattern(".*Arguments"
+                        + ": BitArray1 = " + viewModel.bitArray1StrValue().get()
+                        + "; BitArray2 = " + viewModel.bitArray2StrValue().get()
+                        + "; BitArray3 = " + viewModel.bitArray3StrValue().get()
+                        + ".*"
+        ));
+    }
+
+    @Test
+    public void isAndOperationMentionedInTheLog() {
+        viewModel.onOperationChanged(Operation.OR, Operation.AND);
+
+        viewModel.calculate();
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*And.*"));
+    }
+
+    @Test
+    public void isOrOperationMentionedInTheLog() {
+        viewModel.onOperationChanged(Operation.AND, Operation.OR);
+
+        viewModel.calculate();
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*Or.*"));
+    }
+
+    @Test
+    public void isXorOperationMentionedInTheLog() {
+        viewModel.onOperationChanged(Operation.OR, Operation.XOR);
+
+        viewModel.calculate();
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*Xor.*"));
+    }
+
+    @Test
+    public void canPutSeveralLogMessages() {
+        setInputDataForTwoArrays();
+
+        viewModel.calculate();
+        viewModel.calculate();
+        viewModel.calculate();
+
+        assertEquals(3, viewModel.getLog().size());
+    }
+
+    @Test
+    public void canSeeOperationChangeInLog() {
+        viewModel.onOperationChanged(Operation.XOR, Operation.OR);
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message,
+                matchesPattern(".*" + ViewModel.LogMessages.OPERATION_WAS_CHANGED + "Or.*"));
+    }
+
+    @Test
+    public void isOperationNotLoggedWhenNotChanged() {
+        viewModel.onOperationChanged(Operation.OR, Operation.XOR);
+        viewModel.onOperationChanged(Operation.XOR, Operation.XOR);
+
+        assertEquals(1, viewModel.getLog().size());
+    }
+
+    @Test
+    public void isEditingFinishLogged() {
+        viewModel.bitArray1StrValue().set("1101");
+
+        viewModel.onFocusChanged(true, false);
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
+    }
+
+    @Test
+    public void isEditingFinishLoggedWhenPerformNot() {
+        viewModel.bitArray1StrValue().set("1101");
+
+        viewModel.performNot(0);
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
+    }
+
+    @Test
+    public void areArgumentsCorrectlyLoggedOnEditingFinish() {
+        setInputDataForTwoArrays();
+        viewModel.onFocusChanged(true, false);
+
+        String message = viewModel.getLog().get(0);
+        assertThat(message, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED
+                + "Input arguments are: \\["
+                + viewModel.bitArray1StrValue().get() + "; "
+                + viewModel.bitArray2StrValue().get() + "; "
+                + viewModel.bitArray3StrValue().get() + "\\]"));
+    }
+
+    @Test
+    public void isCalculateNotCalledWhenButtonIsDisabled() {
+        viewModel.calculate();
+
+        assertTrue(viewModel.getLog().isEmpty());
+    }
+
+    @Test
+    public void doNotLogSameParametersTwiceWithPartialInput() {
+        viewModel.bitArray1StrValue().set("1101");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        viewModel.bitArray1StrValue().set("1101");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        assertEquals(1, viewModel.getLog().size());
+    }
+
     private void setInputDataForTwoArrays() {
         viewModel.bitArray1StrValue().set("1101");
         viewModel.bitArray2StrValue().set("1011");
+    }
+
+    private void setInputDataForThreeArrays() {
+        viewModel.bitArray1StrValue().set("1101");
+        viewModel.bitArray2StrValue().set("1011");
+        viewModel.bitArray2StrValue().set("1001");
     }
 }
