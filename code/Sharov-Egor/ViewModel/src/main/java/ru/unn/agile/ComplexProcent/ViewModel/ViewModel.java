@@ -32,11 +32,11 @@ public class ViewModel {
 
     public ViewModel(final ILogger logger) {
         setLogger(logger);
-        Init();
+        start();
     }
 
     public ViewModel() {
-        Init();
+        start();
     }
 
     public void calculate() {
@@ -73,7 +73,7 @@ public class ViewModel {
         for (ValueChangeListener listener : valueChangedListeners) {
             if (listener.wasChanged()) {
                 StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
-                appendMessageEdit(message);
+                message.append(buildMessageEdit());
                 logger.log(message.toString());
                 updateLogs();
                 listener.sync();
@@ -84,7 +84,7 @@ public class ViewModel {
         for (DataValueChangeListener listener : dateChangedListeners) {
             if (listener.isChanged()) {
                 StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
-                appendMessageEdit(message);
+                message.append(buildMessageEdit());
                 logger.log(message.toString());
                 updateLogs();
                 listener.cache();
@@ -160,26 +160,28 @@ public class ViewModel {
 
 
     private GregorianCalendar convertToGregorian(final LocalDate dtPkr) {
-        if(dtPkr==null) return null;
+        if (dtPkr == null) {
+            return null;
+        }
         GregorianCalendar startDate = new GregorianCalendar();
         startDate.set(dtPkr.getYear(), dtPkr.getMonthValue(), dtPkr.getDayOfMonth());
         return startDate;
     }
 
-    private void Init() {
+    private String buildMessageEdit() {
+        return "Input arguments are: ["
+                + txtIntCount.get() + "; "
+                + txtPercent.get() + "; "
+                + txtBase.get() + "; "
+                + dtPkrStart.get() + ";"
+                + dtPkrEnd.get() + "]";
+    }
+
+    private void start() {
         Locale.setDefault(Locale.ENGLISH);
         dtPkrStart.set(LocalDate.now());
         bindDeterminateDisable();
         createFieldsValueChangingListeners();
-    }
-
-    private void appendMessageEdit( StringBuilder message) {
-        message.append("Input arguments are: [")
-                .append(txtIntCount.get()).append("; ")
-                .append(txtPercent.get()).append("; ")
-                .append(txtBase.get()).append("; ")
-                .append(dtPkrStart.get()).append(";")
-                .append(dtPkrEnd.get()).append("]");
     }
 
     private boolean hasNegativeFields() {
@@ -283,13 +285,13 @@ public class ViewModel {
 
         public boolean wasChanged() {
 
-            return !lastValue.equals(currentValue);
+            return !currentValue.equals(lastValue);
         }
 
         @Override
         public void changed(final ObservableValue<? extends String> observable,
-                            final String oldValue, final String newValue) {
-            if (oldValue.equals(newValue)) {
+                            final String lastValue, final String newValue) {
+            if (lastValue.equals(newValue)) {
                 return;
             }
             status.set(getInputStatus().toString());
@@ -302,9 +304,9 @@ public class ViewModel {
     }
 
     //isEqual doesn't work when LocalDate is null -> throws an exception
-    private boolean isEqualWithNullDate(final LocalDate oldValue,final LocalDate newValue) {
-        if (oldValue==null) return false;
-        return oldValue.isEqual(newValue);
+    private boolean isEqualWithNullDate(final LocalDate lastValue, final LocalDate newValue) {
+        if (lastValue == null) { return false; }
+        return lastValue.isEqual(newValue);
     }
 
     private class DataValueChangeListener implements ChangeListener<LocalDate> {
@@ -312,15 +314,17 @@ public class ViewModel {
         private LocalDate currentValue;
         @Override
         public void changed(final ObservableValue<? extends LocalDate> observable,
-                            final LocalDate oldValue, final LocalDate newValue) {
-            if (isEqualWithNullDate(oldValue,newValue)) {
+                            final LocalDate lastValue, final LocalDate newValue) {
+            if (isEqualWithNullDate(lastValue , newValue)) {
                 return;
             }
             status.set(getInputStatus().toString());
             currentValue = newValue;
         }
         public boolean isChanged() {
-            if(lastValue == null && currentValue == null ) return false;
+            if (lastValue == null && currentValue == null) {
+                return false;
+            }
             return !isEqualWithNullDate(lastValue, currentValue);
         }
 
