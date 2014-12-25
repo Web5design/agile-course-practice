@@ -199,7 +199,7 @@ public class ViewModelTests {
     }
 
     @Test
-    public void IsThrowExceptionCaused() {
+    public void isThrowExceptionCaused() {
         try {
             new ViewModel(null);
             fail("Exception wasn't thrown");
@@ -287,7 +287,7 @@ public class ViewModelTests {
     }
 
     @Test
-    public void CanRecogniseChanging() {
+    public void canRecogniseChanging() {
         viewModel.txtBaseProperty().set("100");
         viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
         viewModel.txtBaseProperty().set("3000");
@@ -297,7 +297,7 @@ public class ViewModelTests {
     }
 
     @Test
-    public void CanRecogniseDateChanging() {
+    public void canRecogniseDateChanging() {
         viewModel.dtPkrEndProperty().set(LocalDate.of(2014, 7, 10));
         viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
         viewModel.dtPkrEndProperty().set(LocalDate.of(2015, 7, 10));
