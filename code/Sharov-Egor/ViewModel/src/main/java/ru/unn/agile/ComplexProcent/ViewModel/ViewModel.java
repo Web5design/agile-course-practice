@@ -25,7 +25,7 @@ public class ViewModel {
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
 
     private final List<DataValueChangeListener> dateChangedListeners = new ArrayList<>();
-    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+    private final List<TxtFieldsChangeListener> valueChangedListeners = new ArrayList<>();
 
     private ILogger logger;
     private final StringProperty logs = new SimpleStringProperty();
@@ -70,7 +70,7 @@ public class ViewModel {
             return;
         }
 
-        for (ValueChangeListener listener : valueChangedListeners) {
+        for (TxtFieldsChangeListener listener : valueChangedListeners) {
             if (listener.wasChanged()) {
                 StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
                 message.append(buildMessageEdit());
@@ -246,7 +246,7 @@ public class ViewModel {
             }
         };
         for (StringProperty field : fields) {
-            final ValueChangeListener listener = new ValueChangeListener();
+            final TxtFieldsChangeListener listener = new TxtFieldsChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
@@ -279,7 +279,7 @@ public class ViewModel {
         calculationDisabled.bind(couldCalculate.not());
     }
 
-    private class ValueChangeListener implements ChangeListener<String> {
+    private class TxtFieldsChangeListener implements ChangeListener<String> {
         private String lastValue = new String();
         private String currentValue = new String();
 
