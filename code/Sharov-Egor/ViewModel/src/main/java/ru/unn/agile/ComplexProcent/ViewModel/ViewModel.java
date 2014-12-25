@@ -25,7 +25,7 @@ public class ViewModel {
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
 
     private final List<DataValueChangeListener> dateChangedListeners = new ArrayList<>();
-    private final List<ValueCachingChangeListener> valueChangedListeners = new ArrayList<>();
+    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
 
     private ILogger logger;
     private final StringProperty logs = new SimpleStringProperty();
@@ -70,18 +70,13 @@ public class ViewModel {
             return;
         }
 
-        for (ValueCachingChangeListener listener : valueChangedListeners) {
-            if (listener.isChanged()) {
+        for (ValueChangeListener listener : valueChangedListeners) {
+            if (listener.wasChanged()) {
                 StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
-                message.append("Input arguments are: [")
-                        .append(txtIntCount.get()).append("; ")
-                        .append(txtPercent.get()).append("; ")
-                        .append(txtBase.get()).append("; ")
-                        .append(dtPkrStart.get()).append(";")
-                        .append(dtPkrEnd.get()).append("]");
+                appendMessageEdit(message);
                 logger.log(message.toString());
                 updateLogs();
-                listener.cache();
+                listener.sync();
                 break;
             }
         }
@@ -89,12 +84,7 @@ public class ViewModel {
         for (DataValueChangeListener listener : dateChangedListeners) {
             if (listener.isChanged()) {
                 StringBuilder message = new StringBuilder(LogMessages.EDITING_FINISHED);
-                message.append("Input arguments are: [")
-                        .append(txtIntCount.get()).append("; ")
-                        .append(txtPercent.get()).append("; ")
-                        .append(txtBase.get()).append("; ")
-                        .append(dtPkrStart.get()).append(";")
-                        .append(dtPkrEnd.get()).append("]");
+                appendMessageEdit(message);
                 logger.log(message.toString());
                 updateLogs();
                 listener.cache();
@@ -183,6 +173,15 @@ public class ViewModel {
         createFieldsValueChangingListeners();
     }
 
+    private void appendMessageEdit( StringBuilder message) {
+        message.append("Input arguments are: [")
+                .append(txtIntCount.get()).append("; ")
+                .append(txtPercent.get()).append("; ")
+                .append(txtBase.get()).append("; ")
+                .append(dtPkrStart.get()).append(";")
+                .append(dtPkrEnd.get()).append("]");
+    }
+
     private boolean hasNegativeFields() {
         try {
              return Double.parseDouble(txtBase.get()) < 0
@@ -245,7 +244,7 @@ public class ViewModel {
             }
         };
         for (StringProperty field : fields) {
-            final ValueCachingChangeListener listener = new ValueCachingChangeListener();
+            final ValueChangeListener listener = new ValueChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
@@ -278,9 +277,14 @@ public class ViewModel {
         calculationDisabled.bind(couldCalculate.not());
     }
 
-    private class ValueCachingChangeListener implements ChangeListener<String> {
-        private String prevValue = new String();
-        private String curValue = new String();
+    private class ValueChangeListener implements ChangeListener<String> {
+        private String lastValue = new String();
+        private String currentValue = new String();
+
+        public boolean wasChanged() {
+
+            return !lastValue.equals(currentValue);
+        }
 
         @Override
         public void changed(final ObservableValue<? extends String> observable,
@@ -289,16 +293,11 @@ public class ViewModel {
                 return;
             }
             status.set(getInputStatus().toString());
-            curValue = newValue;
+            currentValue = newValue;
         }
 
-        public boolean isChanged() {
-
-            return !prevValue.equals(curValue);
-        }
-
-        public void cache() {
-            prevValue = curValue;
+        public void sync() {
+            lastValue = currentValue;
         }
     }
 
@@ -309,8 +308,8 @@ public class ViewModel {
     }
 
     private class DataValueChangeListener implements ChangeListener<LocalDate> {
-        private LocalDate prevValue;
-        private LocalDate curValue;
+        private LocalDate lastValue;
+        private LocalDate currentValue;
         @Override
         public void changed(final ObservableValue<? extends LocalDate> observable,
                             final LocalDate oldValue, final LocalDate newValue) {
@@ -318,15 +317,15 @@ public class ViewModel {
                 return;
             }
             status.set(getInputStatus().toString());
-            curValue = newValue;
+            currentValue = newValue;
         }
         public boolean isChanged() {
-            if(prevValue == null && curValue == null ) return false;
-            return !isEqualWithNullDate(prevValue,curValue);
+            if(lastValue == null && currentValue == null ) return false;
+            return !isEqualWithNullDate(lastValue, currentValue);
         }
 
         public void cache() {
-            prevValue = curValue;
+            lastValue = currentValue;
         }
     }
 }
