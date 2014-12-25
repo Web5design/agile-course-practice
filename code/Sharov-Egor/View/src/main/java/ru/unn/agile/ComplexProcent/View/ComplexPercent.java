@@ -31,9 +31,7 @@ public class ComplexPercent extends VBox {
     @FXML
     void initialize() {
 
-        viewModel.setLogger(new TxtLogger("./TxtLogger-lab3.log"));
-
-        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
+        final ChangeListener<Boolean> focusChangedListener = new ChangeListener<Boolean>() {
             @Override
             public void changed(final ObservableValue<? extends Boolean> observable,
                                 final Boolean oldValue, final Boolean newValue) {
@@ -41,21 +39,22 @@ public class ComplexPercent extends VBox {
             }
         };
 
+        viewModel.setLogger(new TxtLogger("TxtLog-ComplexPercents.txt"));
+
         txtBase.textProperty().bindBidirectional(viewModel.txtBaseProperty());
-        txtBase.focusedProperty().addListener(focusChangeListener);
+        txtBase.focusedProperty().addListener(focusChangedListener);
 
         txtInterestCount.textProperty().bindBidirectional(viewModel.txtInterestCountProperty());
-        txtInterestCount.focusedProperty().addListener(focusChangeListener);
+        txtInterestCount.focusedProperty().addListener(focusChangedListener);
 
         txtPercent.textProperty().bindBidirectional(viewModel.txtPercentProperty());
-        txtPercent.focusedProperty().addListener(focusChangeListener);
+        txtPercent.focusedProperty().addListener(focusChangedListener);
 
         dtPkrStart.valueProperty().bindBidirectional(viewModel.dtPkrStartProperty());
-        dtPkrStart.focusedProperty().addListener(focusChangeListener);
+        dtPkrStart.focusedProperty().addListener(focusChangedListener);
 
         dtPkrEnd.valueProperty().bindBidirectional(viewModel.dtPkrEndProperty());
-        dtPkrEnd.focusedProperty().addListener(focusChangeListener);
-
+        dtPkrEnd.focusedProperty().addListener(focusChangedListener);
 
         btnCount.setOnAction(new EventHandler<ActionEvent>() {
             @Override
