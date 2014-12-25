@@ -299,7 +299,6 @@ public class ViewModel {
         }
     }
 
-    //isEqual doesn't work when LocalDate is null -> throws an exception
     private boolean isEqualWithNullDate(final LocalDate lastValue, final LocalDate newValue) {
         if (lastValue == null) { return false; }
         return lastValue.isEqual(newValue);
