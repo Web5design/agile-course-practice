@@ -50,15 +50,15 @@ public class TxtLoggerTests {
 
     @Test
     public void canWriteSeveralLogs() {
-        String firstMessage = "Merry";
-        String secondMessage = "Christmas";
+        String firstLogMessage = "Merry";
+        String secondLogMessage = "Christmas";
 
-        logger.log(firstMessage);
-        logger.log(secondMessage);
+        logger.log(firstLogMessage);
+        logger.log(secondLogMessage);
         List<String> actualMessages = logger.getLog();
 
-        assertThat(actualMessages.get(0), matchesPattern(".*" + firstMessage + "$"));
-        assertThat(actualMessages.get(1), matchesPattern(".*" + secondMessage + "$"));
+        assertThat(actualMessages.get(0), matchesPattern(".*" + firstLogMessage + "$"));
+        assertThat(actualMessages.get(1), matchesPattern(".*" + secondLogMessage + "$"));
     }
 
     @Test
