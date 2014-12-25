@@ -7,6 +7,7 @@ import ru.unn.agile.CreditCalculator.ViewModel.ViewModel.Currency;
 import ru.unn.agile.CreditCalculator.ViewModel.ViewModel.TypePayment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class ViewModelTests {
@@ -14,7 +15,8 @@ public class ViewModelTests {
 
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        FakeLog logger = new FakeLog();
+        viewModel = new ViewModel(logger);
     }
 
     @After
@@ -262,6 +264,13 @@ public class ViewModelTests {
         viewModel.setStartMonth("11");
         viewModel.setTypePayment(TypePayment.Annuity);
         viewModel.setCurrency(Currency.USD);
+    }
+    @Test
+    public void canCreateViewModelWithLogger() {
+        FakeLog logger = new FakeLog();
+        ViewModel viewModelLogged = new ViewModel(logger);
+
+        assertNotNull(viewModelLogged);
     }
 
 }

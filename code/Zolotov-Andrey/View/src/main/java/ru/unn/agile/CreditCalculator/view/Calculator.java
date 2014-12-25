@@ -63,7 +63,7 @@ public final class Calculator {
     public static void main(final String[] args) {
         JFrame frame = new JFrame("Calculator");
 
-        frame.setContentPane(new Calculator(new ViewModel()).mainPanel);
+        //frame.setContentPane(new Calculator(new ViewModel()).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);

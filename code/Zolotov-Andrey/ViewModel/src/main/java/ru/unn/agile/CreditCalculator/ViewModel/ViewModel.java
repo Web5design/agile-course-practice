@@ -18,8 +18,10 @@ public class ViewModel {
     private String overPayment;
     private String firstPayment;
     private String status;
+    private ILogger logger;
 
-    public ViewModel() {
+    public ViewModel(final ILogger log) {
+        logger = log;
         sum = "";
         paymentPeriod = "";
         interestRate = "";
@@ -96,6 +98,14 @@ public class ViewModel {
 
     public void setTypePayment(final TypePayment typePayment) {
         this.typePayment = typePayment;
+    }
+
+    public void setLogger(final ILogger logger) {
+        this.logger = logger;
+    }
+
+    public ILogger getLogger() {
+        return logger;
     }
 
     public void setCurrency(final Currency currency) {
