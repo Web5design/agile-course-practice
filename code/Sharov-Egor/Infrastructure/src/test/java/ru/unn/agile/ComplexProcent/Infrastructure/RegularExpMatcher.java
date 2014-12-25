@@ -4,24 +4,24 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-public class RegexMatcher extends BaseMatcher {
-    private final String regex;
+public class RegularExpMatcher extends BaseMatcher {
+    private final String regularExp;
 
-    public RegexMatcher(final String regex) {
-        this.regex = regex;
+    public RegularExpMatcher(final String regex) {
+        this.regularExp = regex;
     }
 
     public boolean matches(final Object o) {
-        return ((String) o).matches(regex);
+        return ((String) o).matches(regularExp);
     }
 
     public void describeTo(final Description description) {
         description.appendText("matches regex = ");
-        description.appendText(regex);
+        description.appendText(regularExp);
     }
 
     public static Matcher<? super String> matchesPattern(final String regex) {
-        RegexMatcher matcher = new RegexMatcher(regex);
+        RegularExpMatcher matcher = new RegularExpMatcher(regex);
         @SuppressWarnings (value = "unchecked")
         Matcher<? super String> castedMatcher = (Matcher<? super String>)   matcher;
         return castedMatcher;

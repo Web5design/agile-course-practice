@@ -12,11 +12,11 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static ru.unn.agile.ComplexProcent.Infrastructure.RegexMatcher.matchesPattern;
+import static ru.unn.agile.ComplexProcent.Infrastructure.RegularExpMatcher.matchesPattern;
 
 
 public class TxtLoggerTests {
-    private static final String FILENAME = "./TxtLogger_Tests-lab3.log";
+    private static final String FILENAME = "TxtLogger_Tests-ComplexPercent.log";
     private TxtLogger logger;
 
     @Before
@@ -40,7 +40,7 @@ public class TxtLoggerTests {
 
     @Test
     public void canWriteMessageIntoLog() {
-        String testMessage = "Test message";
+        String testMessage = "Ho Ho HO";
 
         logger.log(testMessage);
 
@@ -50,8 +50,8 @@ public class TxtLoggerTests {
 
     @Test
     public void canWriteSeveralLogs() {
-        String firstMessage = "Test message 1";
-        String secondMessage = "Test message 2";
+        String firstMessage = "Merry";
+        String secondMessage = "Christmas";
 
         logger.log(firstMessage);
         logger.log(secondMessage);
@@ -63,7 +63,7 @@ public class TxtLoggerTests {
 
     @Test
     public void doesLogContainDateAndTime() {
-        String testMessage = "Test message";
+        String testMessage = "What time is it?";
 
         logger.log(testMessage);
 
