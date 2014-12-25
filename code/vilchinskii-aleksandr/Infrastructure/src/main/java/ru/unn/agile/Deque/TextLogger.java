@@ -3,12 +3,16 @@ package ru.unn.agile.Deque;
 import ru.unn.agile.Deque.viewmodel.ILogger;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class TextLogger implements ILogger{
     private final BufferedWriter writer;
     private final String filename;
+    private static final String DATETIME = "yyyy-MM-dd [HH:mm:ss]> ";
 
     public TextLogger(final String filename) {
         this.filename = filename;
@@ -25,7 +29,8 @@ public class TextLogger implements ILogger{
     public void log(Level level, String s) {
         s = level + s;
         try {
-            writer.write(s);
+            writer.write(now() + s);
+            writer.newLine();
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,5 +59,11 @@ public class TextLogger implements ILogger{
         }
 
         return log;
+    }
+
+    private String now() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat(DATETIME, Locale.ENGLISH);
+        return date.format(calendar.getTime());
     }
 }
