@@ -299,7 +299,7 @@ public class ViewModel {
         }
     }
 
-    private boolean isDateEqual(final LocalDate lastValue, final LocalDate newValue) {
+    private boolean isEqualWithNullDate(final LocalDate lastValue, final LocalDate newValue) {
         if (lastValue == null) { return false; }
         return lastValue.isEqual(newValue);
     }
@@ -317,7 +317,7 @@ public class ViewModel {
             if (lastValue == null && currentValue == null) {
                 return false;
             }
-            return !isDateEqual(lastValue, currentValue);
+            return !isEqualWithNullDate(lastValue, currentValue);
         }
 
         public void cache() {
