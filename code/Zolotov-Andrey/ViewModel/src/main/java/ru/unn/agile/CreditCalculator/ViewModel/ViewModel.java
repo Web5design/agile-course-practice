@@ -4,6 +4,8 @@ import ru.unn.agile.CreditCalculator.Model.CreditCalculator;
 import ru.unn.agile.CreditCalculator.Model.CreditCalculatorAnnuity;
 import ru.unn.agile.CreditCalculator.Model.CreditCalculatorDifferentiated;
 
+import java.util.List;
+
 
 public class ViewModel {
     private String sum;
@@ -18,6 +20,7 @@ public class ViewModel {
     private String overPayment;
     private String firstPayment;
     private String status;
+    private boolean isInputChanged;
     private ILogger logger;
 
     public ViewModel(final ILogger log) {
@@ -38,6 +41,7 @@ public class ViewModel {
 
     public void setSum(final String sum) {
         this.sum = sum;
+        isInputChanged = true;
     }
 
     public String getPaymentPeriod() {
@@ -46,10 +50,12 @@ public class ViewModel {
 
     public void setPaymentPeriod(final String paymentPeriod) {
         this.paymentPeriod = paymentPeriod;
+        isInputChanged = true;
     }
 
     public void setInterestRate(final String interestRate) {
         this.interestRate = interestRate;
+        isInputChanged = true;
     }
 
     public String getInterestRate() {
@@ -58,6 +64,8 @@ public class ViewModel {
 
     public void setStartMonth(final String startMonth) {
         this.startMonth = startMonth;
+        isInputChanged = true;
+
     }
 
     public String getStartMonth() {
@@ -97,19 +105,25 @@ public class ViewModel {
     }
 
     public void setTypePayment(final TypePayment typePayment) {
-        this.typePayment = typePayment;
+        if (this.typePayment != typePayment) {
+            logger.log(LogMessages.TYPEPAYMENT_WAS_CHANGED + typePayment.toString());
+            this.typePayment = typePayment;
+        }
     }
 
     public void setLogger(final ILogger logger) {
         this.logger = logger;
     }
 
-    public ILogger getLogger() {
-        return logger;
+    public List<String> getLog() {
+        return logger.getLog();
     }
 
     public void setCurrency(final Currency currency) {
-        this.currency = currency;
+        if (this.currency != currency) {
+            logger.log(LogMessages.CURRENCY_WAS_CHANGED + currency.toString());
+            this.currency = currency;
+        }
     }
 
     public enum TypePayment {
@@ -147,6 +161,29 @@ public class ViewModel {
         public static final String IS_NULL = "Is null";
 
         private UserInputStatus() { }
+    }
+
+    public final class LogMessages {
+        public static final String CALCULATE_WAS_PRESSED = "Calculate. ";
+        public static final String CURRENCY_WAS_CHANGED = "Currency was changed to ";
+        public static final String TYPEPAYMENT_WAS_CHANGED = "Type payment was changed to ";
+        public static final String EDITING_FINISHED = "Updated input. ";
+
+        private LogMessages() { }
+    }
+
+    private String calculateLogMessage() {
+        String message =
+                LogMessages.CALCULATE_WAS_PRESSED + "Arguments"
+                        + ": sum = " + sum
+                        + "; paymentPeriod = " + paymentPeriod
+                        + "; interestRate = " + interestRate
+                        + "; startMonth = " + startMonth
+                        + "; currency: " + currency
+                        + "; typePayment: " + typePayment
+                        + ".";
+
+        return message;
     }
 
     private boolean parseInput() {
@@ -191,6 +228,7 @@ public class ViewModel {
     }
 
     public void calculate() {
+        logger.log(calculateLogMessage());
         if (!parseInput() || !isNotNullInputAvailable()) {
             return;
         }
@@ -238,6 +276,32 @@ public class ViewModel {
                 calculator.getFinishDateOfPayment());
         overPayment = String.valueOf(calculator.getOverPayment());
         firstPayment = String.valueOf(calculator.getMonthlyPayment(1));
+    }
+
+
+    private void logInputParams() {
+        if (!isInputChanged) {
+            return;
+        }
+
+        logger.log(editingFinishedLogMessage());
+        isInputChanged = false;
+    }
+
+    public void focusLost() {
+        logInputParams();
+    }
+    private String editingFinishedLogMessage() {
+        String message = LogMessages.EDITING_FINISHED
+                + "Input arguments are: ["
+                + sum + "; "
+                + paymentPeriod + "; "
+                + interestRate + "; "
+                + startMonth + "; "
+                + currency + "; "
+                + typePayment + "]";
+
+        return message;
     }
 
 }
