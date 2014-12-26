@@ -50,8 +50,7 @@ public class TxtLoggerTests {
         List<String> actualMessages = textLogger.getLog();
         assertThat(actualMessages.get(0), matchesPattern(".*" + messages[0] + "$"));
         assertThat(actualMessages.get(1), matchesPattern(".*" + messages[1] + "$"));
-
-    }
+}
 
     @Test
     public void doesLoggerContainDateAndTime() {
