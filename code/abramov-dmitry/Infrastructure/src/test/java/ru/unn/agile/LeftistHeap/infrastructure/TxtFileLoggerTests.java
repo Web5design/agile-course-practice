@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 public class TxtFileLoggerTests {
-    private static final String FILENAME = "./TxtLogger_Tests.log";
+    private static final String FILENAME = "./TxtFileLogger_Tests.log";
     private TxtFileLogger logger;
 
     @Before
