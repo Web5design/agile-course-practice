@@ -350,15 +350,12 @@ public class ViewModel {
 
         for (ValueChangeListener listener : valueChangedListeners) {
             if (listener.isChanged()) {
-                StringBuilder message = new StringBuilder(LogMessages.INPUT_WAS_UPDATED);
-                message.append("key - ")
-                        .append(keyProperty().get())
-                        .append(", value - ")
-                        .append(valueProperty().get())
-                        .append(", newKey - ")
-                        .append(newKeyProperty().get());
-
-                logger.log(message.toString());
+                logger.log(String.format(
+                        LogMessages.INPUT_WAS_UPDATED_FORMAT,
+                        keyProperty().get(),
+                        valueProperty().get(),
+                        newKeyProperty().get()
+                ));
                 updateLogs();
 
                 listener.cache();
@@ -429,7 +426,8 @@ enum Status {
 final class LogMessages {
     public static final String HEAP_WAS_CHANGED_FORMAT = "Heap was changed to '%s'";
 
-    public static final String INPUT_WAS_UPDATED = "Updated input: ";
+    public static final String INPUT_WAS_UPDATED_FORMAT =
+            "Updated input: key - %s, value - %s, newKey - %s";
 
     public static final String ELEMENT_WAS_ADDED_FORMAT = "Added element --%s, %s-- to '%s'";
 

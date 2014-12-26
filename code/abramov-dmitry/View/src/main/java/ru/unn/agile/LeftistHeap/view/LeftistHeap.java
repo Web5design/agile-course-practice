@@ -39,7 +39,7 @@ public class LeftistHeap {
     @FXML
     void initialize() {
         try {
-            viewModel.setLogger(new TxtFileLogger("./mainLog.log"));
+            viewModel.setLogger(new TxtFileLogger("./log.log"));
         } catch (LoggerException exception) {
             exception.printStackTrace();
         }
