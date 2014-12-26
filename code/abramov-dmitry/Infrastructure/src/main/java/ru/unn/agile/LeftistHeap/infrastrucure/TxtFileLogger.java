@@ -23,16 +23,14 @@ public class TxtFileLogger implements ILogger {
         return dateFormat.format(calendar.getTime());
     }
 
-    public TxtFileLogger(final String fileName) throws LoggerException {
+    public TxtFileLogger(final String fileName) {
         this.fileName = fileName;
 
         BufferedWriter logWriter = null;
         try {
             logWriter = new BufferedWriter(new FileWriter(fileName));
         } catch (Exception exception) {
-            throw new LoggerException(
-                    "Exception happened on logger initialization. See inner exception.",
-                    exception);
+            exception.printStackTrace();
         }
         writer = logWriter;
     }
