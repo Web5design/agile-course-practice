@@ -20,7 +20,7 @@ public class ViewModelTests {
     }
 
     @Test
-    public void canSetDefaultValue() {
+    public void canSetInitialValue() {
         assertEquals("", viewModel.getTxtItem());
     }
 
