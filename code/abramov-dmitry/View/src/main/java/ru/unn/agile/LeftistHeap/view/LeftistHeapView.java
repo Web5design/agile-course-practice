@@ -40,22 +40,22 @@ public class LeftistHeapView {
     void initialize() {
         viewModel.setLogger(new TxtFileLogger("./log.log"));
 
-        final ChangeListener<Boolean> onFocusChangeListener = new ChangeListener<Boolean>() {
+        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
             @Override
-            public void changed(final ObservableValue<? extends Boolean> observable,
+            public void changed(final ObservableValue<? extends Boolean> element,
                                 final Boolean oldValue, final Boolean newValue) {
                 viewModel.onFocusChanged(oldValue, newValue);
             }
         };
 
         key.textProperty().bindBidirectional(viewModel.keyProperty());
-        key.focusedProperty().addListener(onFocusChangeListener);
+        key.focusedProperty().addListener(focusChangeListener);
 
         value.textProperty().bindBidirectional(viewModel.valueProperty());
-        value.focusedProperty().addListener(onFocusChangeListener);
+        value.focusedProperty().addListener(focusChangeListener);
 
         newKey.textProperty().bindBidirectional(viewModel.newKeyProperty());
-        newKey.focusedProperty().addListener(onFocusChangeListener);
+        newKey.focusedProperty().addListener(focusChangeListener);
 
         cbHeap.valueProperty().bindBidirectional(viewModel.heapProperty());
         cbHeap.valueProperty().addListener(
