@@ -12,13 +12,17 @@ import ru.unn.agile.BitArray.model.BitArray.Operation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
 import static java.lang.Math.max;
 
 public class ViewModel {
     private static final int ARRAYS_COUNT = 3;
     private int arraysSize;
 
-    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+    private boolean isCalculateButtonEnabled;
+    private ILogger logger;
+
+    private final List<ValueCachingChangeListener> valueChangedListeners = new ArrayList<>();
     private final ObjectProperty<ObservableList<Operation>> operations =
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> bitOperationOnTwoFirstBitArrays =
@@ -28,17 +32,169 @@ public class ViewModel {
     private final Vector<StringProperty> arrays = new Vector<>();
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
     private final StringProperty status = new SimpleStringProperty();
+    private final StringProperty logs = new SimpleStringProperty();
     private final StringProperty result = new SimpleStringProperty();
 
     private class ValueChangeListener implements ChangeListener<String> {
         @Override
-        public void changed(final ObservableValue<? extends String> observable,
-                            final String oldValue, final String newValue) {
+        public void changed(final ObservableValue<? extends String> obs,
+                            final String oldVal, final String newVal) {
             status.set(getInputStatus().toString());
         }
     }
 
+    public final class LogMessages {
+        public static final String CALCULATE_WAS_PRESSED = "Calculate. ";
+        public static final String OPERATION_WAS_CHANGED = "Operation was changed to ";
+        public static final String EDITING_FINISHED = "Updated input. ";
+
+        private LogMessages() { }
+    }
+
     public ViewModel() {
+        init();
+    }
+
+    public ViewModel(final ILogger logger) {
+        setLogger(logger);
+        init();
+    }
+
+    public void setLogger(final ILogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger parameter can not be null");
+        }
+        this.logger = logger;
+    }
+
+    public void performNot(final int buttonNum) {
+        if (checkArrayFieldIsEmpty(arrays.get(buttonNum))) {
+            return;
+        }
+        arraysSize = getArraysSize();
+        BitArray bitArray = new BitArray(arraysSize);
+        bitArray.setBits(arrays.get(buttonNum).get().toCharArray());
+        arrays.get(buttonNum).set(bitArray.not().toString());
+
+        logger.log(editingFinishedLogMessage());
+        updateLogs();
+    }
+
+    public void calculate() {
+        if (calculationDisabled.get()) {
+            return;
+        }
+        arraysSize = getArraysSize();
+        BitArray b1 = new BitArray(arraysSize);
+        BitArray b2 = new BitArray(arraysSize);
+        BitArray res = new BitArray(arraysSize);
+        b1.setBits(getCharArrayFromField(arrays.get(0)));
+        b2.setBits(getCharArrayFromField(arrays.get(1)));
+
+        res = operationApplying(bitOperationOnTwoFirstBitArrays, b1, b2);
+        if (getArrayInputStatus(arrays.get(2)) == InputStatus.READY) {
+            BitArray b3 = new BitArray(arraysSize);
+            b3.setBits(getCharArrayFromField(arrays.get(2)));
+            result.set(operationApplying(bitOperationWithThirdBitArray, res, b3).toString());
+        } else {
+            result.set(res.toString());
+        }
+        status.set(InputStatus.SUCCESS.toString());
+        logger.log(calculateLogMessage());
+        updateLogs();
+    }
+
+    public List<String> getLog() {
+        return logger.getLog();
+    }
+
+    public StringProperty bitArray1StrValue() {
+        return arrays.get(0);
+    }
+
+    public StringProperty bitArray2StrValue() {
+        return arrays.get(1);
+    }
+
+    public StringProperty bitArray3StrValue() {
+        return arrays.get(2);
+    }
+
+    public ObjectProperty<ObservableList<Operation>> bitOperations() {
+        return operations;
+    }
+
+    public final ObservableList<Operation> getOperations() {
+        return operations.get();
+    }
+
+    public void onFocusChanged(final Boolean oldValue, final Boolean newValue) {
+        if (!oldValue && newValue) {
+            return;
+        }
+
+        for (ValueCachingChangeListener listener : valueChangedListeners) {
+            if (listener.isChanged()) {
+                logger.log(editingFinishedLogMessage());
+                updateLogs();
+
+                listener.cache();
+                break;
+            }
+        }
+    }
+
+    public void onOperationChanged(final Operation oldOp, final Operation newOp) {
+        if (oldOp.equals(newOp)) {
+            return;
+        }
+        StringBuilder message = new StringBuilder(LogMessages.OPERATION_WAS_CHANGED);
+        message.append(newOp.toString());
+        logger.log(message.toString());
+        updateLogs();
+    }
+
+    public ObjectProperty<Operation> firstBitOperation() {
+        return bitOperationOnTwoFirstBitArrays;
+    }
+
+    public ObjectProperty<Operation> secondBitOperation() {
+        return bitOperationWithThirdBitArray;
+    }
+
+    public BooleanProperty calculationDisabledProperty() {
+        return calculationDisabled;
+    }
+
+    public final boolean getCalculationDisabled() {
+        return calculationDisabled.get();
+    }
+
+    public final String getStatus() {
+        return status.get();
+    }
+
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    public final String getLogs() {
+        return logs.get();
+    }
+
+    public StringProperty statusProperty() {
+        return status;
+    }
+
+    public final String getResult() {
+        return result.get();
+    }
+
+    public StringProperty resultProperty() {
+        return result;
+    }
+
+    private void init() {
         arraysSize = 0;
         for (int i = 0; i < ARRAYS_COUNT; i++) {
             arrays.add(new SimpleStringProperty(""));
@@ -66,91 +222,6 @@ public class ViewModel {
         calculationDisabled.bind(couldCalculate.not());
 
         addListenersToInputTextFields(fields);
-    }
-
-    public void performNot(final int buttonNum) {
-        if (checkArrayFieldIsEmpty(arrays.get(buttonNum))) {
-            return;
-        }
-        arraysSize = getArraysSize();
-        BitArray bitArray = new BitArray(arraysSize);
-        bitArray.setBits(arrays.get(buttonNum).get().toCharArray());
-
-        arrays.get(buttonNum).set(bitArray.not().toString());
-    }
-
-    public void calculate() {
-        if (calculationDisabled.get()) {
-            return;
-        }
-        arraysSize = getArraysSize();
-        BitArray b1 = new BitArray(arraysSize);
-        BitArray b2 = new BitArray(arraysSize);
-        BitArray res = new BitArray(arraysSize);
-        b1.setBits(getCharArrayFromField(arrays.get(0)));
-        b2.setBits(getCharArrayFromField(arrays.get(1)));
-
-        res = operationApplying(bitOperationOnTwoFirstBitArrays, b1, b2);
-        if (getArrayInputStatus(arrays.get(2)) == InputStatus.READY) {
-            BitArray b3 = new BitArray(arraysSize);
-            b3.setBits(getCharArrayFromField(arrays.get(2)));
-            result.set(operationApplying(bitOperationWithThirdBitArray, res, b3).toString());
-        } else {
-            result.set(res.toString());
-        }
-        status.set(InputStatus.SUCCESS.toString());
-    }
-
-    public StringProperty bitArray1StrValue() {
-        return arrays.get(0);
-    }
-
-    public StringProperty bitArray2StrValue() {
-        return arrays.get(1);
-    }
-
-    public StringProperty bitArray3StrValue() {
-        return arrays.get(2);
-    }
-
-    public ObjectProperty<ObservableList<Operation>> bitOperations() {
-        return operations;
-    }
-
-    public final ObservableList<Operation> getOperations() {
-        return operations.get();
-    }
-
-    public ObjectProperty<Operation> firstBitOperation() {
-        return bitOperationOnTwoFirstBitArrays;
-    }
-
-    public ObjectProperty<Operation> secondBitOperation() {
-        return bitOperationWithThirdBitArray;
-    }
-
-    public BooleanProperty calculationDisabledProperty() {
-        return calculationDisabled;
-    }
-
-    public final boolean getCalculationDisabled() {
-        return calculationDisabled.get();
-    }
-
-    public final String getStatus() {
-        return status.get();
-    }
-
-    public StringProperty statusProperty() {
-        return status;
-    }
-
-    public final String getResult() {
-        return result.get();
-    }
-
-    public StringProperty resultProperty() {
-        return result;
     }
 
     private BitArray operationApplying(final ObjectProperty<Operation> opProp,
@@ -211,9 +282,60 @@ public class ViewModel {
 
     private void addListenersToInputTextFields(final List<StringProperty> fields) {
         for (StringProperty field : fields) {
-            final ValueChangeListener listener = new ValueChangeListener();
+            final ValueCachingChangeListener listener = new ValueCachingChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
+        }
+    }
+
+    private void updateLogs() {
+        List<String> fullLog = logger.getLog();
+        String record = new String();
+        for (String log : fullLog) {
+            record += log + "\n";
+        }
+        logs.set(record);
+    }
+
+    private String calculateLogMessage() {
+        String message =
+                LogMessages.CALCULATE_WAS_PRESSED + "Arguments"
+                        + ": BitArray1 = " + getFieldContent(bitArray1StrValue())
+                        + "; BitArray2 = " + getFieldContent(bitArray2StrValue())
+                        + "; BitArray3 = " + getFieldContent(bitArray3StrValue())
+                        + ". BitOperation1: " + firstBitOperation().get().toString()
+                        + "; BitOperation2: " + secondBitOperation().get().toString() + ".";
+
+        return message;
+    }
+
+    private String editingFinishedLogMessage() {
+        String message = LogMessages.EDITING_FINISHED
+                + "Input arguments are: ["
+                + bitArray1StrValue().get() + "; "
+                + bitArray2StrValue().get() + "; "
+                + bitArray3StrValue().get() + "]";
+
+        return message;
+    }
+
+    private class ValueCachingChangeListener implements ChangeListener<String> {
+        private String previousValue = new String();
+        private String currentValue = new String();
+        @Override
+        public void changed(final ObservableValue<? extends String> obs,
+                            final String oldVal, final String newVal) {
+            if (oldVal.equals(newVal)) {
+                return;
+            }
+            status.set(getInputStatus().toString());
+            currentValue = newVal;
+        }
+        public boolean isChanged() {
+            return !previousValue.equals(currentValue);
+        }
+        public void cache() {
+            previousValue = currentValue;
         }
     }
 }

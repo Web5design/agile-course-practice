@@ -67,6 +67,8 @@ include "code/anufriev-denis/View"
 project(":code/anufriev-denis/View").name = "anufriev-denis-View"
 include "code/anufriev-denis/ViewModel"
 project(":code/anufriev-denis/ViewModel").name = "anufriev-denis-ViewModel"
+include "code/anufriev-denis/Infrastructure"
+project(":code/anufriev-denis/Infrastructure").name = "anufriev-denis-Infrastructure"
 
 // Blinkova Ekaterina
 include "code/blinkova-ekaterina/Model"

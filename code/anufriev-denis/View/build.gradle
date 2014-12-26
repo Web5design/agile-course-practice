@@ -1,7 +1,8 @@
 apply from:   rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
 
 dependencies {
-    compile project(':anufriev-denis-ViewModel')
+	compile project(':anufriev-denis-Infrastructure')
+	compile project(':anufriev-denis-ViewModel')
 }
 
 sourceSets {
