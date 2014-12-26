@@ -21,7 +21,6 @@ public class RegexMatcher extends BaseMatcher {
 
     public static Matcher<? super String> matchesPattern(final String regularExpression) {
         RegexMatcher matcher = new RegexMatcher(regularExpression);
-        //NOTE: this ugly cast is needed to workaround 'unchecked' Java warning
         @SuppressWarnings (value = "unchecked")
         Matcher<? super String> castedMatcher = (Matcher<? super String>)   matcher;
         return castedMatcher;

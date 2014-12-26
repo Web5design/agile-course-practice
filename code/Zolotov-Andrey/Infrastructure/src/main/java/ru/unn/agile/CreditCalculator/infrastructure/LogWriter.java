@@ -35,6 +35,7 @@ public class LogWriter implements ILogger {
         }
         writer = logWr;
     }
+
     @Override
     public List<String> getLog() {
         BufferedReader buffReader;
@@ -53,6 +54,7 @@ public class LogWriter implements ILogger {
 
         return log;
     }
+
     @Override
     public void log(final String str) {
         try {
@@ -63,5 +65,4 @@ public class LogWriter implements ILogger {
             System.out.println(except.getMessage());
         }
     }
-
 }
