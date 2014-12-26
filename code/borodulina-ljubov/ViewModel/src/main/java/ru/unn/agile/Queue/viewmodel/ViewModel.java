@@ -8,9 +8,13 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import ru.unn.agile.Queue.model.Queue;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ViewModel {
+    private ILogger logger;
     private final StringProperty  txtToAdd          = new SimpleStringProperty();
     private final StringProperty  state             = new SimpleStringProperty();
     private final StringProperty  element           = new SimpleStringProperty();
@@ -23,7 +27,13 @@ public class ViewModel {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
-            state.set(getInputState().toString());
+            String inputState = getInputState().toString();
+            state.set(inputState);
+            if (inputState == ViewState.BAD_INPUT.toString()) {
+                log(ILogger.Level.ERR, "Incorrect item: " + newValue);
+            } else {
+                log(ILogger.Level.DBG, "Item to add: " + newValue);
+            }
         }
     }
 
@@ -54,6 +64,7 @@ public class ViewModel {
         Integer item = Integer.parseInt(getTxtToAdd());
         queue.add(item);
         updateElement();
+        log(ILogger.Level.INFO, "Added " + getTxtToAdd());
     }
 
     public void remove() {
@@ -61,9 +72,11 @@ public class ViewModel {
             Integer item = queue.remove();
             txtToAdd.set(item.toString());
             state.set(ViewState.OK.toString());
+            log(ILogger.Level.INFO, "Remove " + item.toString());
 
         } catch (NoSuchElementException nsee) {
             state.set(ViewState.EMPTY.toString());
+            log(ILogger.Level.ERR, "Unable to remove an item");
         }
         updateElement();
     }
@@ -102,6 +115,25 @@ public class ViewModel {
 
     public final String getTxtToAdd() {
         return txtToAdd.get();
+    }
+
+    public void setLogger(final ILogger logger) {
+        this.logger = logger;
+    }
+
+    public List<String> getLog() {
+        if (logger != null) {
+            return logger.getLog();
+        }
+        return new ArrayList<String>();
+    }
+
+    private void log(final ILogger.Level level, final String s) {
+        if (logger == null) {
+            return;
+        }
+
+        logger.log(level, s);
     }
 
     private ViewState getInputState() {
