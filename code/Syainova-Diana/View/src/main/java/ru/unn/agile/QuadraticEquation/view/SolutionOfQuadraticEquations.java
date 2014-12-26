@@ -25,9 +25,9 @@ public class SolutionOfQuadraticEquations {
     @FXML
     void initialize() {
 
-        viewModel.setLogger(new TxtLogger("./TxtLogger.log"));
+        viewModel.setLogger(new TxtLogger("./TextLoggerLab3.log"));
 
-        final ChangeListener<Boolean> onFocusChangeListener = new ChangeListener<Boolean>() {
+        final ChangeListener<Boolean> onFocusChangingListener = new ChangeListener<Boolean>() {
             @Override
             public void changed(final ObservableValue<? extends Boolean> observable,
                                 final Boolean oldValue, final Boolean newValue) {
@@ -36,13 +36,13 @@ public class SolutionOfQuadraticEquations {
         };
 
         txtCoefA.textProperty().bindBidirectional(viewModel.firstCoefficientProperty());
-        txtCoefA.focusedProperty().addListener(onFocusChangeListener);
+        txtCoefA.focusedProperty().addListener(onFocusChangingListener);
 
         txtCoefB.textProperty().bindBidirectional(viewModel.secondCoefficientProperty());
-        txtCoefB.focusedProperty().addListener(onFocusChangeListener);
+        txtCoefB.focusedProperty().addListener(onFocusChangingListener);
 
         txtCoefC.textProperty().bindBidirectional(viewModel.thirdCoefficientProperty());
-        txtCoefC.focusedProperty().addListener(onFocusChangeListener);
+        txtCoefC.focusedProperty().addListener(onFocusChangingListener);
 
         btnSolve.setOnAction(new EventHandler<ActionEvent>() {
             @Override
