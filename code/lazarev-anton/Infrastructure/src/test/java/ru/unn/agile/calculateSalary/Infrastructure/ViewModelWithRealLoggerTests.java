@@ -1,6 +1,5 @@
 package ru.unn.agile.calculateSalary.Infrastructure;
 
-/*import ru.unn.agile.calculateSalary.ViewModel.ViewModel;*/
 import ru.unn.agile.calculateSalary.ViewModel.ViewModelTests;
 
 public class ViewModelWithRealLoggerTests extends ViewModelTests {

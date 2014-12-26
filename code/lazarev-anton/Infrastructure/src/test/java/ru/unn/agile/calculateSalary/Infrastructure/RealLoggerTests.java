@@ -2,8 +2,6 @@ package ru.unn.agile.calculateSalary.Infrastructure;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.fail;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
@@ -26,12 +24,8 @@ public class RealLoggerTests {
     }
 
     @Test
-    public void createLogFileOnHDD() {
-        try {
-            new BufferedReader(new FileReader(FILENAME));
-        } catch (FileNotFoundException e) {
-            fail("File" + FILENAME + " wasn't found.");
-        }
+    public void createLogFileOnHDD() throws FileNotFoundException {
+        new FileReader(FILENAME);
     }
 
     @Test
@@ -51,10 +45,10 @@ public class RealLoggerTests {
         realLogger.textInLog(fewMessages[1]);
 
         List<String> messagesInLog = realLogger.getLog();
-        for (int i = 0; i < messagesInLog.size(); i++) {
-            assertThat(messagesInLog.get(i),
-                       RegexMatcher.matchesPattern(".*" + fewMessages[i] + "$"));
-        }
+        assertThat(messagesInLog.get(0),
+                   RegexMatcher.matchesPattern(".*" + fewMessages[0] + "$"));
+        assertThat(messagesInLog.get(1),
+                RegexMatcher.matchesPattern(".*" + fewMessages[1] + "$"));
     }
 
     @Test
