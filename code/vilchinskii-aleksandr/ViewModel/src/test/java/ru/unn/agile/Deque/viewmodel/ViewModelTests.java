@@ -120,7 +120,8 @@ public class ViewModelTests {
     @Test
     public void isLogMessageAddedWhenInputIsChanged() {
         setInputData("1");
-        assertEquals(ILogger.Level.DEBUG + "Item to add: 1", viewModel.getLog().get(0));
+        assertTrue(viewModel.getLog().get(0)
+                    .matches(".*" + ILogger.Level.DEBUG + "Item to add: 1" + "$"));
     }
 
     @Test
@@ -128,7 +129,8 @@ public class ViewModelTests {
         String item = addOneAsFirst();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.INFO + "Added as first: 1", viewModel.getLog().get(logSize - 1));
+        assertTrue(viewModel.getLog().get(logSize - 1)
+                        .matches(".*" + ILogger.Level.INFO + "Added as first: 1" + "$"));
     }
 
     @Test
@@ -136,13 +138,15 @@ public class ViewModelTests {
         String item = addOneAsLast();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.INFO + "Added as last: 1", viewModel.getLog().get(logSize - 1));
+        assertTrue(viewModel.getLog().get(logSize - 1)
+                        .matches(".*" + ILogger.Level.INFO + "Added as last: 1" + "$"));
     }
 
     @Test
     public void canLogBadFormat() {
         setInputData("a");
-        assertEquals(ILogger.Level.ERROR + "Incorrect item: a", viewModel.getLog().get(0));
+        assertTrue(viewModel.getLog().get(0)
+                        .matches(".*" + ILogger.Level.ERROR + "Incorrect item: a" + "$"));
     }
 
     @Test
@@ -152,7 +156,8 @@ public class ViewModelTests {
         viewModel.getFirst();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.INFO + "Managed to get item: 1", viewModel.getLog().get(logSize - 1));
+        assertTrue(viewModel.getLog().get(logSize - 1)
+                        .matches(".*" + ILogger.Level.INFO + "Managed to get item: 1" + "$"));
     }
 
     @Test
@@ -162,7 +167,8 @@ public class ViewModelTests {
         viewModel.getFirst();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.DEBUG + "Getting the first one", viewModel.getLog().get(logSize - 2));
+        assertTrue(viewModel.getLog().get(logSize - 2)
+                        .matches(".*" + ILogger.Level.DEBUG + "Getting the first one" + "$"));
     }
 
     @Test
@@ -172,7 +178,8 @@ public class ViewModelTests {
         viewModel.getLast();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.DEBUG + "Getting the last one", viewModel.getLog().get(logSize - 2));
+        assertTrue(viewModel.getLog().get(logSize - 2)
+                        .matches(".*" + ILogger.Level.DEBUG + "Getting the last one" + "$"));
     }
 
     @Test
@@ -182,7 +189,8 @@ public class ViewModelTests {
         viewModel.removeFirst();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.DEBUG + "Removing the first one", viewModel.getLog().get(logSize - 2));
+        assertTrue(viewModel.getLog().get(logSize - 2)
+                        .matches(".*" + ILogger.Level.DEBUG + "Removing the first one" + "$"));
     }
 
     @Test
@@ -192,7 +200,8 @@ public class ViewModelTests {
         viewModel.removeLast();
 
         int logSize = viewModel.getLog().size();
-        assertEquals(ILogger.Level.DEBUG + "Removing the last one", viewModel.getLog().get(logSize - 2));
+        assertTrue(viewModel.getLog().get(logSize - 2)
+                        .matches(".*" + ILogger.Level.DEBUG + "Removing the last one" + "$"));
     }
 
 

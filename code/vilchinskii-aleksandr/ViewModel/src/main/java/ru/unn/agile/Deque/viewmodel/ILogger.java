@@ -3,7 +3,7 @@ package ru.unn.agile.Deque.viewmodel;
 import java.util.List;
 
 public interface ILogger {
-    void log(Level level, final String msg);
+    void log(final Level level, final String msg);
 
     List<String> getLog();
 

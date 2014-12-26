@@ -107,7 +107,7 @@ public class ViewModel {
         return new ArrayList<String>();
     }
 
-    private void log(ILogger.Level level, final String msg) {
+    private void log(final ILogger.Level level, final String msg) {
         if (logger == null) {
             return;
         }

@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TextLogger implements ILogger{
+public class TextLogger implements ILogger {
     private final BufferedWriter writer;
     private final String filename;
     private static final String DATETIME = "yyyy-MM-dd [HH:mm:ss]> ";
@@ -26,7 +26,7 @@ public class TextLogger implements ILogger{
     }
 
     @Override
-    public void log(Level level, String msg) {
+    public void log(final Level level, final String msg) {
         try {
             writer.write(now() + level + msg + "\n");
             writer.flush();
