@@ -2,13 +2,16 @@ package ru.unn.agile.Queue;
 
 import ru.unn.agile.Queue.viewmodel.ILogger;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class PlainTextLogger implements ILogger{
+public class PlainTextLogger implements ILogger {
     private final String filename;
     private final BufferedWriter writer;
-
+    private static final String DATETIME = "yyyy-MM-dd [HH:mm:ss]: ";
 
     public PlainTextLogger(final String filename) {
         this.filename = filename;
@@ -22,10 +25,10 @@ public class PlainTextLogger implements ILogger{
     }
 
     @Override
-    public void log(Level level, String s) {
-        s = level + s;
+    public void log(final Level level, final String s) {
+        String msg = timestamp() + level + s + "\n";
         try {
-            writer.write(s);
+            writer.write(msg);
             writer.flush();
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -34,7 +37,7 @@ public class PlainTextLogger implements ILogger{
 
     @Override
     public List<String> getLog() {
-        List<String> log = new ArrayList<>();
+        List<String> log = new ArrayList<String>();
         String line;
         BufferedReader reader;
 
@@ -54,5 +57,11 @@ public class PlainTextLogger implements ILogger{
         }
 
         return log;
+    }
+
+    private String timestamp() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat(DATETIME, Locale.ENGLISH);
+        return date.format(calendar.getTime());
     }
 }

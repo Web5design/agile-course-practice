@@ -3,7 +3,7 @@ package ru.unn.agile.Queue.viewmodel;
 import java.util.List;
 
 public interface ILogger {
-    void log(Level level, final String s);
+    void log(final Level level, final String s);
 
     List<String> getLog();
 
