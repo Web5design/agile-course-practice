@@ -2,7 +2,6 @@ package ru.unn.agile.calculateSalary.Infrastructure;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.fail;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,16 +26,8 @@ public class RealLoggerTests {
 
     @Test
     public void createdLogFileWhenInitial() throws FileNotFoundException {
-        new FileReader(FILENAME);
-    }
-
-    @Test
-    public void createLogFileOnHDD() {
-        try {
-            new BufferedReader(new FileReader(FILENAME));
-        } catch (FileNotFoundException e) {
-            fail("File" + FILENAME + " wasn't found.");
-        }
+        FileReader fileReader = new FileReader(FILENAME);
+        BufferedReader reader = new BufferedReader(fileReader);
     }
 
     @Test
