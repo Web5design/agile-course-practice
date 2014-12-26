@@ -8,12 +8,17 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import ru.unn.agile.Deque.model.Deque;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ViewModel {
+    private ILogger logger;
     private final StringProperty txtItem = new SimpleStringProperty();
     private final StringProperty status   = new SimpleStringProperty();
     private final BooleanProperty isAddingDisabled  = new SimpleBooleanProperty();
+    private final StringProperty logs = new SimpleStringProperty();
 
     private final Deque<Integer> deque = Deque.create();
 
@@ -23,7 +28,13 @@ public class ViewModel {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
-            status.set(getInputStatus().toString());
+            String inputStatus = getInputStatus().toString();
+            status.set(inputStatus);
+            if (inputStatus == ViewStatus.BAD_FORMAT.toString()) {
+                log(ILogger.Level.ERROR, "Incorrect item: " + newValue);
+            } else {
+                log(ILogger.Level.DEBUG, "Item to add: " + newValue);
+            }
         }
     }
 
@@ -52,6 +63,7 @@ public class ViewModel {
 
         Integer item = Integer.parseInt(getTxtItem());
         deque.addFirst(item);
+        log(ILogger.Level.INFO, "Added as first: " + getTxtItem());
     }
 
     public void addLast() {
@@ -61,22 +73,60 @@ public class ViewModel {
 
         Integer item = Integer.parseInt(getTxtItem());
         deque.addLast(item);
+        log(ILogger.Level.INFO, "Added as last: " + getTxtItem());
     }
 
     public void getFirst() {
+        log(ILogger.Level.DEBUG, "Getting the first one");
         getItem(new GetFirstCommand());
     }
 
     public void getLast() {
+        log(ILogger.Level.DEBUG, "Getting the last one");
         getItem(new GetLastCommand());
     }
 
     public void removeFirst() {
+        log(ILogger.Level.DEBUG, "Removing the first one");
         getItem(new RemoveFirstCommand());
     }
 
     public void removeLast() {
+        log(ILogger.Level.DEBUG, "Removing the last one");
         getItem(new RemoveLastCommand());
+    }
+
+    public void setLogger(final ILogger newLogger) {
+        logger = newLogger;
+    }
+
+    public List<String> getLog() {
+        if (logger != null) {
+            return logger.getLog();
+        }
+        return new ArrayList<String>();
+    }
+
+    private void log(final ILogger.Level level, final String msg) {
+        if (logger == null) {
+            return;
+        }
+
+        logger.log(level, msg);
+        refreshLogs();
+    }
+
+    private void refreshLogs() {
+        if (logger == null) {
+            return;
+        }
+
+        List<String> storedLog = logger.getLog();
+        String logToView = "";
+        for (String s : storedLog) {
+            logToView += s + "\n";
+        }
+        logs.set(logToView);
     }
 
     public StringProperty txtItemProperty() {
@@ -85,6 +135,14 @@ public class ViewModel {
 
     public final String getTxtItem() {
         return txtItem.get();
+    }
+
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    public final String getLogs() {
+        return logs.get();
     }
 
     public BooleanProperty isAddingDisabledProperty() {
@@ -140,9 +198,11 @@ public class ViewModel {
             Integer item = getter.execute(deque);
             txtItem.set(item.toString());
             status.set(ViewStatus.SUCCESS.toString());
+            log(ILogger.Level.INFO, "Managed to get item: " + item.toString());
         } catch (NoSuchElementException nsee) {
             txtItem.set("");
             status.set(ViewStatus.EMPTY.toString());
+            log(ILogger.Level.ERROR, "Unable to retrieve an item");
         }
     }
 
