@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import ru.unn.agile.Deque.TextLogger;
 import ru.unn.agile.Deque.viewmodel.ViewModel;
 
 public class Container {
@@ -27,6 +28,7 @@ public class Container {
 
     @FXML
     void initialize() {
+        viewModel.setLogger(new TextLogger("viewlog.txt"));
         txtItem.textProperty().bindBidirectional(viewModel.txtItemProperty());
 
         btnAddFirst.setOnAction(new EventHandler<ActionEvent>() {

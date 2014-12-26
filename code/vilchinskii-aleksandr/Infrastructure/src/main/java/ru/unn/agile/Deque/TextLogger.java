@@ -28,8 +28,7 @@ public class TextLogger implements ILogger{
     @Override
     public void log(Level level, String msg) {
         try {
-            writer.write(now() + level + msg);
-            writer.newLine();
+            writer.write(now() + level + msg + "\n");
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
