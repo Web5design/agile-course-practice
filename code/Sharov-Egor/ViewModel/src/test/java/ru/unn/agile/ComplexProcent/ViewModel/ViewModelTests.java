@@ -4,14 +4,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.time.LocalDate;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setExternalViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        FakeLoggerArrList fakeLogger = new FakeLoggerArrList();
+        viewModel = new ViewModel(fakeLogger);
     }
 
     @After
@@ -21,9 +28,9 @@ public class ViewModelTests {
 
     @Test
     public void canSetDefaultValues() {
-        assertEquals("", viewModel.getTxtBaseProperty().get());
-        assertEquals("", viewModel.getTxtInterestCountProperty().get());
-        assertEquals("", viewModel.getTxtPercentProperty().get());
+        assertEquals("", viewModel.txtBaseProperty().get());
+        assertEquals("", viewModel.txtInterestCountProperty().get());
+        assertEquals("", viewModel.txtPercentProperty().get());
         assertEquals(LocalDate.now(), viewModel.dtPkrStartProperty().get());
         assertEquals(null, viewModel.dtPkrEndProperty().get());
         assertEquals("", viewModel.resultProperty().get());
@@ -89,7 +96,7 @@ public class ViewModelTests {
     public void statusIsBadFormatWhenHasNegative() {
         setInputData();
         assertEquals(viewModel.getStatus(), Status.READY.toString());
-        viewModel.getTxtPercentProperty().set("-100");
+        viewModel.txtPercentProperty().set("-100");
         assertEquals(viewModel.getStatus(), Status.BAD_FORMAT.toString());
     }
 
@@ -101,19 +108,19 @@ public class ViewModelTests {
 
     @Test
     public void canReportBadFormat() {
-        viewModel.getTxtBaseProperty().set("sadcacasa");
+        viewModel.txtBaseProperty().set("sadcacasa");
         assertEquals(Status.BAD_FORMAT.toString(), viewModel.statusProperty().get());
     }
 
     @Test
     public void canReportBadFormatForInterestCount() {
-        viewModel.getTxtInterestCountProperty().set("5,4");
+        viewModel.txtInterestCountProperty().set("5,4");
         assertEquals(Status.BAD_FORMAT.toString(), viewModel.statusProperty().get());
     }
 
     @Test
     public void statusIsWaitingIfNotEnoughCorrectData() {
-        viewModel.getTxtBaseProperty().set("1");
+        viewModel.txtBaseProperty().set("1");
         assertEquals(Status.WAITING.toString(), viewModel.statusProperty().get());
     }
 
@@ -125,14 +132,14 @@ public class ViewModelTests {
     @Test
     public void calculateButtonIsDisabledWhenFormatIsBad() {
         setInputData();
-        viewModel.getTxtBaseProperty().set("spam");
+        viewModel.txtBaseProperty().set("spam");
         assertTrue(viewModel.calculationDisabledProperty().get());
     }
 
     @Test
     public void calculateButtonIsDisabledWithIncompleteInput() {
-        viewModel.getTxtBaseProperty().set("1000");
-        viewModel.getTxtInterestCountProperty().set("1");
+        viewModel.txtBaseProperty().set("1000");
+        viewModel.txtInterestCountProperty().set("1");
         assertTrue(viewModel.calculationDisabledProperty().get());
     }
 
@@ -145,7 +152,7 @@ public class ViewModelTests {
     @Test
     public void calculateButtonIsDisabledWithErasing() {
         setInputData();
-        viewModel.getTxtBaseProperty().set("");
+        viewModel.txtBaseProperty().set("");
         assertTrue(viewModel.calculationDisabledProperty().get());
     }
 
@@ -167,7 +174,7 @@ public class ViewModelTests {
 
     @Test
     public void canSetBadFormatMessage() {
-        viewModel.getTxtPercentProperty().set("www.google.ru");
+        viewModel.txtPercentProperty().set("www.google.ru");
         assertEquals(Status.BAD_FORMAT.toString(), viewModel.statusProperty().get());
     }
 
@@ -191,17 +198,128 @@ public class ViewModelTests {
         assertEquals(Status.READY.toString(), viewModel.statusProperty().get());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void isThrowExceptionCaused() {
+            new ViewModel(null);
+    }
+
+    @Test
+    public void logIsEmptyOnTheStart() {
+        List<String> log = viewModel.getLog();
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void logContainsProperMessageAfterCalculation() {
+        setInputData();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*" + LogMessages.CALCULATE_WAS_PRESSED + ".*"));
+    }
+
+    @Test
+    public void logContainsInputArgumentsAfterCalculation() {
+        setInputData();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + viewModel.txtInterestCountProperty().get()
+                + ".*" + viewModel.txtPercentProperty().get()
+                + ".*" + viewModel.txtBaseProperty().get()
+                + ".*" + viewModel.dtPkrStartProperty().get()
+                + ".*" + viewModel.dtPkrEndProperty().get() + ".*"));
+    }
+
+    @Test
+    public void argumentsHasProperFormat() {
+        setInputData();
+
+        viewModel.calculate();
+
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Arguments"
+                + ": IntCount = " + viewModel.txtInterestCountProperty().get()
+                + "; Percents = " + viewModel.txtPercentProperty().get()
+                + "; Base = " + viewModel.txtBaseProperty().get()
+                + "; Start = " + viewModel.dtPkrStartProperty().get()
+                + "; End = " + viewModel.dtPkrEndProperty().get() + ".*"));
+    }
+
+    @Test
+    public void canPutFewLogs() {
+        setInputData();
+
+        viewModel.calculate();
+        viewModel.calculate();
+        viewModel.calculate();
+        viewModel.calculate();
+        assertEquals(4, viewModel.getLog().size());
+    }
+
+    @Test
+    public void argumentsLoggedOnChange() {
+        setInputData();
+
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + LogMessages.EDITING_FINISHED
+                + "Input arguments are: \\["
+                + viewModel.txtInterestCountProperty().get() + "; "
+                + viewModel.txtPercentProperty().get() + "; "
+                + viewModel.txtBaseProperty().get() + "; "
+                + viewModel.dtPkrStartProperty().get() + ";"
+                + viewModel.dtPkrEndProperty().get() + "\\]"));
+    }
+
+    @Test
+    public void calculateIsNotCalledWhenButtonIsDisabled() {
+        viewModel.calculate();
+
+        assertTrue(viewModel.getLog().isEmpty());
+    }
+
+    @Test
+    public void canRecogniseChanging() {
+        viewModel.txtBaseProperty().set("100");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        viewModel.txtBaseProperty().set("3000");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        assertEquals(2, viewModel.getLog().size());
+    }
+
+    @Test
+    public void canRecogniseDateChanging() {
+        viewModel.dtPkrEndProperty().set(LocalDate.of(2014, 7, 10));
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        viewModel.dtPkrEndProperty().set(LocalDate.of(2015, 7, 10));
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        assertEquals(2, viewModel.getLog().size());
+    }
+
+    @Test
+    public void doNotLogSameParametersTwiceWithPartialInput() {
+        viewModel.txtBaseProperty().set("1");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        viewModel.txtBaseProperty().set("1");
+        viewModel.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        assertEquals(1, viewModel.getLog().size());
+    }
+
     private void setTxtFields(final String base, final String percent, final String interestCount) {
-        viewModel.getTxtBaseProperty().set(base);
-        viewModel.getTxtInterestCountProperty().set(interestCount);
-        viewModel.getTxtPercentProperty().set(percent);
+        viewModel.txtBaseProperty().set(base);
+        viewModel.txtInterestCountProperty().set(interestCount);
+        viewModel.txtPercentProperty().set(percent);
     }
 
     private void setInputData() {
-        viewModel.getTxtBaseProperty().set("1000");
-        viewModel.getTxtPercentProperty().set("4.5");
-        viewModel.getTxtInterestCountProperty().set("1");
+        viewModel.txtBaseProperty().set("1000");
+        viewModel.txtPercentProperty().set("4.5");
+        viewModel.txtInterestCountProperty().set("1");
         viewModel.dtPkrStartProperty().set(LocalDate.of(2014, 7, 10));
         viewModel.dtPkrEndProperty().set(LocalDate.of(2015, 7, 10));
     }
+
 }
