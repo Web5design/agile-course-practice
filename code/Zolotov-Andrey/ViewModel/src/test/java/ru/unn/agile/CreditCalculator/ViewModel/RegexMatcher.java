@@ -10,6 +10,7 @@ public class RegexMatcher extends BaseMatcher {
     public boolean matches(final Object obj) {
         return ((String) obj).matches(regularExpression);
     }
+
     public RegexMatcher(final String regex) {
         this.regularExpression = regex;
     }

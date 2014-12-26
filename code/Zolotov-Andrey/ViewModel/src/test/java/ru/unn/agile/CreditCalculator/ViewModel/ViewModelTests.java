@@ -54,6 +54,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.WAITING, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessAnnuity() {
         viewModel.setSum("1");
@@ -66,6 +67,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessDifferentiated() {
         viewModel.setSum("1");
@@ -78,6 +80,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessDollar() {
         viewModel.setSum("1");
@@ -90,6 +93,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatSum() {
         viewModel.setSum("test");
@@ -101,6 +105,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatPaymentPeriod() {
         viewModel.setSum("1");
@@ -112,6 +117,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatInterestRate() {
         viewModel.setSum("1");
@@ -123,6 +129,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatStartMonth() {
         viewModel.setSum("1");
@@ -272,16 +279,20 @@ public class ViewModelTests {
         viewModel.setTypePayment(TypePayment.Annuity);
         viewModel.setCurrency(Currency.RUR);
     }
+
     public String getFirstLogMessage() {
         return viewModel.getLog().get(0);
     }
+
     public int getLogSize() {
         return viewModel.getLog().size();
     }
+
     @Test(expected = IllegalArgumentException.class)
     public void viewModelConstructorThrowsExceptionWithNullLogger() {
         new ViewModel(null);
     }
+
     @Test
     public void isLogEmptyInTheBeginning() {
         List<String> log = viewModel.getLog();
@@ -445,6 +456,7 @@ public class ViewModelTests {
 
         assertEquals(1, getLogSize());
     }
+
     @Test
     public void doNotLogSameParametersTwice() {
         setViewModelVariables();

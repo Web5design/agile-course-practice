@@ -274,6 +274,7 @@ public class ViewModel {
         }
         status = UserInputStatus.SUCCESS;
     }
+
     public  void setResults(final CreditCalculator calculator) {
         allSum = String.valueOf(calculator.getAllSum());
         startDateOfPayment = String.valueOf(
@@ -297,6 +298,7 @@ public class ViewModel {
     public void focusLost() {
         logInputParams();
     }
+
     private String editingFinishedLogMessage() {
         String message = LogMessages.EDITING_FINISHED
                 + "Input arguments are: ["
