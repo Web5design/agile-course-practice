@@ -24,6 +24,9 @@ public class ViewModel {
     private ILogger logger;
 
     public ViewModel(final ILogger log) {
+        if (log == null) {
+            throw new IllegalArgumentException("Logger parameter can't be null");
+        }
         logger = log;
         sum = "";
         paymentPeriod = "";

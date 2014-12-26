@@ -1,10 +1,11 @@
 package ru.unn.agile.CreditCalculator.view;
 
 import ru.unn.agile.CreditCalculator.ViewModel.ViewModel;
-
+import ru.unn.agile.CreditCalculator.infrastructure.TxtLogger;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public final class Calculator {
 
@@ -24,6 +25,7 @@ public final class Calculator {
     private JTextField finishDateOfPayment;
     private JTextField firstPayment;
     private JTextField overPayment;
+    private JList<String> lstLog;
 
     private Calculator() { }
 
@@ -63,7 +65,8 @@ public final class Calculator {
     public static void main(final String[] args) {
         JFrame frame = new JFrame("Calculator");
 
-        //frame.setContentPane(new Calculator(new ViewModel()).mainPanel);
+        TxtLogger logger = new TxtLogger("./Calculator.log");
+        frame.setContentPane(new Calculator(new ViewModel(logger)).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -96,6 +99,10 @@ public final class Calculator {
         overPayment.setText(viewModel.getOverPayment());
         firstPayment.setText(viewModel.getFirstPayment());
         lbStatus.setText(viewModel.getStatus());
+
+        List<String> log = viewModel.getLog();
+        String[] items = log.toArray(new String[log.size()]);
+        lstLog.setListData(items);
     }
 
 }

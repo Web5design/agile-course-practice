@@ -15,7 +15,9 @@ import static ru.unn.agile.CreditCalculator.ViewModel.RegexMatcher.matchesPatter
 
 public class ViewModelTests {
     private ViewModel viewModel;
-
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
     @Before
     public void setUp() {
         FakeLog logger = new FakeLog();
@@ -271,11 +273,21 @@ public class ViewModelTests {
     @Test
     public void canCreateViewModelWithLogger() {
         FakeLog logger = new FakeLog();
-        ViewModel viewModelLogged = new ViewModel(logger);
+        ViewModel viewModelLog = new ViewModel(logger);
 
-        assertNotNull(viewModelLogged);
+        assertNotNull(viewModelLog);
     }
-
+    @Test
+    public void viewModelConstructorThrowsExceptionWithNullLogger() {
+        try {
+            new ViewModel(null);
+            fail("Exception wasnt thrown");
+        } catch (IllegalArgumentException except) {
+            assertEquals("Logger parameter can't be null", except.getMessage());
+        } catch (Exception except) {
+            fail("Invalid exception type");
+        }
+    }
     @Test
     public void isLogEmptyInTheBeginning() {
         List<String> log = viewModel.getLog();
