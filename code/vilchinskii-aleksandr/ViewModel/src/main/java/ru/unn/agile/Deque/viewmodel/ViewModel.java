@@ -137,6 +137,14 @@ public class ViewModel {
         return txtItem.get();
     }
 
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    public final String getLogs() {
+        return logs.get();
+    }
+
     public BooleanProperty isAddingDisabledProperty() {
         return isAddingDisabled;
     }
@@ -151,14 +159,6 @@ public class ViewModel {
 
     public final String getStatus() {
         return status.get();
-    }
-
-    public StringProperty logsProperty() {
-        return logs;
-    }
-
-    public final String getLogs() {
-        return logs.get();
     }
 
     public boolean isDequeEmpty() {
