@@ -60,13 +60,13 @@ public class TextLoggerTests {
 
     @Test
     public void canWriteSeveralLogMessage() {
-        String[] messages = {"test1", "test2"};
+        String[] messagesToLog = {"test1", "test2"};
 
-        logger.log(ILogger.Level.ERROR, messages[0]);
-        logger.log(ILogger.Level.INFO,  messages[1]);
+        logger.log(ILogger.Level.ERROR, messagesToLog[0]);
+        logger.log(ILogger.Level.INFO,  messagesToLog[1]);
         List<String> loggedMessages = logger.getLog();
 
-        assertTrue(loggedMessages.get(0).matches(".*" + messages[0] + "$"));
-        assertTrue(loggedMessages.get(1).matches(".*" + messages[1] + "$"));
+        assertTrue(loggedMessages.get(0).matches(".*" + messagesToLog[0] + "$"));
+        assertTrue(loggedMessages.get(1).matches(".*" + messagesToLog[1] + "$"));
     }
 }

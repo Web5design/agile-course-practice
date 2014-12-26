@@ -8,10 +8,6 @@ import static org.junit.Assert.*;
 public class ViewModelTests {
     private ViewModel viewModel = new ViewModel();
 
-    public void setLogger(final ILogger logger) {
-        viewModel.setLogger(logger);
-    }
-
     @Before
     public void setUp() {
         viewModel = new ViewModel();
@@ -204,6 +200,9 @@ public class ViewModelTests {
                         .matches(".*" + ILogger.Level.DEBUG + "Removing the last one" + "$"));
     }
 
+    public void setLogger(final ILogger logger) {
+        viewModel.setLogger(logger);
+    }
 
     private String addOneAsFirst() {
         String item = "1";
