@@ -21,11 +21,19 @@ public class ViewModel {
 
     private final StringProperty status = new SimpleStringProperty(systemStatus.WAITING.toString());
 
-    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+    private final StringProperty logs = new SimpleStringProperty("");
+
+    private final List<ValueCachingChangeListener> valueChangedListeners = new ArrayList<>();
+
+    private ILogger logger;
 
     public ViewModel() {
-        bindEquationDisabled();
-        createFieldsValueChangedListeners();
+        init();
+    }
+
+    public ViewModel(final ILogger logger) {
+        setLogger(logger);
+        init();
     }
 
     private void bindEquationDisabled() {
@@ -51,10 +59,22 @@ public class ViewModel {
             }
         };
         for (StringProperty field : fields) {
-            final ValueChangeListener listener = new ValueChangeListener();
+            final ValueCachingChangeListener listener = new ValueCachingChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
+    }
+
+    public void setLogger(final ILogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger parameter can't be null");
+        }
+        this.logger = logger;
+    }
+
+    private void init() {
+        bindEquationDisabled();
+        createFieldsValueChangedListeners();
     }
 
     public void solve() {
@@ -74,6 +94,34 @@ public class ViewModel {
             status.set(systemStatus.NO_ROOTS.toString());
         } catch (IllegalArgumentException ae) {
             status.set(systemStatus.INCORRECT_COEF.toString());
+        }
+        StringBuilder message = new StringBuilder(TypeOfLogMessages.SOLVE_WAS_PRESSED);
+        message.append("Coefficients")
+                .append(": a = ").append(firstCoef.get())
+                .append("; b = ").append(secondCoef.get())
+                .append("; c = ").append(thirdCoef.get()).append(".");
+        logger.log(message.toString());
+        updateRecordsInLog();
+    }
+
+    public void onFocusChanged(final Boolean oldValue, final Boolean newValue) {
+        if (!oldValue && newValue) {
+            return;
+        }
+
+        for (ValueCachingChangeListener listener : valueChangedListeners) {
+            if (listener.isChanged()) {
+                StringBuilder message = new StringBuilder(TypeOfLogMessages.INPUT_EDITING_FINISHED);
+                message.append("Input coefficients are: [")
+                        .append(firstCoef.get()).append("; ")
+                        .append(secondCoef.get()).append("; ")
+                        .append(thirdCoef.get()).append("]");
+                logger.log(message.toString());
+                updateRecordsInLog();
+
+                listener.cache();
+                break;
+            }
         }
     }
 
@@ -121,6 +169,19 @@ public class ViewModel {
         return solvingDisabled.get();
     }
 
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    public final String getLogs() {
+        return logs.get();
+    }
+
+    public final List<String> getLog() {
+        return logger.getLog();
+    }
+
+
     private systemStatus getEquationStatus() {
         systemStatus equationStatus = systemStatus.READY;
         if (firstCoef.get().isEmpty() || secondCoef.get().isEmpty() || thirdCoef.get().isEmpty()) {
@@ -143,12 +204,32 @@ public class ViewModel {
         return equationStatus;
     }
 
-    private class ValueChangeListener implements ChangeListener<String> {
+    private void updateRecordsInLog() {
+        List<String> filledLog = logger.getLog();
+        String record = new String();
+        for (String log : filledLog) {
+            record += log + "\n";
+        }
+        logs.set(record);
+    }
+
+    private class ValueCachingChangeListener implements ChangeListener<String> {
+        private String pastValue = new String();
+        private String presentValue = new String();
         @Override
         public void changed(final ObservableValue<? extends String> observable,
-                        final String oldValue,
-                        final String newValue) {
+                            final String oldValue, final String newValue) {
+            if (oldValue.equals(newValue)) {
+                return;
+            }
             status.set(getEquationStatus().toString());
+            presentValue = newValue;
+        }
+        public boolean isChanged() {
+            return !pastValue.equals(presentValue);
+        }
+        public void cache() {
+            pastValue = presentValue;
         }
     }
 }
