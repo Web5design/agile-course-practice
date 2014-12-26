@@ -1,6 +1,6 @@
 dependencies {
     compile project(':lazarev-anton-ViewModel')
-    compile project(':lazarev-anton-Infrastructure')
+    testCompile project(':lazarev-anton-ViewModel').sourceSets.test.output
 }
 
 sourceSets {

@@ -160,6 +160,8 @@ include "code/lazarev-anton/View"
 project(":code/lazarev-anton/View").name = "lazarev-anton-View"
 include "code/lazarev-anton/ViewModel"
 project(":code/lazarev-anton/ViewModel").name = "lazarev-anton-ViewModel"
+include "code/lazarev-anton/Infrastructure"
+project(":code/lazarev-anton/Infrastructure").name = "lazarev-anton-Infrastructure"
 
 // Ljaljushkin Nikolay
 include "code/Ljaljushkin-Nikolay/Model"

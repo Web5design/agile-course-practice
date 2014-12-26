@@ -48,8 +48,8 @@ public class CentralBankCurrencyProvider implements ICurrencyProvider {
         }
 
         actualCurrency.add(CurrencyIndexes.RUB.getIndex(),
-                Currency.builder().numCode(1).charCode("RUB").name("Российский рубль")
-                        .nominal(1).value(1).build());
+               Currency.builder().numCode(1).charCode("RUB").name("Российский рубль")
+                       .nominal(1).value(1).build());
     }
 
     private static Document getXMLDocumentWithActualCurrencyRates() {
