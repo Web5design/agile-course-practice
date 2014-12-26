@@ -59,6 +59,8 @@ include "code/abramov-dmitry/ViewModel"
 project(":code/abramov-dmitry/ViewModel").name = "abramov-dmitry-ViewModel"
 include "code/abramov-dmitry/View"
 project(":code/abramov-dmitry/View").name = "abramov-dmitry-View"
+include "code/abramov-dmitry/Infrastructure"
+project(":code/abramov-dmitry/Infrastructure").name = "abramov-dmitry-Infrastructure"
 
 // Anufriev Denis
 include "code/anufriev-denis/Model"

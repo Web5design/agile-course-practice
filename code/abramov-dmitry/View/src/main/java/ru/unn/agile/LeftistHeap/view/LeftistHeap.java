@@ -1,11 +1,15 @@
 package ru.unn.agile.LeftistHeap.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import ru.unn.agile.LeftistHeap.infrastrucure.LoggerException;
+import ru.unn.agile.LeftistHeap.infrastrucure.TxtFileLogger;
 import ru.unn.agile.LeftistHeap.viewmodel.ViewModel;
 
 public class LeftistHeap {
@@ -34,11 +38,43 @@ public class LeftistHeap {
 
     @FXML
     void initialize() {
+        try {
+            viewModel.setLogger(new TxtFileLogger("./mainLog.log"));
+        } catch (LoggerException exception) {
+            exception.printStackTrace();
+        }
+
+        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
+            @Override
+            public void changed(final ObservableValue<? extends Boolean> observable,
+                                final Boolean oldValue, final Boolean newValue) {
+                viewModel.onFocusChanged(oldValue, newValue);
+            }
+        };
+
         key1.textProperty().bindBidirectional(viewModel.keyProperty());
+        key1.focusedProperty().addListener(focusChangeListener);
+
         value1.textProperty().bindBidirectional(viewModel.valueProperty());
+        value1.focusedProperty().addListener(focusChangeListener);
+
         newKey1.textProperty().bindBidirectional(viewModel.newKeyProperty());
+        newKey1.focusedProperty().addListener(focusChangeListener);
 
         cbHeap.valueProperty().bindBidirectional(viewModel.heapProperty());
+        cbHeap.valueProperty().addListener(
+                new ChangeListener<ru.unn.agile.LeftistHeap.Model.LeftistHeap<String>>() {
+                    @Override
+                    public void changed(
+                            final ObservableValue<? extends ru.unn.agile.LeftistHeap.Model
+                                    .LeftistHeap<String>> observable,
+                            final ru.unn.agile.LeftistHeap.Model
+                                    .LeftistHeap<String> oldValue,
+                            final ru.unn.agile.LeftistHeap.Model
+                                    .LeftistHeap<String> newValue) {
+                viewModel.onHeapChanged(oldValue, newValue);
+            }
+        });
 
         add.setOnAction(new EventHandler<ActionEvent>() {
             @Override
