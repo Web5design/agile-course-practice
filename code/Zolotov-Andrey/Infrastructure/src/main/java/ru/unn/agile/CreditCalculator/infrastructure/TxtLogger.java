@@ -19,21 +19,21 @@ public class TxtLogger implements ILogger {
     private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 
     private static String now() {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW, Locale.ENGLISH);
-        return sdf.format(cal.getTime());
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sDateFormat = new SimpleDateFormat(DATE_FORMAT_NOW, Locale.ENGLISH);
+        return sDateFormat.format(calendar.getTime());
     }
 
     public TxtLogger(final String filename) {
         this.filename = filename;
 
-        BufferedWriter logWriter = null;
+        BufferedWriter logWr = null;
         try {
-            logWriter = new BufferedWriter(new FileWriter(filename));
+            logWr = new BufferedWriter(new FileWriter(filename));
         } catch (Exception except) {
             except.printStackTrace();
         }
-        writer = logWriter;
+        writer = logWr;
     }
     @Override
     public List<String> getLog() {
