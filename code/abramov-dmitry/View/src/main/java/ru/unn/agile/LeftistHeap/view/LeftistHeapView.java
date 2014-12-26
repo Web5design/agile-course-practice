@@ -8,19 +8,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import ru.unn.agile.LeftistHeap.infrastrucure.LoggerException;
+import ru.unn.agile.LeftistHeap.Model.LeftistHeap;
 import ru.unn.agile.LeftistHeap.infrastrucure.TxtFileLogger;
 import ru.unn.agile.LeftistHeap.viewmodel.ViewModel;
 
-public class LeftistHeap {
+public class LeftistHeapView {
     @FXML
     private ViewModel viewModel;
     @FXML
-    private TextField key1;
+    private TextField key;
     @FXML
-    private TextField value1;
+    private TextField value;
     @FXML
-    private TextField newKey1;
+    private TextField newKey;
 
     @FXML
     private Button add;
@@ -38,13 +38,9 @@ public class LeftistHeap {
 
     @FXML
     void initialize() {
-        try {
-            viewModel.setLogger(new TxtFileLogger("./log.log"));
-        } catch (LoggerException exception) {
-            exception.printStackTrace();
-        }
+        viewModel.setLogger(new TxtFileLogger("./log.log"));
 
-        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
+        final ChangeListener<Boolean> onFocusChangeListener = new ChangeListener<Boolean>() {
             @Override
             public void changed(final ObservableValue<? extends Boolean> observable,
                                 final Boolean oldValue, final Boolean newValue) {
@@ -52,26 +48,23 @@ public class LeftistHeap {
             }
         };
 
-        key1.textProperty().bindBidirectional(viewModel.keyProperty());
-        key1.focusedProperty().addListener(focusChangeListener);
+        key.textProperty().bindBidirectional(viewModel.keyProperty());
+        key.focusedProperty().addListener(onFocusChangeListener);
 
-        value1.textProperty().bindBidirectional(viewModel.valueProperty());
-        value1.focusedProperty().addListener(focusChangeListener);
+        value.textProperty().bindBidirectional(viewModel.valueProperty());
+        value.focusedProperty().addListener(onFocusChangeListener);
 
-        newKey1.textProperty().bindBidirectional(viewModel.newKeyProperty());
-        newKey1.focusedProperty().addListener(focusChangeListener);
+        newKey.textProperty().bindBidirectional(viewModel.newKeyProperty());
+        newKey.focusedProperty().addListener(onFocusChangeListener);
 
         cbHeap.valueProperty().bindBidirectional(viewModel.heapProperty());
         cbHeap.valueProperty().addListener(
-                new ChangeListener<ru.unn.agile.LeftistHeap.Model.LeftistHeap<String>>() {
+                new ChangeListener<LeftistHeap<String>>() {
                     @Override
                     public void changed(
-                            final ObservableValue<? extends ru.unn.agile.LeftistHeap.Model
-                                    .LeftistHeap<String>> observable,
-                            final ru.unn.agile.LeftistHeap.Model
-                                    .LeftistHeap<String> oldValue,
-                            final ru.unn.agile.LeftistHeap.Model
-                                    .LeftistHeap<String> newValue) {
+                            final ObservableValue<? extends LeftistHeap<String>> observable,
+                            final LeftistHeap<String> oldValue,
+                            final LeftistHeap<String> newValue) {
                 viewModel.onHeapChanged(oldValue, newValue);
             }
         });

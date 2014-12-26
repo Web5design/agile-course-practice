@@ -198,16 +198,9 @@ public class ViewModelTests {
         assertEquals(Status.OK.toString(), viewModel.statusProperty().get());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void viewModelConstructorThrowsExceptionWithNullLogger() {
-        try {
-            new ViewModel(null);
-            fail("Exception wasn't thrown");
-        } catch (IllegalArgumentException ex) {
-            assertEquals("Parameter 'logger' can't be null", ex.getMessage());
-        } catch (Exception ex) {
-            fail("Invalid exception type");
-        }
+        new ViewModel(null);
     }
 
     @Test

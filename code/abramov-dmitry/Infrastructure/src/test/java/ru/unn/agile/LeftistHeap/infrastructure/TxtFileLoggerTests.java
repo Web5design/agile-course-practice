@@ -2,7 +2,6 @@ package ru.unn.agile.LeftistHeap.infrastructure;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.unn.agile.LeftistHeap.infrastrucure.LoggerException;
 import ru.unn.agile.LeftistHeap.infrastrucure.TxtFileLogger;
 
 import java.io.BufferedReader;
@@ -21,11 +20,7 @@ public class TxtFileLoggerTests {
 
     @Before
     public void setUp() {
-        try {
-            logger = new TxtFileLogger(FILENAME);
-        } catch (LoggerException exception) {
-            fail("Logger initialization failed: " + exception.getMessage());
-        }
+        logger = new TxtFileLogger(FILENAME);
     }
 
     @Test
@@ -54,15 +49,14 @@ public class TxtFileLoggerTests {
 
     @Test
     public void canWriteSeveralLogMessage() {
-        String[] messages = {"message 1", "message 2"};
-
-        logger.log(messages[0]);
-        logger.log(messages[1]);
+        logger.log("message 1");
+        logger.log("message 2");
 
         List<String> actualMessages = logger.getLog();
-        for (int i = 0; i < actualMessages.size(); i++) {
-            assertTrue(actualMessages.get(i).matches(".*" + messages[i] + "$"));
-        }
+
+        assertEquals(2, actualMessages.size());
+        assertTrue(actualMessages.get(0).matches(".*message 1"));
+        assertTrue(actualMessages.get(1).matches(".*message 2"));
     }
 
     @Test
