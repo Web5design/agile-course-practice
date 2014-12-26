@@ -95,6 +95,8 @@ include "code/borodulina-ljubov/ViewModel"
 project(":code/borodulina-ljubov/ViewModel").name = "borodulina-ljubov-ViewModel"
 include "code/borodulina-ljubov/View"
 project(":code/borodulina-ljubov/View").name = "borodulina-ljubov-View"
+include "code/borodulina-ljubov/Infrastructure"
+project(":code/borodulina-ljubov/Infrastructure").name = "borodulina-ljubov-Infrastructure"
 
 // Bysheva Tatyana
 include "code/bysheva-tatyana/Model"
