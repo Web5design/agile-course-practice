@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import ru.unn.agile.Queue.PlainTextLogger;
 import ru.unn.agile.Queue.viewmodel.ViewModel;
 
 public class Queue {
@@ -19,6 +20,7 @@ public class Queue {
 
     @FXML
     public void initialize() {
+        viewModel.setLogger(new PlainTextLogger("view.log"));
         txtToAdd.textProperty().bindBidirectional(viewModel.txtToAddProperty());
 
         btnAdd.setOnAction(new EventHandler<ActionEvent>() {

@@ -20,6 +20,7 @@ public class ViewModel {
     private final StringProperty  element           = new SimpleStringProperty();
     private final BooleanProperty isAddingDisabled  = new SimpleBooleanProperty();
     private final Queue<Integer>  queue             = new Queue<Integer>();
+    private final StringProperty logEntries = new SimpleStringProperty();
 
     private final InputChangeListener valueChangedListener = new InputChangeListener();
 
@@ -117,6 +118,14 @@ public class ViewModel {
         return txtToAdd.get();
     }
 
+    public StringProperty logEntriesProperty() {
+        return logEntries;
+    }
+
+    public final String getLogEntries() {
+        return logEntries.get();
+    }
+
     public void setLogger(final ILogger logger) {
         this.logger = logger;
     }
@@ -134,6 +143,20 @@ public class ViewModel {
         }
 
         logger.log(level, s);
+        fetchLogs();
+    }
+
+    private void fetchLogs() {
+        if (logger == null) {
+            return;
+        }
+
+        List<String> storedLog = logger.getLog();
+        String logToView = "";
+        for (String s : storedLog) {
+            logToView += s + "\n";
+        }
+        logEntries.set(logToView);
     }
 
     private ViewState getInputState() {
