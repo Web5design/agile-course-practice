@@ -287,6 +287,8 @@ include "code/Syainova-Diana/View"
 project(":code/Syainova-Diana/View").name = "Syainova-Diana-View"
 include "code/Syainova-Diana/ViewModel"
 project(":code/Syainova-Diana/ViewModel").name = "Syainova-Diana-ViewModel"
+include "code/Syainova-Diana/Infrastructure"
+project(":code/Syainova-Diana/Infrastructure").name = "Syainova-Diana-Infrastructure"
 
 // Tsarev Mikhail
 

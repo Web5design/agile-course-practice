@@ -4,176 +4,279 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ViewModelTests {
-    private ViewModel viewModel;
+    private ViewModel viewModelForTests;
+
+    public void setExternalViewModel(final ViewModel viewModel) {
+        this.viewModelForTests = viewModel;
+    }
 
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        if (viewModelForTests == null) {
+            viewModelForTests = new ViewModel(new FakeLogger());
+        }
     }
 
     @After
     public void tearDown() {
-        viewModel = null;
+        viewModelForTests = null;
     }
 
     @Test
-    public void canSetDefaultValues() {
-        assertEquals("", viewModel.firstCoefficientProperty().get());
-        assertEquals("", viewModel.secondCoefficientProperty().get());
-        assertEquals("", viewModel.firstRootResultProperty().get());
-        assertEquals("", viewModel.secondRootResultProperty().get());
-        assertEquals(systemStatus.WAITING.toString(), viewModel.statusProperty().get());
+    public void canSetDefaultValuesCoefficientsAndRoots() {
+        assertEquals("", viewModelForTests.firstCoefficientProperty().get());
+        assertEquals("", viewModelForTests.secondCoefficientProperty().get());
+        assertEquals("", viewModelForTests.firstRootResultProperty().get());
+        assertEquals("", viewModelForTests.secondRootResultProperty().get());
+        assertEquals(systemStatus.WAITING.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void statusIsWaitingWhenSolveWithEmptyFields() {
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals(systemStatus.WAITING.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.WAITING.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void statusIsReadyWhenFieldsAreFill() {
         setEquationData();
 
-        assertEquals(systemStatus.READY.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.READY.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void canReportWhenTheInputCoefficientHasBadFormat() {
-        viewModel.firstCoefficientProperty().set("/");
+        viewModelForTests.firstCoefficientProperty().set("/");
 
-        assertEquals(systemStatus.BAD_FORMAT.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.BAD_FORMAT.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void statusIsWaitingWhenNotAllCoefficientsIntroduced() {
-        viewModel.firstCoefficientProperty().set("2");
-        viewModel.secondCoefficientProperty().set("1");
+        viewModelForTests.firstCoefficientProperty().set("2");
+        viewModelForTests.secondCoefficientProperty().set("1");
 
-        assertEquals(systemStatus.WAITING.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.WAITING.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void solveButtonIsDisabledInitially() {
-        assertTrue(viewModel.solvingDisabledProperty().get());
+        assertTrue(viewModelForTests.solvingDisabledProperty().get());
     }
 
     @Test
     public void solveButtonIsDisabledWhenFormatIsBad() {
         setEquationData();
-        viewModel.thirdCoefficientProperty().set("ttt");
+        viewModelForTests.thirdCoefficientProperty().set("ttt");
 
-        assertTrue(viewModel.solvingDisabledProperty().get());
+        assertTrue(viewModelForTests.solvingDisabledProperty().get());
     }
 
     @Test
     public void solveButtonIsDisabledWheNotAllCoefficientsIntroduced() {
-        viewModel.firstCoefficientProperty().set("4");
-        viewModel.thirdCoefficientProperty().set("2");
+        viewModelForTests.firstCoefficientProperty().set("4");
+        viewModelForTests.thirdCoefficientProperty().set("2");
 
-        assertTrue(viewModel.solvingDisabledProperty().get());
+        assertTrue(viewModelForTests.solvingDisabledProperty().get());
     }
 
     @Test
     public void solveButtonIsEnabledWhenAllCorrectCoefficientIntroduced() {
         setEquationData();
 
-        assertFalse(viewModel.solvingDisabledProperty().get());
+        assertFalse(viewModelForTests.solvingDisabledProperty().get());
     }
 
     @Test
     public void solveButtonIsEnabledWhenFirstCoefficientIsNull() {
         setEquationData();
-        viewModel.firstCoefficientProperty().set("0");
+        viewModelForTests.firstCoefficientProperty().set("0");
 
-        assertFalse(viewModel.solvingDisabledProperty().get());
+        assertFalse(viewModelForTests.solvingDisabledProperty().get());
     }
 
     @Test
     public void solvingHasTwoDifferentRoots() {
-        viewModel.firstCoefficientProperty().set("1");
-        viewModel.secondCoefficientProperty().set("1");
-        viewModel.thirdCoefficientProperty().set("-2");
+        viewModelForTests.firstCoefficientProperty().set("1");
+        viewModelForTests.secondCoefficientProperty().set("1");
+        viewModelForTests.thirdCoefficientProperty().set("-2");
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals("x = 1.0", viewModel.firstRootResultProperty().get());
-        assertEquals("x = -2.0", viewModel.secondRootResultProperty().get());
+        assertEquals("x = 1.0", viewModelForTests.firstRootResultProperty().get());
+        assertEquals("x = -2.0", viewModelForTests.secondRootResultProperty().get());
     }
 
     @Test
     public void statusIsSuccessWhenEquationCorrectlySolved() {
         setEquationData();
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals(systemStatus.SUCCESS.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.SUCCESS.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void statusIsReadyWhenEnterCorrectCoefficients() {
         setEquationData();
 
-        assertEquals(systemStatus.READY.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.READY.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void canReportBadFormatCoefficients() {
-        viewModel.firstCoefficientProperty().set("incorrect coefficients");
+        viewModelForTests.firstCoefficientProperty().set("incorrect coefficients");
 
-        assertEquals(systemStatus.BAD_FORMAT.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.BAD_FORMAT.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void solvingHasTwoSameRoots() {
-        viewModel.firstCoefficientProperty().set("1");
-        viewModel.secondCoefficientProperty().set("-10");
-        viewModel.thirdCoefficientProperty().set("25");
+        viewModelForTests.firstCoefficientProperty().set("1");
+        viewModelForTests.secondCoefficientProperty().set("-10");
+        viewModelForTests.thirdCoefficientProperty().set("25");
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals("x = 5.0", viewModel.firstRootResultProperty().get());
-        assertEquals("x = 5.0", viewModel.secondRootResultProperty().get());
+        assertEquals("x = 5.0", viewModelForTests.firstRootResultProperty().get());
+        assertEquals("x = 5.0", viewModelForTests.secondRootResultProperty().get());
     }
 
     @Test
     public void solvingHasNotRealRoots() {
-        viewModel.firstCoefficientProperty().set("1");
-        viewModel.secondCoefficientProperty().set("1");
-        viewModel.thirdCoefficientProperty().set("2");
+        viewModelForTests.firstCoefficientProperty().set("1");
+        viewModelForTests.secondCoefficientProperty().set("1");
+        viewModelForTests.thirdCoefficientProperty().set("2");
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals(systemStatus.NO_ROOTS.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.NO_ROOTS.toString(), viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void canReportStatusWhenFirstCoefficientIsNull() {
         setEquationData();
-        viewModel.firstCoefficientProperty().set("0");
+        viewModelForTests.firstCoefficientProperty().set("0");
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals(systemStatus.INCORRECT_COEF.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.INCORRECT_COEF.toString(),
+                viewModelForTests.statusProperty().get());
     }
 
     @Test
     public void canReportStatusWhenFirstCoefficientIsNullOtherKind() {
         setEquationData();
-        viewModel.firstCoefficientProperty().set("00.0");
+        viewModelForTests.firstCoefficientProperty().set("00.0");
 
-        viewModel.solve();
+        viewModelForTests.solve();
 
-        assertEquals(systemStatus.INCORRECT_COEF.toString(), viewModel.statusProperty().get());
+        assertEquals(systemStatus.INCORRECT_COEF.toString(),
+                viewModelForTests.statusProperty().get());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorThrowsExceptionWhenViewModelCreatedWithNullLogger() {
+            new ViewModel(null);
+    }
+
+    @Test
+    public void logIsEmptyBeforeActions() {
+        List<String> log = viewModelForTests.getLog();
+
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void logIncludesProperMessageAfterSolving() {
+        setEquationData();
+
+        viewModelForTests.solve();
+
+        String message = viewModelForTests.getLog().get(0);
+
+        assertTrue(message.matches(".*" + TypeOfLogMessages.SOLVE_WAS_PRESSED + ".*"));
+    }
+
+    @Test
+    public void logIncludesInputCoefficientsAfterSolving() {
+        setEquationData();
+
+        viewModelForTests.solve();
+
+        String message = viewModelForTests.getLog().get(0);
+
+        assertTrue(message.matches(".*" + viewModelForTests.firstCoefficientProperty().get()
+                + ".*" + viewModelForTests.secondCoefficientProperty().get()
+                + ".*" + viewModelForTests.thirdCoefficientProperty().get() + ".*"));
+    }
+
+    @Test
+    public void coefficientIsInfoIsProperlyFormatted() {
+        setEquationData();
+
+        viewModelForTests.solve();
+
+        String message = viewModelForTests.getLog().get(0);
+
+        assertTrue(message.matches(".*Coefficients"
+                + ": a = " + viewModelForTests.firstCoefficientProperty().get()
+                + "; b = " + viewModelForTests.secondCoefficientProperty().get()
+                + "; c = " + viewModelForTests.thirdCoefficientProperty().get() + ".*"));
+    }
+
+    @Test
+    public void canAddSeveralMessagesInLog() {
+        setEquationData();
+
+        viewModelForTests.solve();
+        viewModelForTests.solve();
+        viewModelForTests.solve();
+
+        assertEquals(3, viewModelForTests.getLog().size());
+    }
+
+    @Test
+    public void coefficientsAreCorrectlyLogged() {
+        setEquationData();
+
+        viewModelForTests.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        String message = viewModelForTests.getLog().get(0);
+
+        assertTrue(message.matches(".*" + TypeOfLogMessages.INPUT_EDITING_FINISHED
+                + "Input coefficients are: \\["
+                + viewModelForTests.firstCoefficientProperty().get() + "; "
+                + viewModelForTests.secondCoefficientProperty().get() + "; "
+                + viewModelForTests.thirdCoefficientProperty().get() + "\\]"));
+    }
+
+    @Test
+    public void solveIsNotCalledWhenButtonIsDisabled() {
+        viewModelForTests.solve();
+
+        assertTrue(viewModelForTests.getLog().isEmpty());
+    }
+
+    @Test
+    public void doNotLogSameParametersTwice() {
+        viewModelForTests.firstCoefficientProperty().set("5");
+        viewModelForTests.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+        viewModelForTests.firstCoefficientProperty().set("5");
+        viewModelForTests.onFocusChanged(Boolean.TRUE, Boolean.FALSE);
+
+        assertEquals(1, viewModelForTests.getLog().size());
     }
 
     public void setEquationData() {
-        viewModel.firstCoefficientProperty().set("5");
-        viewModel.secondCoefficientProperty().set("-4");
-        viewModel.thirdCoefficientProperty().set("-3");
+        viewModelForTests.firstCoefficientProperty().set("5");
+        viewModelForTests.secondCoefficientProperty().set("-4");
+        viewModelForTests.thirdCoefficientProperty().set("-3");
     }
 }

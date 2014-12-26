@@ -1,8 +1,6 @@
-apply from:   rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
-
 dependencies {
     compile project(':Syainova-Diana-ViewModel')
-    compile project(':Syainova-Diana-Infrastructure')
+    testCompile project(':Syainova-Diana-ViewModel').sourceSets.test.output
 }
 
 sourceSets {
