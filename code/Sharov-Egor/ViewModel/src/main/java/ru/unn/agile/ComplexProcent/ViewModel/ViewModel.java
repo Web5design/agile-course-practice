@@ -300,7 +300,9 @@ public class ViewModel {
     }
 
     private boolean isDateEqual(final LocalDate lastValue, final LocalDate newValue) {
-        if (lastValue == null) { return false; }
+        if (lastValue == null) {
+            return false;
+        }
         return lastValue.isEqual(newValue);
     }
 
