@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FakeLogger implements ILogger {
-    private ArrayList<String> log = new ArrayList<String>();
+    private final ArrayList<String> log = new ArrayList<String>();
 
     @Override
-    public void log(Level level, final String s) {
+    public void log(final Level level, final String s) {
         log.add(level + s);
     }
 

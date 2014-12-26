@@ -54,7 +54,8 @@ public class PlainTextLoggerTests {
     public void canLogWithDate() {
         logger.log(ILogger.Level.ERR, "any_text");
 
-        assertTrue(logger.getLog().get(0).matches("^\\d{4}-\\d{2}-\\d{2} \\[\\d{2}:\\d{2}:\\d{2}\\]: .*$"));
+        assertTrue(logger.getLog().get(0)
+                        .matches("^\\d{4}-\\d{2}-\\d{2} \\[\\d{2}:\\d{2}:\\d{2}\\]: .*$"));
     }
 
     @Test
