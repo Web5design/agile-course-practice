@@ -308,7 +308,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c9746" class="javax.swing.JList" binding="lstLog">
+          <component id="c9746" class="javax.swing.JList" binding="logs">
             <constraints/>
             <properties/>
           </component>

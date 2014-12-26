@@ -7,8 +7,8 @@ import org.hamcrest.Matcher;
 public class RegexMatcher extends BaseMatcher {
     private final String regularExpression;
 
-    public boolean matches(final Object o) {
-        return ((String) o).matches(regularExpression);
+    public boolean matches(final Object obj) {
+        return ((String) obj).matches(regularExpression);
     }
     public RegexMatcher(final String regex) {
         this.regularExpression = regex;

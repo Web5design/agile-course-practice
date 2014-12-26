@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TxtLogger implements ILogger {
+public class LogWriter implements ILogger {
 
     private final BufferedWriter writer;
     private final String filename;
@@ -24,7 +24,7 @@ public class TxtLogger implements ILogger {
         return sDateFormat.format(calendar.getTime());
     }
 
-    public TxtLogger(final String filename) {
+    public LogWriter(final String filename) {
         this.filename = filename;
 
         BufferedWriter logWr = null;

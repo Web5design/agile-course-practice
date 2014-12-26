@@ -3,7 +3,7 @@ package ru.unn.agile.CreditCalculator.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakeLog implements ILogger {
+public class FakeLogger implements ILogger {
     private ArrayList<String> log = new ArrayList<String>();
 
     @Override

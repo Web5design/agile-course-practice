@@ -15,13 +15,15 @@ import static ru.unn.agile.CreditCalculator.ViewModel.RegexMatcher.matchesPatter
 
 public class ViewModelTests {
     private ViewModel viewModel;
+
     public void setViewModel(final ViewModel viewModel) {
         this.viewModel = viewModel;
     }
+
     @Before
     public void setUp() {
-        FakeLog logger = new FakeLog();
-        viewModel = new ViewModel(logger);
+        FakeLogger log = new FakeLogger();
+        viewModel = new ViewModel(log);
     }
 
     @After
@@ -270,23 +272,15 @@ public class ViewModelTests {
         viewModel.setTypePayment(TypePayment.Annuity);
         viewModel.setCurrency(Currency.RUR);
     }
-    @Test
-    public void canCreateViewModelWithLogger() {
-        FakeLog logger = new FakeLog();
-        ViewModel viewModelLog = new ViewModel(logger);
-
-        assertNotNull(viewModelLog);
+    public String getFirstLogMessage() {
+        return viewModel.getLog().get(0);
     }
-    @Test
+    public int getLogSize() {
+        return viewModel.getLog().size();
+    }
+    @Test(expected = IllegalArgumentException.class)
     public void viewModelConstructorThrowsExceptionWithNullLogger() {
-        try {
-            new ViewModel(null);
-            fail("Exception wasnt thrown");
-        } catch (IllegalArgumentException except) {
-            assertEquals("Logger parameter can't be null", except.getMessage());
-        } catch (Exception except) {
-            fail("Invalid exception type");
-        }
+        new ViewModel(null);
     }
     @Test
     public void isLogEmptyInTheBeginning() {
@@ -306,7 +300,7 @@ public class ViewModelTests {
     @Test
     public void isLogContainsProperMessage() {
         viewModel.calculate();
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
 
         assertThat(report,
                 matchesPattern(".*" + ViewModel.LogMessages.CALCULATE_WAS_PRESSED + ".*"));
@@ -318,7 +312,7 @@ public class ViewModelTests {
 
         viewModel.calculate();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*" + viewModel.getSum()
                         + ".*" + viewModel.getPaymentPeriod()
                         + ".*" + viewModel.getInterestRate()
@@ -329,11 +323,11 @@ public class ViewModelTests {
     }
 
     @Test
-    public void isProperlyFormattingInfoAboutArguments() {
+    public void isInfoAboutArgumentsProperlyFormatted() {
         setViewModelVariables();
 
         viewModel.calculate();
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
 
         assertThat(report, matchesPattern(".*Arguments"
                         + ": sum = " + viewModel.getSum()
@@ -352,7 +346,7 @@ public class ViewModelTests {
 
         viewModel.calculate();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*R.*"));
     }
 
@@ -362,26 +356,26 @@ public class ViewModelTests {
 
         viewModel.calculate();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*$.*"));
     }
    @Test
-    public void isAnnTypePaymentMentionedInTheLog() {
+    public void isAnnuityTypePaymentMentionedInTheLog() {
         viewModel.setTypePayment(TypePayment.Annuity);
 
         viewModel.calculate();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*Ann.*"));
     }
 
     @Test
-    public void isDifTypePaymentMentionedInTheLog() {
+    public void isDifferentTypePaymentMentionedInTheLog() {
         viewModel.setTypePayment(TypePayment.Differentiated);
 
         viewModel.calculate();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*Diff.*"));
     }
 
@@ -393,14 +387,14 @@ public class ViewModelTests {
         viewModel.calculate();
         viewModel.calculate();
 
-        assertEquals(3, viewModel.getLog().size());
+        assertEquals(3, getLogSize());
     }
 
     @Test
     public void canSeeCurrencyChangeInLog() {
         viewModel.setCurrency(Currency.USD);
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report,
                 matchesPattern(".*" + ViewModel.LogMessages.CURRENCY_WAS_CHANGED + "\\$.*"));
     }
@@ -410,7 +404,7 @@ public class ViewModelTests {
         viewModel.setCurrency(Currency.RUR);
         viewModel.setCurrency(Currency.RUR);
 
-        assertEquals(0, viewModel.getLog().size());
+        assertEquals(0, getLogSize());
     }
 
     @Test
@@ -419,7 +413,7 @@ public class ViewModelTests {
 
         viewModel.focusLost();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
     }
 
@@ -428,7 +422,7 @@ public class ViewModelTests {
         setViewModelVariables();
         viewModel.focusLost();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED
                 + "Input arguments are: \\["
                 + viewModel.getSum() + "; "
@@ -449,7 +443,7 @@ public class ViewModelTests {
         viewModel.focusLost();
         viewModel.focusLost();
 
-        assertEquals(1, viewModel.getLog().size());
+        assertEquals(1, getLogSize());
     }
     @Test
     public void doNotLogSameParametersTwice() {
@@ -459,9 +453,9 @@ public class ViewModelTests {
         viewModel.focusLost();
         viewModel.focusLost();
 
-        String report = viewModel.getLog().get(0);
+        String report = getFirstLogMessage();
         assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
-        assertEquals(1, viewModel.getLog().size());
+        assertEquals(1, getLogSize());
     }
 
 }
