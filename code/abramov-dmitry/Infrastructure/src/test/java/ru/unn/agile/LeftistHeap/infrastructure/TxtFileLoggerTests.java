@@ -4,15 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.unn.agile.LeftistHeap.infrastrucure.TxtFileLogger;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 public class TxtFileLoggerTests {
     private static final String FILENAME = "./TxtFileLogger_Tests.log";
@@ -30,11 +27,9 @@ public class TxtFileLoggerTests {
 
     @Test
     public void canCreateLogFile() {
-        try {
-            new BufferedReader(new FileReader(FILENAME));
-        } catch (FileNotFoundException e) {
-            fail("File " + FILENAME + " was not found");
-        }
+        File logFile = new File(FILENAME);
+
+        assertTrue(logFile.exists());
     }
 
     @Test
