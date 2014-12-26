@@ -48,9 +48,9 @@ public class TxtLoggerTests {
         textLogger.log(messages[1]);
 
         List<String> actualMessages = textLogger.getLog();
-        for (int i = 0; i < actualMessages.size(); i++) {
-            assertThat(actualMessages.get(i), matchesPattern(".*" + messages[i] + "$"));
-        }
+        assertThat(actualMessages.get(0), matchesPattern(".*" + messages[0] + "$"));
+        assertThat(actualMessages.get(1), matchesPattern(".*" + messages[1] + "$"));
+
     }
 
     @Test
