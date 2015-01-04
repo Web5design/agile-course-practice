@@ -6,15 +6,24 @@ import org.junit.Test;
 import ru.unn.agile.CreditCalculator.ViewModel.ViewModel.Currency;
 import ru.unn.agile.CreditCalculator.ViewModel.ViewModel.TypePayment;
 
+import java.util.List;
+
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
+import static ru.unn.agile.CreditCalculator.ViewModel.RegexMatcher.matchesPattern;
 
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        FakeLogger log = new FakeLogger();
+        viewModel = new ViewModel(log);
     }
 
     @After
@@ -45,6 +54,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.WAITING, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessAnnuity() {
         viewModel.setSum("1");
@@ -57,6 +67,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessDifferentiated() {
         viewModel.setSum("1");
@@ -69,6 +80,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isStatusSuccessDollar() {
         viewModel.setSum("1");
@@ -81,6 +93,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.SUCCESS, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatSum() {
         viewModel.setSum("test");
@@ -92,6 +105,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatPaymentPeriod() {
         viewModel.setSum("1");
@@ -103,6 +117,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatInterestRate() {
         viewModel.setSum("1");
@@ -114,6 +129,7 @@ public class ViewModelTests {
 
         assertEquals(ViewModel.UserInputStatus.BAD_FORMAT, viewModel.getStatus());
     }
+
     @Test
     public void isBadFormatStartMonth() {
         viewModel.setSum("1");
@@ -176,7 +192,7 @@ public class ViewModelTests {
 
     @Test
     public void canGetAllSumPayment() {
-        setViewModelVariables(viewModel);
+        setViewModelVariables();
 
         viewModel.calculate();
         Double allSum = Double.parseDouble(viewModel.getAllSum());
@@ -199,14 +215,14 @@ public class ViewModelTests {
 
     @Test
     public void canGetFinishDateOfPayment() {
-        setViewModelVariables(viewModel);
+        setViewModelVariables();
         viewModel.calculate();
         assertTrue(viewModel.getFinishDateOfPayment().equals("5.2015"));
     }
 
     @Test
     public void canGetOverPayment() {
-        setViewModelVariables(viewModel);
+        setViewModelVariables();
         viewModel.calculate();
         Double overPayment = Double.parseDouble(viewModel.getOverPayment());
         assertTrue(overPayment > 430 && overPayment < 450);
@@ -214,7 +230,7 @@ public class ViewModelTests {
 
     @Test
     public void canGetFirstPayment() {
-        setViewModelVariables(viewModel);
+        setViewModelVariables();
         viewModel.calculate();
         Double firstPayment = Double.parseDouble(viewModel.getFirstPayment());
         assertTrue(firstPayment > 1730 && firstPayment < 1750);
@@ -255,13 +271,203 @@ public class ViewModelTests {
         assertEquals(Currency.RUR, viewModel.getCurrency());
     }
 
-    public void setViewModelVariables(final ViewModel viewModel) {
+    public void setViewModelVariables() {
         viewModel.setSum("10000");
         viewModel.setPaymentPeriod("6");
         viewModel.setInterestRate("15");
         viewModel.setStartMonth("11");
         viewModel.setTypePayment(TypePayment.Annuity);
+        viewModel.setCurrency(Currency.RUR);
+    }
+
+    public String getFirstLogMessage() {
+        return viewModel.getLog().get(0);
+    }
+
+    public int getLogSize() {
+        return viewModel.getLog().size();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void viewModelConstructorThrowsExceptionWithNullLogger() {
+        new ViewModel(null);
+    }
+
+    @Test
+    public void isLogEmptyInTheBeginning() {
+        List<String> log = viewModel.getLog();
+
+        assertEquals(0, log.size());
+    }
+
+    @Test
+    public void isCalculatePuttingSomething() {
+        viewModel.calculate();
+
+        List<String> log = viewModel.getLog();
+        assertNotEquals(0, log.size());
+    }
+
+    @Test
+    public void isLogContainsProperMessage() {
+        viewModel.calculate();
+        String report = getFirstLogMessage();
+
+        assertThat(report,
+                matchesPattern(".*" + ViewModel.LogMessages.CALCULATE_WAS_PRESSED + ".*"));
+    }
+
+    @Test
+    public void isLogContainsInputArguments() {
+        setViewModelVariables();
+
+        viewModel.calculate();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*" + viewModel.getSum()
+                        + ".*" + viewModel.getPaymentPeriod()
+                        + ".*" + viewModel.getInterestRate()
+                        + ".*" + viewModel.getStartMonth()
+                        + ".*" + viewModel.getCurrency()
+                        + ".*" + viewModel.getTypePayment() + ".*"
+        ));
+    }
+
+    @Test
+    public void isInfoAboutArgumentsProperlyFormatted() {
+        setViewModelVariables();
+
+        viewModel.calculate();
+        String report = getFirstLogMessage();
+
+        assertThat(report, matchesPattern(".*Arguments"
+                        + ": sum = " + viewModel.getSum()
+                        + "; paymentPeriod = " + viewModel.getPaymentPeriod()
+                        + "; interestRate = " + viewModel.getInterestRate()
+                        + "; startMonth = " + viewModel.getStartMonth()
+                        + "; currency: " + viewModel.getCurrency()
+                        + "; typePayment: " + viewModel.getTypePayment()
+                        + ".*"
+        ));
+    }
+
+    @Test
+     public void isRurCurrencyMentionedInTheLog() {
+        viewModel.setCurrency(Currency.RUR);
+
+        viewModel.calculate();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*R.*"));
+    }
+
+    @Test
+    public void isUSDMulOperationMentionedInTheLog() {
         viewModel.setCurrency(Currency.USD);
+
+        viewModel.calculate();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*$.*"));
+    }
+   @Test
+    public void isAnnuityTypePaymentMentionedInTheLog() {
+        viewModel.setTypePayment(TypePayment.Annuity);
+
+        viewModel.calculate();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*Ann.*"));
+    }
+
+    @Test
+    public void isDifferentTypePaymentMentionedInTheLog() {
+        viewModel.setTypePayment(TypePayment.Differentiated);
+
+        viewModel.calculate();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*Diff.*"));
+    }
+
+    @Test
+    public void canPutSeveralLogMessages() {
+        setViewModelVariables();
+
+        viewModel.calculate();
+        viewModel.calculate();
+        viewModel.calculate();
+
+        assertEquals(3, getLogSize());
+    }
+
+    @Test
+    public void canSeeCurrencyChangeInLog() {
+        viewModel.setCurrency(Currency.USD);
+
+        String report = getFirstLogMessage();
+        assertThat(report,
+                matchesPattern(".*" + ViewModel.LogMessages.CURRENCY_WAS_CHANGED + "\\$.*"));
+    }
+
+    @Test
+    public void isCurrencyNotLoggedWhenNotChanged() {
+        viewModel.setCurrency(Currency.RUR);
+        viewModel.setCurrency(Currency.RUR);
+
+        assertEquals(0, getLogSize());
+    }
+
+    @Test
+    public void isEditingFinishLogged() {
+        viewModel.setSum("10000");
+
+        viewModel.focusLost();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
+    }
+
+    @Test
+    public void areArgumentsCorrectlyLoggedOnEditingFinish() {
+        setViewModelVariables();
+        viewModel.focusLost();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED
+                + "Input arguments are: \\["
+                + viewModel.getSum() + "; "
+                + viewModel.getPaymentPeriod() + "; "
+                + viewModel.getInterestRate() + "; "
+                + viewModel.getStartMonth() + "; "
+                + viewModel.getCurrency() + "; "
+                + viewModel.getTypePayment() + "\\]"));
+    }
+
+    @Test
+    public void doNotLogSameParametersTwiceWithPartialInput() {
+        viewModel.setSum("1000");
+        viewModel.setSum("1000");
+        viewModel.setSum("1000");
+
+        viewModel.focusLost();
+        viewModel.focusLost();
+        viewModel.focusLost();
+
+        assertEquals(1, getLogSize());
+    }
+
+    @Test
+    public void doNotLogSameParametersTwice() {
+        setViewModelVariables();
+        setViewModelVariables();
+
+        viewModel.focusLost();
+        viewModel.focusLost();
+
+        String report = getFirstLogMessage();
+        assertThat(report, matchesPattern(".*" + ViewModel.LogMessages.EDITING_FINISHED + ".*"));
+        assertEquals(1, getLogSize());
     }
 
 }
