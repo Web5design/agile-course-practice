@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import ru.unn.agile.LeftistHeap.viewmodel.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.LeftistHeap.view.LeftistHeap">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.LeftistHeap.view.LeftistHeapView">
     
     <children>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="354.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -26,19 +26,19 @@
                   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="307.0">
                      <children>
                         <Label text="Key:" />
-                        <TextField fx:id="key1" />
+                        <TextField fx:id="key" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="307.0">
                      <children>
                         <Label text="Value:" />
-                        <TextField fx:id="value1" />
+                        <TextField fx:id="value" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="307.0">
                      <children>
                         <Label text="New key:" />
-                        <TextField fx:id="newKey1" />
+                        <TextField fx:id="newKey" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="307.0">
@@ -60,6 +60,7 @@
             <Label text="${viewModel.status}" />
          </children>
       </HBox>
+            <TextArea prefHeight="200.0" text="${viewModel.logs}" prefWidth="200.0" />
    </children>
 </VBox>
     </children>

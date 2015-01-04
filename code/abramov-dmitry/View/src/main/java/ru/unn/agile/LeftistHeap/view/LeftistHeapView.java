@@ -1,22 +1,26 @@
 package ru.unn.agile.LeftistHeap.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import ru.unn.agile.LeftistHeap.Model.LeftistHeap;
+import ru.unn.agile.LeftistHeap.infrastrucure.TxtFileLogger;
 import ru.unn.agile.LeftistHeap.viewmodel.ViewModel;
 
-public class LeftistHeap {
+public class LeftistHeapView {
     @FXML
     private ViewModel viewModel;
     @FXML
-    private TextField key1;
+    private TextField key;
     @FXML
-    private TextField value1;
+    private TextField value;
     @FXML
-    private TextField newKey1;
+    private TextField newKey;
 
     @FXML
     private Button add;
@@ -34,11 +38,36 @@ public class LeftistHeap {
 
     @FXML
     void initialize() {
-        key1.textProperty().bindBidirectional(viewModel.keyProperty());
-        value1.textProperty().bindBidirectional(viewModel.valueProperty());
-        newKey1.textProperty().bindBidirectional(viewModel.newKeyProperty());
+        viewModel.setLogger(new TxtFileLogger("./log.log"));
+
+        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
+            @Override
+            public void changed(final ObservableValue<? extends Boolean> element,
+                                final Boolean oldValue, final Boolean newValue) {
+                viewModel.onFocusChanged(oldValue, newValue);
+            }
+        };
+
+        key.textProperty().bindBidirectional(viewModel.keyProperty());
+        key.focusedProperty().addListener(focusChangeListener);
+
+        value.textProperty().bindBidirectional(viewModel.valueProperty());
+        value.focusedProperty().addListener(focusChangeListener);
+
+        newKey.textProperty().bindBidirectional(viewModel.newKeyProperty());
+        newKey.focusedProperty().addListener(focusChangeListener);
 
         cbHeap.valueProperty().bindBidirectional(viewModel.heapProperty());
+        cbHeap.valueProperty().addListener(
+                new ChangeListener<LeftistHeap<String>>() {
+                    @Override
+                    public void changed(
+                            final ObservableValue<? extends LeftistHeap<String>> observable,
+                            final LeftistHeap<String> oldValue,
+                            final LeftistHeap<String> newValue) {
+                viewModel.onHeapChanged(oldValue, newValue);
+            }
+        });
 
         add.setOnAction(new EventHandler<ActionEvent>() {
             @Override
