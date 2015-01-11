@@ -387,7 +387,7 @@ public class ViewModelTests {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void exceptionWhenLoggerIsNull() {
+    public void exceptionWhenLoggerNull() {
         ViewModel viewModel = new ViewModel(null);
         assertNull(viewModel);
     }
