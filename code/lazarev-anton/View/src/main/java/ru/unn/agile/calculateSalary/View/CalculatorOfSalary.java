@@ -1,11 +1,10 @@
 package ru.unn.agile.calculateSalary.View;
 
 import ru.unn.agile.calculateSalary.ViewModel.ViewModel;
+import ru.unn.agile.calculateSalary.Infrastructure.RealLogger;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.util.List;
 
 public final class CalculatorOfSalary {
     private JPanel mainPanel;
@@ -20,6 +19,7 @@ public final class CalculatorOfSalary {
     private JTextField txtVacationMonth;
     private JTextField txtCountMonth;
     private JTextField txtStartDayVacation;
+    private JList<String> listLog;
     private ViewModel viewModel;
 
     private CalculatorOfSalary() { }
@@ -45,6 +45,11 @@ public final class CalculatorOfSalary {
             }
         };
 
+        txtSalary.addKeyListener(whenInCountType);
+        txtWorkedHours.addKeyListener(whenInCountType);
+        txtCountMonth.addKeyListener(whenInCountType);
+        txtCountYear.addKeyListener(whenInCountType);
+
         KeyAdapter whenInVacationType = new KeyAdapter() {
             @Override
             public void keyReleased(final KeyEvent e) {
@@ -54,19 +59,42 @@ public final class CalculatorOfSalary {
             }
         };
 
-        txtSalary.addKeyListener(whenInCountType);
-        txtWorkedHours.addKeyListener(whenInCountType);
-        txtCountMonth.addKeyListener(whenInCountType);
-        txtCountYear.addKeyListener(whenInCountType);
         txtVacationLength.addKeyListener(whenInVacationType);
         txtStartDayVacation.addKeyListener(whenInVacationType);
         txtVacationMonth.addKeyListener(whenInVacationType);
         txtVacationYear.addKeyListener(whenInVacationType);
+
+        FocusAdapter countFocusListener = new FocusAdapter() {
+            public void focusLost(final FocusEvent e) {
+                bind();
+                CalculatorOfSalary.this.viewModel.countFocusLost();
+                backBind();
+            }
+        };
+
+        txtSalary.addFocusListener(countFocusListener);
+        txtWorkedHours.addFocusListener(countFocusListener);
+        txtCountMonth.addFocusListener(countFocusListener);
+        txtCountYear.addFocusListener(countFocusListener);
+
+        FocusAdapter vacationFocusListener = new FocusAdapter() {
+            public void focusLost(final FocusEvent e) {
+                bind();
+                CalculatorOfSalary.this.viewModel.vacationFocusLost();
+                backBind();
+            }
+        };
+
+        txtVacationLength.addFocusListener(vacationFocusListener);
+        txtStartDayVacation.addFocusListener(vacationFocusListener);
+        txtVacationMonth.addFocusListener(vacationFocusListener);
+        txtVacationYear.addFocusListener(vacationFocusListener);
     }
 
     public static void main(final String[] args) {
         JFrame frame = new JFrame("CalculatorOfSalary");
-        frame.setContentPane(new CalculatorOfSalary(new ViewModel()).mainPanel);
+        RealLogger logger = new RealLogger("/.SalaryCalculator.log");
+        frame.setContentPane(new CalculatorOfSalary(new ViewModel(logger)).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -87,5 +115,9 @@ public final class CalculatorOfSalary {
         calculateButton.setEnabled(viewModel.getCalculateButtonEnable());
         txtResult.setText(viewModel.getResult());
         lbStatus.setText(viewModel.getStatus());
+
+        List<String> logs = viewModel.getLog();
+        String[] logItems = logs.toArray(new String[logs.size()]);
+        listLog.setListData(logItems);
     }
 }

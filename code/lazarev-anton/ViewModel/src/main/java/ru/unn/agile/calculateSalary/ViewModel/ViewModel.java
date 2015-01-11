@@ -4,6 +4,7 @@ import ru.unn.agile.calculateSalary.CalculateSalary;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ViewModel {
     private static final int MAX_MONTH = 12;
@@ -21,8 +22,15 @@ public class ViewModel {
     private String result;
     private String status;
     private boolean isCalculateButtonEnabled;
+    private boolean isCountInputChanged;
+    private boolean isVacationInputChanged;
+    private final UniversalLogger logger;
 
-    public ViewModel() {
+    public ViewModel(final UniversalLogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger parameter must be not null");
+        }
+        this.logger = logger;
         salary = "";
         workedHours = "";
         countMonth = "";
@@ -50,12 +58,28 @@ public class ViewModel {
         private Status() { }
     }
 
+    public final class LogMessageTemplates {
+        public static final String COUNT_MESSAGE = "Count input updated.";
+        public static final String VACATION_MESSAGE = "Vacation input updated.";
+        public static final String CALCULATE_MESSAGE = "Calculate salary.";
+
+        private LogMessageTemplates() { }
+    }
+
     public void checkCountFields() {
         isCountInputCorrect();
     }
 
     public void checkVacationFields() {
         isVacationInputCorrect();
+    }
+
+    public void countFocusLost() {
+        createInputedCountLog();
+    }
+
+    public void vacationFocusLost() {
+        createInputedVacationLog();
     }
 
     public void calculate() {
@@ -69,6 +93,7 @@ public class ViewModel {
                                              , Integer.parseInt(countMonth)
                                              , 1))
                 .setLengthOfVacation(0);
+        logger.textInLog(createCalculateLogMessage());
         if (isOneVacationFieldNotDefault()) {
             if (!isVacationInputCorrect()) {
                 return;
@@ -77,9 +102,14 @@ public class ViewModel {
                        .setCountingMonth(LocalDate.of(Integer.parseInt(vacationYear)
                                        , Integer.parseInt(vacationMonth)
                                        , Integer.parseInt(startVacationDay)));
+        logger.textInLog(addVacationInCalculateLogMessage());
         }
         result = getMoneyFormatInCashValue(countPeriod);
         status = Status.CASH;
+    }
+
+    public List<String> getLog() {
+        return logger.getLog();
     }
 
     private String getMoneyFormatInCashValue(final CalculateSalary countPeriod) {
@@ -101,6 +131,7 @@ public class ViewModel {
             return;
         }
         this.salary = inSalary;
+        isCountInputChanged = true;
     }
 
     public String getWorkedHours() {
@@ -112,6 +143,7 @@ public class ViewModel {
             return;
         }
         this.workedHours = inWorkedHours;
+        isCountInputChanged = true;
     }
 
     public String getCountMonth() {
@@ -123,6 +155,7 @@ public class ViewModel {
             return;
         }
         this.countMonth = inCountMonth;
+        isCountInputChanged = true;
     }
 
     public String getCountYear() {
@@ -134,6 +167,7 @@ public class ViewModel {
             return;
         }
         this.countYear = inCountYear;
+        isCountInputChanged = true;
     }
 
     public String getVacationLength() {
@@ -145,6 +179,7 @@ public class ViewModel {
             return;
         }
         this.vacationLength = inVacationLength;
+        isVacationInputChanged = true;
     }
 
     public String getStartVacationDay() {
@@ -156,6 +191,7 @@ public class ViewModel {
             return;
         }
         this.startVacationDay = inVacationStart;
+        isVacationInputChanged = true;
     }
 
     public String getVacationMonth() {
@@ -167,6 +203,7 @@ public class ViewModel {
             return;
         }
         this.vacationMonth = inVacationMonth;
+        isVacationInputChanged = true;
     }
 
     public String getVacationYear() {
@@ -178,6 +215,7 @@ public class ViewModel {
             return;
         }
         this.vacationYear = inVacationYear;
+        isVacationInputChanged = true;
     }
 
     public String getResult() {
@@ -186,6 +224,61 @@ public class ViewModel {
 
     public String getStatus() {
         return status;
+    }
+
+    private void createInputedCountLog() {
+        if (!isCountInputChanged) {
+            return;
+        }
+        logger.textInLog(createCountLogMessage());
+        isCountInputChanged = false;
+    }
+
+    private void createInputedVacationLog() {
+        if (!isVacationInputChanged) {
+            return;
+        }
+        logger.textInLog(createVacationLogMessage());
+        isVacationInputChanged = false;
+    }
+
+    private String createCountLogMessage() {
+        String logMessage =
+                LogMessageTemplates.COUNT_MESSAGE + "Data"
+                        + ": [ Salary = " + salary
+                        + "; Worked hours = " + workedHours
+                        + "; Count date = " + countMonth
+                        + "." + countYear + " ]";
+        return logMessage;
+    }
+
+    private String createVacationLogMessage() {
+        String logMessage =
+                LogMessageTemplates.VACATION_MESSAGE + "Data"
+                        + ": [ Length of vacation = " + vacationLength
+                        + "; Vacation start = " + startVacationDay
+                        + "." + vacationMonth
+                        + "." + vacationYear + " ]";
+        return logMessage;
+    }
+
+    private String createCalculateLogMessage() {
+        String finalMessage =
+                    LogMessageTemplates.CALCULATE_MESSAGE + "With this data"
+                            + ": [ Salary = " + salary
+                            + "; Worked hours = " + workedHours
+                            + "; Count date = " + countMonth
+                            + "." + countYear + " ]";
+        return finalMessage;
+    }
+
+    private String addVacationInCalculateLogMessage() {
+        String addVacationMessage = " And this vacation data"
+                            + ": [ Length of vacation = " + vacationLength
+                            + "; Vacation start = " + startVacationDay
+                            + "." + vacationMonth
+                            + "." + vacationYear + " ]";
+        return addVacationMessage;
     }
 
     private boolean isCountInputCorrect() {

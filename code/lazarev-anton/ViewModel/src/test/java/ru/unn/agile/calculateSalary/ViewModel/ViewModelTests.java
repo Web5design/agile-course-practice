@@ -4,14 +4,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.unn.agile.calculateSalary.ViewModel.ViewModel.Status;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel inViewModel) {
+        this.viewModel = inViewModel;
+    }
+
     @Before
     public void setUpEmptyExample() {
-        viewModel = new ViewModel();
+        FakeLogger myLogger = new FakeLogger();
+        viewModel = new ViewModel(myLogger);
     }
 
     @After
@@ -369,5 +376,185 @@ public class ViewModelTests {
         assertEquals("", viewModel.getResult());
         assertEquals(Status.BAD_YEAR_FORMAT, viewModel.getStatus());
         assertFalse(viewModel.getCalculateButtonEnable());
+    }
+
+    @Test
+    public void canCreateLogger() {
+        FakeLogger myLogger = new FakeLogger();
+        ViewModel viewModelWithLogger = new ViewModel(myLogger);
+
+        assertNotNull(viewModelWithLogger);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void exceptionWhenLoggerNull() {
+        ViewModel viewModel = new ViewModel(null);
+        assertNull(viewModel);
+    }
+
+    @Test
+    public void logIsEmptyWhenCalculatorStart() {
+        List<String> log = viewModel.getLog();
+        assertEquals(0, log.size());
+    }
+
+    @Test
+    public void logIsEmptyWhenCalculateEmptyFields() {
+        viewModel.calculate();
+
+        List<String> log = viewModel.getLog();
+        assertEquals(0, log.size());
+    }
+
+    @Test
+        public void logWhenOneCountFieldType() {
+        viewModel.setSalary("25000");
+
+        viewModel.countFocusLost();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*"
+                + ViewModel.LogMessageTemplates.COUNT_MESSAGE
+                + ".*" + viewModel.getSalary()
+                + ".*"));
+    }
+
+    @Test
+    public void logWhenCountDataType() {
+        viewModel.setCountMonth("10");
+        viewModel.setCountYear("2014");
+
+        viewModel.countFocusLost();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*"
+                + ViewModel.LogMessageTemplates.COUNT_MESSAGE
+                + ".*" + viewModel.getCountMonth()
+                + ".*" + viewModel.getCountYear() + ".*"));
+    }
+
+    @Test
+    public void logWhenAllFieldsType() {
+        viewModel.setSalary("35000");
+        viewModel.setWorkedHours("190");
+        viewModel.setCountMonth("11");
+        viewModel.setCountYear("2000");
+
+        viewModel.countFocusLost();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*"
+                + ViewModel.LogMessageTemplates.COUNT_MESSAGE
+                + ".*" + viewModel.getSalary()
+                + ".*" + viewModel.getWorkedHours()
+                + ".*" + viewModel.getCountMonth()
+                + ".*" + viewModel.getCountYear() + ".*"));
+    }
+
+    @Test
+    public void logWhenOneVacationFieldType() {
+        viewModel.setVacationLength("25");
+
+        viewModel.vacationFocusLost();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*"
+                + ViewModel.LogMessageTemplates.VACATION_MESSAGE
+                + ".*" + viewModel.getVacationLength()
+                + ".*"));
+    }
+
+    @Test
+    public void logWhenDateOfVacationFilled() {
+        viewModel.setStartVacationDay("13");
+        viewModel.setVacationMonth("3");
+        viewModel.setVacationYear("2000");
+
+        viewModel.vacationFocusLost();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*" + ViewModel.LogMessageTemplates.VACATION_MESSAGE
+                + ".*" + viewModel.getStartVacationDay()
+                + ".*" + viewModel.getVacationMonth()
+                + ".*" + viewModel.getVacationYear() + ".*"));
+    }
+
+    @Test
+    public void logWhenCountFilledButVacationFilledNotAll() {
+        viewModel.setSalary("18635");
+        viewModel.setWorkedHours("121");
+        viewModel.setCountMonth("1");
+        viewModel.setCountYear("2009");
+        viewModel.setStartVacationDay("11");
+        viewModel.setVacationMonth("5");
+        viewModel.setVacationYear("2001");
+
+
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+
+        assertTrue(message.matches(".*" + ViewModel.LogMessageTemplates.CALCULATE_MESSAGE
+                + ".*" + viewModel.getSalary()
+                + ".*" + viewModel.getWorkedHours()
+                + ".*" + viewModel.getCountMonth()
+                + ".*" + viewModel.getCountYear() + ".*"));
+    }
+
+    @Test
+    public void logWhenCountFilledAndVacationFilled() {
+        viewModel.setSalary("16000");
+        viewModel.setWorkedHours("130");
+        viewModel.setCountMonth("3");
+        viewModel.setCountYear("2008");
+        viewModel.setVacationLength("45");
+        viewModel.setStartVacationDay("19");
+        viewModel.setVacationMonth("5");
+        viewModel.setVacationYear("2001");
+
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        String vacationMessage = viewModel.getLog().get(1);
+
+        assertTrue(message.matches(".*"
+                + ViewModel.LogMessageTemplates.CALCULATE_MESSAGE + ".*"));
+        assertTrue(vacationMessage.matches(".*"
+                + " And this vacation data" + ".*"));
+    }
+
+    @Test
+    public void notLogEqualInputInCount() {
+        viewModel.setSalary("18000");
+        viewModel.setSalary("18000");
+
+        viewModel.countFocusLost();
+        viewModel.countFocusLost();
+
+        assertEquals(1, viewModel.getLog().size());
+    }
+
+    @Test
+    public void notLogEqualInputInVacation() {
+        viewModel.setStartVacationDay("35");
+        viewModel.setStartVacationDay("35");
+
+        viewModel.vacationFocusLost();
+        viewModel.vacationFocusLost();
+
+        assertEquals(1, viewModel.getLog().size());
+    }
+
+    @Test
+    public void notLogEqualInputInBothTypesOfFields() {
+        viewModel.setSalary("85000");
+        viewModel.setSalary("85000");
+        viewModel.setStartVacationDay("15");
+        viewModel.setStartVacationDay("15");
+
+        viewModel.countFocusLost();
+        viewModel.countFocusLost();
+        viewModel.vacationFocusLost();
+        viewModel.vacationFocusLost();
+
+        assertEquals(2, viewModel.getLog().size());
     }
 }
