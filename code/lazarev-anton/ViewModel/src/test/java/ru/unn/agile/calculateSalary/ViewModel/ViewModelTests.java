@@ -386,16 +386,10 @@ public class ViewModelTests {
         assertNotNull(viewModelWithLogger);
     }
 
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void checkExceptionWhenLoggerIsNull() {
-        try {
-            new ViewModel(null);
-            fail("Exception not ready");
-        } catch (IllegalArgumentException exception) {
-            assertEquals("Logger parameter must be not null", exception.getMessage());
-        } catch (Exception ex) {
-            fail("Invalid exception type");
-        }
+        ViewModel viewModel = new ViewModel(null);
+        assertNull(viewModel);
     }
 
     @Test
