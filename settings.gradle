@@ -305,14 +305,14 @@ include "code/vilchinskii-aleksandr/Infrastructure"
 project(":code/vilchinskii-aleksandr/Infrastructure").name = "vilchinskii-aleksandr-Infrastructure"
 
 // Zolotov Andrey
-include "code/Zolotov-Andrey/Model"
-project(":code/Zolotov-Andrey/Model").name = "Zolotov-Andrey-Model"
-include "code/Zolotov-Andrey/ViewModel"
-project(":code/Zolotov-Andrey/ViewModel").name = "Zolotov-Andrey-ViewModel"
-include "code/Zolotov-Andrey/View"
-project(":code/Zolotov-Andrey/View").name = "Zolotov-Andrey-View"
-include "code/Zolotov-Andrey/Infrastructure"
-project(":code/Zolotov-Andrey/Infrastructure").name = "Zolotov-Andrey-Infrastructure"
+// include "code/Zolotov-Andrey/Model"
+// project(":code/Zolotov-Andrey/Model").name = "Zolotov-Andrey-Model"
+// include "code/Zolotov-Andrey/ViewModel"
+// project(":code/Zolotov-Andrey/ViewModel").name = "Zolotov-Andrey-ViewModel"
+// include "code/Zolotov-Andrey/View"
+// project(":code/Zolotov-Andrey/View").name = "Zolotov-Andrey-View"
+// include "code/Zolotov-Andrey/Infrastructure"
+// project(":code/Zolotov-Andrey/Infrastructure").name = "Zolotov-Andrey-Infrastructure"
 
 // Zotov Alexey
 include "code/Zotov-Alexey/Model"
