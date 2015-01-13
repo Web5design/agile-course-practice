@@ -65,9 +65,9 @@ public class FractionTest {
 
     @Test
     public void addZero() {
-        Fraction fraction1 = new Fraction(1, 2);
-        Fraction fraction2 = new Fraction(0, 1);
-        assertEquals(fraction1, fraction1.add(fraction2));
+        Fraction fraction = new Fraction(1, 2);
+        Fraction zero = new Fraction(0, 1);
+        assertEquals(fraction, fraction.add(zero));
     }
 
     @Test
@@ -88,9 +88,9 @@ public class FractionTest {
 
     @Test
     public void subtractZero() {
-        Fraction fraction1 = new Fraction(1, 2);
-        Fraction fraction2 = new Fraction(0, 1);
-        assertEquals(fraction1, fraction1.subtract(fraction2));
+        Fraction fraction = new Fraction(1, 2);
+        Fraction zero = new Fraction(0, 1);
+        assertEquals(fraction, fraction.subtract(zero));
     }
 
     @Test
@@ -101,9 +101,51 @@ public class FractionTest {
     }
 
     @Test
+    public void fractionGreaterThanZero() {
+        Fraction fraction = new Fraction(1, 1);
+        Fraction zero = new Fraction(0, 1);
+        assertTrue(fraction.greaterThan(zero));
+    }
+
+    @Test
+    public void fractionGreaterThanNegatives() {
+        Fraction fraction1 = new Fraction(-1, 2);
+        Fraction fraction2 = new Fraction(-1, 3);
+        assertTrue(fraction2.greaterThan(fraction1));
+    }
+
+    @Test
+    public void fractionGreaterThanDifferentSigns() {
+        Fraction fraction1 = new Fraction(-1, 2);
+        Fraction fraction2 = new Fraction(1, 3);
+        assertTrue(fraction2.greaterThan(fraction1));
+    }
+
+    @Test
     public void fractionLessThan() {
         Fraction fraction1 = new Fraction(1, 2);
         Fraction fraction2 = new Fraction(1, 3);
+        assertTrue(fraction2.lessThan(fraction1));
+    }
+
+    @Test
+    public void fractionLessThanZero() {
+        Fraction fraction = new Fraction(-1, 2);
+        Fraction zero = new Fraction(0, 1);
+        assertTrue(fraction.lessThan(zero));
+    }
+
+    @Test
+    public void fractionLessThanNegatives() {
+        Fraction fraction1 = new Fraction(-1, 2);
+        Fraction fraction2 = new Fraction(-1, 3);
+        assertTrue(fraction1.lessThan(fraction2));
+    }
+
+    @Test
+    public void fractionLessThanDifferentSigns() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(-1, 3);
         assertTrue(fraction2.lessThan(fraction1));
     }
 
