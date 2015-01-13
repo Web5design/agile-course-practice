@@ -6,14 +6,15 @@ public class Fraction {
 
     public Fraction(final int numerator, final int denominator) {
         if (denominator == 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Denominator can not be zero!");
         }
         if (numerator == 0) {
             this.numerator = 0;
             this.denominator = 1;
         } else {
-            this.numerator = numerator / gcd(numerator, denominator);
-            this.denominator = denominator / gcd(numerator, denominator);
+            int denominatorSignum = (int) Math.signum(denominator);
+            this.numerator = numerator / gcd(numerator, denominator) * denominatorSignum;
+            this.denominator = denominator / gcd(numerator, denominator) * denominatorSignum;
         }
     }
 
@@ -61,6 +62,9 @@ public class Fraction {
     }
 
     public Fraction divideBy(final Fraction other) {
+        if (other.numerator == 0) {
+            throw new ArithmeticException("Division by zero!");
+        }
         return new Fraction(numerator * other.denominator, denominator * other.numerator);
     }
 
