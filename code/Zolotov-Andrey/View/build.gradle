@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':Zolotov-Andrey-ViewModel')
+    compile project(':Zolotov-Andrey-Infrastructure')
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}

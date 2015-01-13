@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':Sharov-Egor-ViewModel')
+    testCompile project(':Sharov-Egor-ViewModel').sourceSets.test.output
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}

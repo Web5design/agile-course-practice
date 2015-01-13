@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':serov-alexey-ViewModel')
+    testCompile project(':serov-alexey-ViewModel').sourceSets.test.output
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}

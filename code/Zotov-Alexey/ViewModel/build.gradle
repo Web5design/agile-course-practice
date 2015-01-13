@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':Zotov-Alexey-Model')
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}

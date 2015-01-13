@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':Sokolov-Mihail-ViewModel')
+    testCompile project(':Sokolov-Mihail-ViewModel').sourceSets.test.output
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}
