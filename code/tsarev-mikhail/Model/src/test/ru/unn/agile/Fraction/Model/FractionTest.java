@@ -41,6 +41,12 @@ public class FractionTest {
     }
 
     @Test
+    public void compareWithNull() {
+        Fraction fraction = new Fraction(1, 1);
+        assertNotEquals(fraction, null);
+    }
+
+    @Test
     public void fractionReducing() {
         Fraction fraction1 = new Fraction(1, 1);
         Fraction fraction2 = new Fraction(3, 3);

@@ -69,6 +69,9 @@ public class Fraction {
     }
 
     public boolean equals(final Object object) {
+        if (object == null) {
+            return false;
+        }
         if (this.getClass() != object.getClass()) {
             return false;
         }
