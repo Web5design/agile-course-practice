@@ -16,6 +16,17 @@ public class FractionTest {
     }
 
     @Test
+    public void canCreateOtherFraction() {
+        Fraction fraction = new Fraction(4, 6);
+        assertNotNull(fraction);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void canNotDivideByZero() {
+        Fraction fraction = new Fraction(1, 0);
+    }
+
+    @Test
     public void compareEqualFractions() {
         Fraction fraction1 = new Fraction(1, 2);
         Fraction fraction2 = new Fraction(1, 2);
@@ -27,6 +38,13 @@ public class FractionTest {
         Fraction fraction1 = new Fraction(1, 2);
         Fraction fraction2 = new Fraction(1, 1);
         assertNotEquals(fraction1, fraction2);
+    }
+
+    @Test
+    public void fractionReducing() {
+        Fraction fraction1 = new Fraction(1, 1);
+        Fraction fraction2 = new Fraction(3, 3);
+        assertEquals(fraction1, fraction2);
     }
 
     @Test
