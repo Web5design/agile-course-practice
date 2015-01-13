@@ -56,11 +56,41 @@ public class FractionTest {
     }
 
     @Test
+    public void addNegativeFraction() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(-1, 3);
+        assertEquals(new Fraction(1, 6),
+                    fraction1.add(fraction2));
+    }
+
+    @Test
+    public void addZero() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(0, 1);
+        assertEquals(fraction1, fraction1.add(fraction2));
+    }
+
+    @Test
     public void subtractFractions() {
         Fraction fraction1 = new Fraction(5, 6);
         Fraction fraction2 = new Fraction(1, 3);
         assertEquals(new Fraction(1, 2),
                 fraction1.subtract(fraction2));
+    }
+
+    @Test
+    public void subtractNegativeFraction() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(-1, 3);
+        assertEquals(new Fraction(5, 6),
+                fraction1.subtract(fraction2));
+    }
+
+    @Test
+    public void subtractZero() {
+        Fraction fraction1 = new Fraction(1, 2);
+        Fraction fraction2 = new Fraction(0, 1);
+        assertEquals(fraction1, fraction1.subtract(fraction2));
     }
 
     @Test
