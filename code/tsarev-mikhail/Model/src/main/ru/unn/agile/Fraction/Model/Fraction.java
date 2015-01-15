@@ -88,6 +88,6 @@ public class Fraction {
     }
 
     public int hashCode() {
-        return 0;
+        return numerator << 16 | (denominator & 0xFF);
     }
 }
