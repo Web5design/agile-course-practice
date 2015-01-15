@@ -219,15 +219,15 @@ public class FractionTest {
 
     @Test
     public void hashTest() {
-        Fraction fraction1 = new Fraction(1, 2);
-        Fraction fraction2 = new Fraction(2, 3);
+        Fraction fraction1 = new Fraction(1, 1);
+        Fraction fraction2 = new Fraction(1, 1);
         assertNotEquals(fraction1.hashCode(), fraction2.hashCode());
     }
 
     @Test
     public void hashTest2() {
-        Fraction fraction1 = new Fraction(-1, 27);
-        Fraction fraction2 = new Fraction(6, 398);
-        assertNotEquals(fraction1.hashCode(), fraction2.hashCode());
+        Fraction fraction1 = new Fraction(3, 4);
+        Fraction fraction2 = new Fraction(6, 8);
+        assertEquals(fraction1.hashCode(), fraction2.hashCode());
     }
 }
