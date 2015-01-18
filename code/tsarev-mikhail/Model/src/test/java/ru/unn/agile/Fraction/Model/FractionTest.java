@@ -221,7 +221,7 @@ public class FractionTest {
     public void hashTest() {
         Fraction fraction1 = new Fraction(1, 1);
         Fraction fraction2 = new Fraction(1, 1);
-        assertNotEquals(fraction1.hashCode(), fraction2.hashCode());
+        assertEquals(fraction1.hashCode(), fraction2.hashCode());
     }
 
     @Test

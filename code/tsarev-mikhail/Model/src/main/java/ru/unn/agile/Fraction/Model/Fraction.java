@@ -1,6 +1,9 @@
 package ru.unn.agile.Fraction.Model;
 
 public class Fraction {
+    private static final int ONE_HALF_OF_INT_LENGTH = 16;
+    private static final int ONE_HALF_OF_INT_MASK = 0xFF;
+
     private final int numerator;
     private final int denominator;
 
@@ -88,6 +91,6 @@ public class Fraction {
     }
 
     public int hashCode() {
-        return numerator << 16 | (denominator & 0xFF);
+        return numerator << ONE_HALF_OF_INT_LENGTH | (denominator & ONE_HALF_OF_INT_MASK);
     }
 }
