@@ -121,7 +121,7 @@ public final class Huffman {
             f++;
             c++;
         }
-        if ((j == n1.length)) {
+        if (j == n1.length) {
            current = n1[n1.length - 1];
            n2[c] = addHollowNode(root, r, n2[f], current);
            r += 2;
