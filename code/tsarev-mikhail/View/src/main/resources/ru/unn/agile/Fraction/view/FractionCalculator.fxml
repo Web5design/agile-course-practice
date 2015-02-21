@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+
+
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.Fraction.view.FractionCalculator">
+   <children>
+      <GridPane alignment="CENTER" layoutX="-100.0" layoutY="-45.0" prefHeight="90.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="0.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="676.0" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="601.0" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="550.0" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="485.0" minWidth="10.0" prefWidth="200.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" text="Calculate" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <ComboBox prefWidth="150.0" visibleRowCount="4" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <TextField id="FirstDenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField id="SecondDenom" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField id="ResultDenom" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField id="FirstNumer" GridPane.columnIndex="1" />
+            <TextField id="SecondNumer" GridPane.columnIndex="3" />
+            <TextField id="ResultNumer" GridPane.columnIndex="5" />
+            <Label text="Result denominator:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label text="Denominator:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label text="Denominator:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+            <Label text="Result numerator:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" />
+            <Label text="Numerator:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+            <Label text="Numerator:" GridPane.halignment="RIGHT" />
+         </children>
+      </GridPane>
+   </children>
 </AnchorPane>
