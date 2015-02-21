@@ -93,4 +93,39 @@ public class Fraction {
     public int hashCode() {
         return numerator << ONE_HALF_OF_INT_LENGTH | (denominator & ONE_HALF_OF_INT_MASK);
     }
+
+    public enum Operation {
+        ADD("Add") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.add(r);
+            }
+        },
+        SUBTRACT("Subtract") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.subtract(r);
+            }
+        },
+        MULTIPLY("Mul") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.multiplyBy(r);
+            }
+        },
+        DIVIDE("Divide") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.divideBy(r);
+            }
+        };
+
+        private final String name;
+        Operation(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        public abstract Fraction apply(final Fraction l, final Fraction r);
+    }
 }

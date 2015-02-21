@@ -4,6 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
 public class ViewModelTests {
     private ViewModel viewModel;
@@ -38,6 +41,16 @@ public class ViewModelTests {
     }
 
     @Test
+    public void defaultOperationIsAdd() {
+        assertEquals(Operation.ADD, viewModel.operationProperty().get());
+    }
+
+    @Test
+    public void calculationIsDisabledByDefault() {
+        assertTrue(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
     public void statusReadyWithGoodInput() {
         setInputData();
         assertEquals(Status.READY.toString(), viewModel.statusProperty().get());
@@ -62,6 +75,30 @@ public class ViewModelTests {
         setInputData();
         viewModel.firstDenominatorProperty().set("0");
         assertEquals(Status.IMPOSSIBLE_FRACTION.toString(), viewModel.statusProperty().get());
+    }
+
+    @Test
+    public void canSetAddOperation() {
+        viewModel.operationProperty().set(Operation.ADD);
+        assertEquals(Operation.ADD, viewModel.operationProperty().get());
+    }
+
+    @Test
+    public void canSetSubtractOperation() {
+        viewModel.operationProperty().set(Operation.SUBTRACT);
+        assertEquals(Operation.SUBTRACT, viewModel.operationProperty().get());
+    }
+
+    @Test
+    public void canSetMultiplyOperation() {
+        viewModel.operationProperty().set(Operation.MULTIPLY);
+        assertEquals(Operation.MULTIPLY, viewModel.operationProperty().get());
+    }
+
+    @Test
+    public void canSetDivideOperation() {
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        assertEquals(Operation.DIVIDE, viewModel.operationProperty().get());
     }
 
     private void setInputData() {
