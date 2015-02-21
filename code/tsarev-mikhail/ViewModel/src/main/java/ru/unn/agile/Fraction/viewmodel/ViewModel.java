@@ -14,7 +14,7 @@ import java.util.List;
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
 public class ViewModel {
-    private final SimpleStringProperty resultNominator = new SimpleStringProperty();
+    private final SimpleStringProperty resultDenominator = new SimpleStringProperty();
     private final SimpleStringProperty resultNumerator = new SimpleStringProperty();
     private final SimpleStringProperty firstNumerator = new SimpleStringProperty();
     private final SimpleStringProperty firstDenominator = new SimpleStringProperty();
@@ -31,7 +31,7 @@ public class ViewModel {
 
     // FXML needs default c-tor for binding
     public ViewModel() {
-        resultNominator.set("");
+        resultDenominator.set("");
         resultNumerator.set("");
         firstDenominator.set("");
         firstNumerator.set("");
@@ -66,12 +66,12 @@ public class ViewModel {
         }
     }
 
-    public StringProperty resultNominatorProperty() {
-        return resultNominator;
-    }
-
     public StringProperty resultNumeratorProperty() {
         return resultNumerator;
+    }
+
+    public StringProperty resultDenominatorProperty() {
+        return resultDenominator;
     }
 
     public StringProperty firstNumeratorProperty() {
@@ -100,6 +100,22 @@ public class ViewModel {
 
     public BooleanProperty calculationDisabledProperty() {
         return calculationDisabled;
+    }
+
+    public void calculate() {
+        if (calculationDisabled.get()) {
+            return;
+        }
+
+        Fraction f1 = new Fraction(Integer.parseInt(firstNumerator.get()),
+                                    Integer.parseInt(firstDenominator.get()));
+        Fraction f2 = new Fraction(Integer.parseInt(secondNumerator.get()),
+                                    Integer.parseInt(secondDenominator.get()));
+
+        Fraction result = operation.get().apply(f1, f2);
+        resultNumerator.set(Integer.toString(result.getNumerator()));
+        resultDenominator.set(Integer.toString(result.getDenominator()));
+        status.set(Status.SUCCESS.toString());
     }
 
     private Status getInputStatus() {
@@ -151,7 +167,8 @@ enum Status {
     WAITING("Please provide input data"),
     READY("Press 'Calculate'"),
     BAD_FORMAT("Bad format"),
-    IMPOSSIBLE_FRACTION("Such fraction can not exists");
+    IMPOSSIBLE_FRACTION("Such fraction can not exists"),
+    SUCCESS("Success");
 
     private final String name;
     private Status(final String name) {

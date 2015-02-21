@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
@@ -23,7 +24,7 @@ public class ViewModelTests {
 
     @Test
     public void defaultResultIsEmpty() {
-        assertEquals("", viewModel.resultNominatorProperty().get());
+        assertEquals("", viewModel.resultDenominatorProperty().get());
         assertEquals("", viewModel.resultNumeratorProperty().get());
     }
 
@@ -101,10 +102,73 @@ public class ViewModelTests {
         assertEquals(Operation.DIVIDE, viewModel.operationProperty().get());
     }
 
+    @Test
+    public void calculationEnabledWithProperInput() {
+        setInputData();
+        assertFalse(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
+    public void calculationDisabledWithEmptyField() {
+        setInputData();
+        viewModel.firstDenominatorProperty().set("");
+        assertTrue(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
+    public void calculationDisabledWithTrashField() {
+        setInputData();
+        viewModel.firstDenominatorProperty().set("trash");
+        assertTrue(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
+    public void calculationDisabledWithZeroDenominator() {
+        setInputData();
+        viewModel.firstDenominatorProperty().set("0");
+        assertTrue(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
+    public void resultOfAddIsRight() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.ADD);
+        viewModel.calculate();
+        assertEquals("7", viewModel.resultNumeratorProperty().get());
+        assertEquals("6", viewModel.resultDenominatorProperty().get());
+    }
+
+    @Test
+    public void resultOfSubtractIsRight() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.SUBTRACT);
+        viewModel.calculate();
+        assertEquals("-1", viewModel.resultNumeratorProperty().get());
+        assertEquals("6", viewModel.resultDenominatorProperty().get());
+    }
+
+    @Test
+    public void resultOfMultiplyIsRight() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.MULTIPLY);
+        viewModel.calculate();
+        assertEquals("1", viewModel.resultNumeratorProperty().get());
+        assertEquals("3", viewModel.resultDenominatorProperty().get());
+    }
+
+    @Test
+    public void resultOfDivideIsRight() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        viewModel.calculate();
+        assertEquals("3", viewModel.resultNumeratorProperty().get());
+        assertEquals("4", viewModel.resultDenominatorProperty().get());
+    }
+
     private void setInputData() {
-        viewModel.firstDenominatorProperty().set("1");
-        viewModel.firstNumeratorProperty().set("2");
-        viewModel.secondDenominatorProperty().set("2");
-        viewModel.secondNumeratorProperty().set("3");
+        viewModel.firstNumeratorProperty().set("1");
+        viewModel.firstDenominatorProperty().set("2");
+        viewModel.secondNumeratorProperty().set("2");
+        viewModel.secondDenominatorProperty().set("3");
     }
 }

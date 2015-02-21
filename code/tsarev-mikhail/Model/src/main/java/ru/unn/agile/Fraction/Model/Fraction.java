@@ -94,6 +94,14 @@ public class Fraction {
         return numerator << ONE_HALF_OF_INT_LENGTH | (denominator & ONE_HALF_OF_INT_MASK);
     }
 
+    public int getNumerator() {
+        return numerator;
+    }
+
+    public int getDenominator() {
+        return denominator;
+    }
+
     public enum Operation {
         ADD("Add") {
             public Fraction apply(final Fraction l, final Fraction r) {
