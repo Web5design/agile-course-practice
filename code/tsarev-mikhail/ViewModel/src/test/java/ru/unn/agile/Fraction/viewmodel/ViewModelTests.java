@@ -23,4 +23,17 @@ public class ViewModelTests {
         assertEquals("", viewModel.resultNominatorProperty().get());
         assertEquals("", viewModel.resultNumeratorProperty().get());
     }
+
+    @Test
+    public void defaultArgumentsIsEmpty() {
+        assertEquals("", viewModel.firstNominatorProperty().get());
+        assertEquals("", viewModel.firstNumeratorProperty().get());
+        assertEquals("", viewModel.secondNominatorProperty().get());
+        assertEquals("", viewModel.secondNumeratorProperty().get());
+    }
+
+    @Test
+    public void defaultStateIsWaiting() {
+        assertEquals(Status.WAITING.toString(), viewModel.statusProperty().get());
+    }
 }
