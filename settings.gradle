@@ -297,6 +297,8 @@ project(":code/Syainova-Diana/Infrastructure").name = "Syainova-Diana-Infrastruc
 // Tsarev Mikhail
 include "code/tsarev-mikhail/Model"
 project(":code/tsarev-mikhail/Model").name = "tsarev-mikhail-Model"
+include "code/tsarev-mikhail/View"
+project(":code/tsarev-mikhail/View").name = "tsarev-mikhail-View"
 
 // Vilchinskii Aleksandr
 include "code/vilchinskii-aleksandr/Model"
