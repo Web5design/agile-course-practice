@@ -1,11 +1,11 @@
 package ru.unn.agile.Huffman.model;
-        import java.util.Arrays;
+import java.util.Arrays;
 
 public final class Huffman {
     private final char ch;
     private final int freq;
     private final int left, right;
-    Huffman(final char ch, final int freq, final int left, final int right) {
+    private Huffman(final char ch, final int freq, final int left, final int right) {
         this.ch = ch;
         this.freq = freq;
         this.left = left;
