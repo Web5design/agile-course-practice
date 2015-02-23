@@ -102,6 +102,10 @@ public class ViewModel {
         return calculationDisabled;
     }
 
+    public ObjectProperty<ObservableList<Operation>> operationsProperty() {
+        return operations;
+    }
+
     public void calculate() {
         if (calculationDisabled.get()) {
             return;
@@ -148,7 +152,11 @@ public class ViewModel {
                                 Integer.parseInt(secondDenominator.get()));
             }
         } catch (IllegalArgumentException iae) {
-            inputStatus = Status.IMPOSSIBLE_FRACTION;
+            inputStatus = Status.DIVISION_BY_ZERO;
+        }
+        if (inputStatus == Status.READY && operation.get() == Operation.DIVIDE
+                && Integer.parseInt(secondNumerator.get()) == 0) {
+            inputStatus = Status.DIVISION_BY_ZERO;
         }
 
         return inputStatus;
@@ -167,7 +175,7 @@ enum Status {
     WAITING("Please provide input data"),
     READY("Press 'Calculate'"),
     BAD_FORMAT("Bad format"),
-    IMPOSSIBLE_FRACTION("Such fraction can not exists"),
+    DIVISION_BY_ZERO("Division by zero occurs somewhere"),
     SUCCESS("Success");
 
     private final String name;

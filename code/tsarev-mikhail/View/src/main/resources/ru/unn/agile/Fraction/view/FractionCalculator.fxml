@@ -4,8 +4,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
+<?import ru.unn.agile.Fraction.viewmodel.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.Fraction.view.FractionCalculator">
+   <fx:define>
+      <ViewModel fx:id="viewModel" />
+   </fx:define>
    <children>
       <GridPane alignment="CENTER" layoutX="-100.0" layoutY="-45.0" prefHeight="90.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -22,14 +25,18 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" text="Calculate" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" visibleRowCount="4" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <TextField id="FirstDenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField id="SecondDenom" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <TextField id="ResultDenom" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-            <TextField id="FirstNumer" GridPane.columnIndex="1" />
-            <TextField id="SecondNumer" GridPane.columnIndex="3" />
-            <TextField id="ResultNumer" GridPane.columnIndex="5" />
+            <Button fx:id="calculateButton" defaultButton="true" disable="${viewModel.calculationDisabled}"
+                    mnemonicParsing="false" text="Calculate" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Label text="Status:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label fx:id="statusLabel" text="${viewModel.status}" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cbOperation" items="${viewModel.operations}"
+                      prefWidth="150.0" visibleRowCount="4" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <TextField fx:id="firstDenom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="secondDenom" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label fx:id="resultDenom" text="${viewModel.resultDenominator}" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField fx:id="firstNumer" GridPane.columnIndex="1" />
+            <TextField fx:id="secondNumer" GridPane.columnIndex="3" />
+            <Label fx:id="resultNumer" text="${viewModel.resultNumerator}" GridPane.columnIndex="5" />
             <Label text="Result denominator:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Label text="Denominator:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <Label text="Denominator:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />

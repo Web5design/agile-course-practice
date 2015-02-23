@@ -72,10 +72,18 @@ public class ViewModelTests {
     }
 
     @Test
-    public void statusImpossibleWithBadInput() {
+    public void statusDivByZeroWithBadDenominator() {
         setInputData();
         viewModel.firstDenominatorProperty().set("0");
-        assertEquals(Status.IMPOSSIBLE_FRACTION.toString(), viewModel.statusProperty().get());
+        assertEquals(Status.DIVISION_BY_ZERO.toString(), viewModel.statusProperty().get());
+    }
+
+    @Test
+    public void statusDivByZeroWithDivByZero() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        viewModel.secondNumeratorProperty().set("0");
+        assertEquals(Status.DIVISION_BY_ZERO.toString(), viewModel.statusProperty().get());
     }
 
     @Test
@@ -126,6 +134,14 @@ public class ViewModelTests {
     public void calculationDisabledWithZeroDenominator() {
         setInputData();
         viewModel.firstDenominatorProperty().set("0");
+        assertTrue(viewModel.calculationDisabledProperty().get());
+    }
+
+    @Test
+    public void calculationDisabledWithDivByZero() {
+        setInputData();
+        viewModel.secondNumeratorProperty().set("0");
+        viewModel.operationProperty().set(Operation.DIVIDE);
         assertTrue(viewModel.calculationDisabledProperty().get());
     }
 
