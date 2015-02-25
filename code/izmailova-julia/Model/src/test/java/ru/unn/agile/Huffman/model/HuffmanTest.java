@@ -4,24 +4,25 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 public class HuffmanTest {
+
     @Test
     public void canFindTroubleWithBuildTreeWithWrongMessage() {
-        String str = "";
-        Huffman[] huffmans = Huffman.buildTree(str);
+        Huffman[] huffmans = Huffman.buildTree("");
         assertNull(huffmans);
     }
+
     @Test
      public void canBildTreeWithMessage() {
-        String str = "some message";
-        Huffman[] huffmans = Huffman.buildTree(str);
+        Huffman[] huffmans = Huffman.buildTree("some message");
         assertNotNull(huffmans);
     }
+
     @Test
     public void canBildTreeWithOneSimbol() {
-        String str = "s";
-        Huffman[] huffmans = Huffman.buildTree(str);
+        Huffman[] huffmans = Huffman.buildTree("s");
         assertNotNull(huffmans);
     }
+
     @Test
     public void canBildCorrectTreeWithMessage() {
         String str = "some message";
@@ -29,6 +30,7 @@ public class HuffmanTest {
         boolean res = Huffman.checkNode(huffmans, str.length());
         assertTrue(res);
     }
+
     @Test
     public void canBildCodeWithMessage() {
         String str = "some message";
@@ -38,6 +40,7 @@ public class HuffmanTest {
         boolean res = Huffman.buildCode(st, huffmans, s, str.length(), -1);
         assertTrue(res);
     }
+
     @Test
     public void canWriteTree() {
         String str = "some message";

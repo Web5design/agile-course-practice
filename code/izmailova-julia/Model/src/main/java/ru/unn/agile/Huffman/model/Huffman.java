@@ -5,90 +5,93 @@ public final class Huffman {
     private final char ch;
     private final int freq;
     private final int left, right;
+
     private Huffman(final char ch, final int freq, final int left, final int right) {
         this.ch = ch;
         this.freq = freq;
         this.left = left;
         this.right = right;
     }
+
     public  static Huffman[] buildTree(final String str) {
         if (str == "") {
             return null;
         }
-        Huffman[] mes = makeNode(str);
-        Huffman[] hol = new Huffman[mes.length];
-        Huffman[] tree = new Huffman[mes.length * 2];
-        Huffman[] gmes, ghol;
-        gmes = null;
+        Huffman[] symbol = makeNode(str);
+        Huffman[] hollow = new Huffman[symbol.length];
+        Huffman[] tree = new Huffman[symbol.length * 2];
+        Huffman[] currentSymbol, currentHollow;
+        currentSymbol = null;
         Huffman root;
         int m = 0, h = 0, treeCnt = -1 , hc = 0;
-        if (mes == null) {
+        if (symbol == null) {
             return null;
         }
-        if (mes.length == 1) {
-            return mes;
+        if (symbol.length == 1) {
+            return symbol;
         }
-        root = addHollowNode(tree, treeCnt, mes[m], mes[m + 1]);
+        root = addHollowNode(tree, treeCnt, symbol[m], symbol[m + 1]);
         m += 2;
         treeCnt += 2;
-        hol[hc] = root;
+        hollow[hc] = root;
         hc++;
-        ghol = getNext(hol, hc, 0);
+        currentHollow = getNext(hollow, hc, 0);
         while (root.freq != str.length()) {
-            if (m < mes.length) {
-                gmes = getNext(mes, mes.length, m);
+            if (m < symbol.length) {
+                currentSymbol = getNext(symbol, symbol.length, m);
                 m++;
-                if (gmes[1] != null) {
+                if (currentSymbol[1] != null) {
                     m++;
                 }
             }
-            if (gmes[1] == null) {
-                if (gmes[0] == null) {
-                    ghol = getNext(hol, hc, h);
-                    root = addHollowNode(tree, treeCnt, ghol[0], ghol[1]);
+            if (currentSymbol[1] == null) {
+                if (currentSymbol[0] == null) {
+                    currentHollow = getNext(hollow, hc, h);
+                    root = addHollowNode(tree, treeCnt, currentHollow[0], currentHollow[1]);
                     h += 2;
                     treeCnt += 2;
-                    hol[hc] = root;
+                    hollow[hc] = root;
                     hc++;
             } else {
-                    if (gmes[0].freq < ghol[0].freq) {
-                        root = addHollowNode(tree, treeCnt, gmes[0], ghol[0]);
+                    if (currentSymbol[0].freq < currentHollow[0].freq) {
+                        root = addHollowNode(tree, treeCnt, currentSymbol[0], currentHollow[0]);
                     } else {
-                        root = addHollowNode(tree, treeCnt, ghol[0], gmes[0]);
+                        root = addHollowNode(tree, treeCnt, currentHollow[0], currentSymbol[0]);
                     }
                     treeCnt += 2;
-                    hol[hc] = root;
+                    hollow[hc] = root;
                     hc++;
                     h++;
-                    ghol = getNext(hol, hc, h);
-                    gmes[0] = null;
+                    currentHollow = getNext(hollow, hc, h);
+                    currentSymbol[0] = null;
             }
             } else {
-                if (gmes[1].freq < ghol[0].freq) {
-                    root = addHollowNode(tree, treeCnt, gmes[0], gmes[1]);
+                if (currentSymbol[1].freq < currentHollow[0].freq) {
+                    root = addHollowNode(tree, treeCnt, currentSymbol[0], currentSymbol[1]);
                     treeCnt += 2;
-                    hol[hc] = root;
+                    hollow[hc] = root;
                     hc++;
-                    gmes[0] = null;
-                    gmes[1] = null;
+                    currentSymbol[0] = null;
+                    currentSymbol[1] = null;
                 } else {
-                    if (gmes[0].freq >= ghol[0].freq) {
-                        root = addHollowNode(tree, treeCnt, ghol[0], gmes[0]);
+                    if (currentSymbol[0].freq >= currentHollow[0].freq) {
+                        root = addHollowNode(tree, treeCnt, currentHollow[0], currentSymbol[0]);
                     } else {
-                        root = addHollowNode(tree, treeCnt, gmes[0], ghol[0]);
+                        root = addHollowNode(tree, treeCnt, currentSymbol[0], currentHollow[0]);
                     }
                     m--;
                     treeCnt += 2;
-                    hol[hc] = root;
+                    hollow[hc] = root;
                     hc++;
                     h++;
-                    ghol = getNext(hol, hc, h);
+                    currentHollow = getNext(hollow, hc, h);
                 }
             }
         }
         tree[treeCnt + 1] = root;
         return tree;
     }
+
     public static boolean checkNode(final Huffman[] x, final int r) {
         if (x[0] == null) {
             return false;
@@ -103,6 +106,7 @@ public final class Huffman {
         }
         return true;
     }
+
     public static boolean buildCode(final String[] st, final Huffman[] x,
                                     final String s, final int frq, final int r) {
         boolean res = true;
@@ -128,6 +132,7 @@ public final class Huffman {
         }
         return res;
     }
+
     public static String writeTree(final Huffman[] huff, final int frq) {
         String s = "";
         String[][] st = new String[frq * 2][frq];
@@ -143,7 +148,7 @@ public final class Huffman {
             return  s;
         }
         st[0][frq / 2] = "root";
-        sfm(huff, i, st, 0, frq / 2);
+        strOut(huff, i, st, 0, frq / 2);
 
         for (int n = 0; n < frq; n++) {
             for (int j = 0; j < frq; j++) {
@@ -154,7 +159,6 @@ public final class Huffman {
         return s;
     }
     public static String writeCode(final String[] st, final char[] input) {
-
         String s = "";
         for (int i = 0; i < input.length; i++) {
             String code = st[input[i]];
@@ -170,6 +174,7 @@ public final class Huffman {
         }
         return s;
     }
+
     private static Huffman addHollowNode(final Huffman[] root, final int r,
                                          final Huffman left, final Huffman right) {
         int c = r;
@@ -181,11 +186,11 @@ public final class Huffman {
         root[c] = right;
         return new Huffman('\0', left.freq + right.freq, lft, rgh);
     }
+
     private static Huffman[] makeNode(final String str) {
         if (str == "" || str == null) {
             return null;
         }
-
         char[] input = str.toCharArray();
         int ch = input[0];
         for (int i = 1; i < input.length; i++) {
@@ -220,8 +225,9 @@ public final class Huffman {
         }
         return r1;
     }
-    private static void sfm(final Huffman[] huff, final int i,
-                            final String[][]st, final int count, final int pt) {
+
+    private static void strOut(final Huffman[] huff, final int i,
+                               final String[][] st, final int count, final int pt) {
         int r = count;
         r++;
         if (huff[i].left == -1 && huff[i].right == -1) {
@@ -230,14 +236,15 @@ public final class Huffman {
         if (huff[i].left != -1) {
             int lft = huff[i].left;
             st[r][pt - 1] += "0";
-            sfm(huff, lft, st, r, pt - 1);
+            strOut(huff, lft, st, r, pt - 1);
         }
         if (huff[i].right != -1) {
             int rgh = huff[i].right;
             st[r][pt + 1] += "1";
-            sfm(huff, rgh, st, r, pt + 1);
+            strOut(huff, rgh, st, r, pt + 1);
         }
     }
+
     private static Huffman[] getNext(final Huffman[] arr, final int count, final int cur) {
         Huffman [] curArr = new Huffman[2];
         if (cur < count) {
