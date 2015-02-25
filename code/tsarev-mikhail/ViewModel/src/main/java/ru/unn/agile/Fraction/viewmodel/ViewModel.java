@@ -24,7 +24,7 @@ public class ViewModel {
     private final StringProperty status = new SimpleStringProperty();
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
 
-    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+    private final List<InputChangeListener> inputChangedListeners = new ArrayList<>();
     private final ObjectProperty<ObservableList<Operation>> operations =
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> operation = new SimpleObjectProperty<>();
@@ -60,9 +60,9 @@ public class ViewModel {
         } };
 
         for (StringProperty field : fields) {
-            final ValueChangeListener listener = new ValueChangeListener();
+            final InputChangeListener listener = new InputChangeListener();
             field.addListener(listener);
-            valueChangedListeners.add(listener);
+            inputChangedListeners.add(listener);
         }
     }
 
@@ -122,47 +122,45 @@ public class ViewModel {
         status.set(Status.SUCCESS.toString());
     }
 
+    private boolean isParsableToInt(final String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
+
     private Status getInputStatus() {
         Status inputStatus = Status.READY;
         if (firstDenominator.get().isEmpty() || firstNumerator.get().isEmpty()
                 || secondDenominator.get().isEmpty() || secondNumerator.get().isEmpty()) {
             inputStatus = Status.WAITING;
-        }
-        try {
-            if (!firstDenominator.get().isEmpty()) {
-                Integer.parseInt(firstDenominator.get());
+        } else {
+            if (isParsableToInt(firstDenominator.get())
+                    && isParsableToInt(firstNumerator.get())
+                    && isParsableToInt(secondDenominator.get())
+                    && isParsableToInt(secondNumerator.get())) {
+                try {
+                    new Fraction(Integer.parseInt(firstNumerator.get()),
+                            Integer.parseInt(firstDenominator.get()));
+                    Fraction f = new Fraction(Integer.parseInt(secondNumerator.get()),
+                            Integer.parseInt(secondDenominator.get()));
+                    if (operation.get() == Operation.DIVIDE && f.getNumerator() == 0) {
+                        inputStatus = Status.DIVISION_BY_ZERO;
+                    }
+                } catch (IllegalArgumentException exc) {
+                    inputStatus = Status.DIVISION_BY_ZERO;
+                }
+            } else {
+                inputStatus = Status.BAD_FORMAT;
             }
-            if (!firstNumerator.get().isEmpty()) {
-                Integer.parseInt(firstNumerator.get());
-            }
-            if (!secondDenominator.get().isEmpty()) {
-                Integer.parseInt(secondDenominator.get());
-            }
-            if (!secondNumerator.get().isEmpty()) {
-                Integer.parseInt(secondNumerator.get());
-            }
-        } catch (NumberFormatException nfe) {
-            inputStatus = Status.BAD_FORMAT;
-        }
-        try {
-            if (inputStatus == Status.READY) {
-                new Fraction(Integer.parseInt(firstNumerator.get()),
-                                Integer.parseInt(firstDenominator.get()));
-                new Fraction(Integer.parseInt(secondNumerator.get()),
-                                Integer.parseInt(secondDenominator.get()));
-            }
-        } catch (IllegalArgumentException iae) {
-            inputStatus = Status.DIVISION_BY_ZERO;
-        }
-        if (inputStatus == Status.READY && operation.get() == Operation.DIVIDE
-                && Integer.parseInt(secondNumerator.get()) == 0) {
-            inputStatus = Status.DIVISION_BY_ZERO;
         }
 
         return inputStatus;
     }
 
-    private class ValueChangeListener implements ChangeListener<String> {
+    private class InputChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
