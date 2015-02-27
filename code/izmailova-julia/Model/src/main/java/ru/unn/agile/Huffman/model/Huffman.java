@@ -22,7 +22,6 @@ public final class Huffman {
         Huffman[] tree = new Huffman[symbol.length * 2];
         Huffman[] currentSymbol, currentHollow;
         currentSymbol = null;
-        Huffman root;
         int m = 0, h = 0, treeCnt = -1 , hc = 0;
         if (symbol == null) {
             return null;
@@ -30,13 +29,12 @@ public final class Huffman {
         if (symbol.length == 1) {
             return symbol;
         }
-        root = addHollowNode(tree, treeCnt, symbol[m], symbol[m + 1]);
+        hollow[hc] = addHollowNode(tree, treeCnt, symbol[m], symbol[m + 1]);
         m += 2;
         treeCnt += 2;
-        hollow[hc] = root;
-        hc++;
-        currentHollow = getNext(hollow, hc, 0);
-        while (root.freq != str.length()) {
+        currentHollow = getNext(hollow, hc + 1, 0);
+        while (hollow[hc].freq != str.length()) {
+            hc++;
             if (m < symbol.length) {
                 currentSymbol = getNext(symbol, symbol.length, m);
                 m++;
@@ -47,48 +45,29 @@ public final class Huffman {
             if (currentSymbol[1] == null) {
                 if (currentSymbol[0] == null) {
                     currentHollow = getNext(hollow, hc, h);
-                    root = addHollowNode(tree, treeCnt, currentHollow[0], currentHollow[1]);
+                    hollow[hc] = addHollowNode(tree, treeCnt, currentHollow[0], currentHollow[1]);
                     h += 2;
-                    treeCnt += 2;
-                    hollow[hc] = root;
-                    hc++;
             } else {
-                    if (currentSymbol[0].freq < currentHollow[0].freq) {
-                        root = addHollowNode(tree, treeCnt, currentSymbol[0], currentHollow[0]);
-                    } else {
-                        root = addHollowNode(tree, treeCnt, currentHollow[0], currentSymbol[0]);
-                    }
-                    treeCnt += 2;
-                    hollow[hc] = root;
-                    hc++;
+                    hollow[hc] = hollowAndSymbol(currentHollow[0], currentSymbol[0], tree, treeCnt);
                     h++;
-                    currentHollow = getNext(hollow, hc, h);
+                    currentHollow = getNext(hollow, hc + 1, h);
                     currentSymbol[0] = null;
             }
             } else {
                 if (currentSymbol[1].freq < currentHollow[0].freq) {
-                    root = addHollowNode(tree, treeCnt, currentSymbol[0], currentSymbol[1]);
-                    treeCnt += 2;
-                    hollow[hc] = root;
-                    hc++;
+                    hollow[hc] = addHollowNode(tree, treeCnt, currentSymbol[0], currentSymbol[1]);
                     currentSymbol[0] = null;
                     currentSymbol[1] = null;
                 } else {
-                    if (currentSymbol[0].freq >= currentHollow[0].freq) {
-                        root = addHollowNode(tree, treeCnt, currentHollow[0], currentSymbol[0]);
-                    } else {
-                        root = addHollowNode(tree, treeCnt, currentSymbol[0], currentHollow[0]);
-                    }
+                    hollow[hc] = hollowAndSymbol(currentHollow[0], currentSymbol[0], tree, treeCnt);
                     m--;
-                    treeCnt += 2;
-                    hollow[hc] = root;
-                    hc++;
                     h++;
-                    currentHollow = getNext(hollow, hc, h);
+                    currentHollow = getNext(hollow, hc + 1, h);
                 }
             }
+            treeCnt += 2;
         }
-        tree[treeCnt + 1] = root;
+        tree[treeCnt + 1] = hollow[hc];
         return tree;
     }
 
@@ -158,6 +137,7 @@ public final class Huffman {
         }
         return s;
     }
+
     public static String writeCode(final String[] st, final char[] input) {
         String s = "";
         for (int i = 0; i < input.length; i++) {
@@ -256,5 +236,17 @@ public final class Huffman {
             }
         }
         return curArr;
+    }
+
+    private static Huffman hollowAndSymbol(final Huffman currentHollow,
+                                            final Huffman currentSymbol,
+                                            final Huffman[] tree, final int treeCnt) {
+        Huffman hollow;
+        if (currentSymbol.freq >= currentHollow.freq) {
+            hollow = addHollowNode(tree, treeCnt, currentHollow, currentSymbol);
+        } else {
+            hollow = addHollowNode(tree, treeCnt, currentSymbol, currentHollow);
+        }
+    return hollow;
     }
 }
