@@ -6,6 +6,7 @@ public class ViewModel {
     private String codes;
     private String codeMessage;
     private String status;
+    
     public ViewModel() {
         message = "";
         codes = "";
