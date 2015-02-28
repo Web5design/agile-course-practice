@@ -26,26 +26,26 @@ public class ViewModelTest {
 
     @Test
     public void isStatusWaitingWhenProgrammIsStart() {
-        assertEquals(ViewModel.Status.WAITING, viewModel.getStatus());
+        assertEquals(ViewModel.CodeStatus.WAITING, viewModel.getStatus());
     }
 
     @Test
     public void isStatusReadyWhenMessageisCome() {
         viewModel.setMessage("0");
-        assertEquals(ViewModel.Status.READY, viewModel.getStatus());
+        assertEquals(ViewModel.CodeStatus.READY, viewModel.getStatus());
     }
 
     @Test
     public void isStatusBadFormatWhenMessageisWrong() {
         viewModel.setMessage("");
-        assertEquals(ViewModel.Status.BAD_FORMAT, viewModel.getStatus());
+        assertEquals(ViewModel.CodeStatus.BAD_FORMAT, viewModel.getStatus());
     }
 
     @Test
     public void isStatusSuccessWhenMessageIsCorrectAndProgrammIsRun() {
         viewModel.setMessage("some_message");
         viewModel.gettree();
-        assertEquals(ViewModel.Status.SUCCESS, viewModel.getStatus());
+        assertEquals(ViewModel.CodeStatus.SUCCESS, viewModel.getStatus());
     }
 
     @Test
