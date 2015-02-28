@@ -122,6 +122,10 @@ project(":code/izutov-evgenii/View").name = "izutov-evgenii-View"
 include "code/izutov-evgenii/Infrastructure"
 project(":code/izutov-evgenii/Infrastructure").name = "izutov-evgenii-Infrastructure"
 
+// Izmailova Julia
+include "code/izmailova-julia/Model"
+project(":code/izmailova-julia/Model").name = "izmailova-julia-Model"
+
 // Karsakov Alexander
 include "code/karsakov-alexander/Model"
 project(":code/karsakov-alexander/Model").name = "karsakov-alexander-Model"
