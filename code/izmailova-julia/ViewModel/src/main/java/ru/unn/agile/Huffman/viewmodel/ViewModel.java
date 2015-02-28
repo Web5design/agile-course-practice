@@ -5,20 +5,19 @@ import javafx.beans.property.*;
 public class ViewModel {
     private String message;
     private String codes;
-    private String codemessage;
+    private String codeMessage;
     private String status;
-    private final StringProperty logs = new SimpleStringProperty();
     public ViewModel() {
         message = "";
         codes = "";
-        codemessage = "";
+        codeMessage = "";
         status = Status.WAITING;
     }
 
     public ViewModel gettree() {
         if (message == "" || ((int) message.toCharArray()[0]) == 0) {
             codes = "";
-            codemessage = "";
+            codeMessage = "";
             status = Status.BAD_FORMAT;
             return this;
         }
@@ -27,7 +26,7 @@ public class ViewModel {
         String[] st = new String[ (int) 'z'];
         Huffman.buildCode(st, huff, s, message.length(), -1);
         codes = Huffman.getcode(st);
-        codemessage = Huffman.writeCode(st, message.toCharArray());
+        codeMessage = Huffman.writeCode(st, message.toCharArray());
         status = Status.SUCCESS;
         return this;
     }
@@ -48,7 +47,7 @@ public class ViewModel {
     }
 
     public String getCodeMessage() {
-        return codemessage;
+        return codeMessage;
     }
 
     public String getStatus() {
