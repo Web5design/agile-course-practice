@@ -122,37 +122,22 @@ public class ViewModel {
         status.set(Status.SUCCESS.toString());
     }
 
-    private boolean isParsableToInt(final String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-        return true;
-    }
-
     private Status getInputStatus() {
         Status inputStatus = Status.READY;
         if (firstDenominator.get().isEmpty() || firstNumerator.get().isEmpty()
                 || secondDenominator.get().isEmpty() || secondNumerator.get().isEmpty()) {
             inputStatus = Status.WAITING;
         } else {
-            if (isParsableToInt(firstDenominator.get())
-                    && isParsableToInt(firstNumerator.get())
-                    && isParsableToInt(secondDenominator.get())
-                    && isParsableToInt(secondNumerator.get())) {
+            try {
                 try {
-                    new Fraction(Integer.parseInt(firstNumerator.get()),
-                            Integer.parseInt(firstDenominator.get()));
-                    Fraction f = new Fraction(Integer.parseInt(secondNumerator.get()),
-                            Integer.parseInt(secondDenominator.get()));
-                    if (operation.get() == Operation.DIVIDE && f.getNumerator() == 0) {
-                        inputStatus = Status.DIVISION_BY_ZERO;
-                    }
-                } catch (IllegalArgumentException exc) {
+                    operation.get().apply(new Fraction(Integer.parseInt(firstNumerator.get()),
+                                    Integer.parseInt(firstDenominator.get())),
+                                            new Fraction(Integer.parseInt(secondNumerator.get()),
+                                                    Integer.parseInt(secondDenominator.get())));
+                } catch (ArithmeticException ex) {
                     inputStatus = Status.DIVISION_BY_ZERO;
                 }
-            } else {
+            } catch (NumberFormatException ex) {
                 inputStatus = Status.BAD_FORMAT;
             }
         }

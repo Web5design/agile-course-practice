@@ -21,7 +21,7 @@ public class FractionTest {
         assertNotNull(fraction);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ArithmeticException.class)
     public void canNotDivideByZero() {
         Fraction fraction = new Fraction(1, 0);
     }
