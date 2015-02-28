@@ -14,6 +14,7 @@ import java.util.List;
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
 public class ViewModel {
+    // ViewModel properties
     private final SimpleStringProperty resultDenominator = new SimpleStringProperty();
     private final SimpleStringProperty resultNumerator = new SimpleStringProperty();
     private final SimpleStringProperty firstNumerator = new SimpleStringProperty();
