@@ -14,7 +14,6 @@ import java.util.List;
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
 public class ViewModel {
-    // ViewModel properties
     private final SimpleStringProperty resultDenominator = new SimpleStringProperty();
     private final SimpleStringProperty resultNumerator = new SimpleStringProperty();
     private final SimpleStringProperty firstNumerator = new SimpleStringProperty();
@@ -30,7 +29,6 @@ public class ViewModel {
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> operation = new SimpleObjectProperty<>();
 
-    // FXML needs default c-tor for binding
     public ViewModel() {
         resultDenominator.set("");
         resultNumerator.set("");
@@ -52,7 +50,6 @@ public class ViewModel {
         };
         calculationDisabled.bind(couldCalculate.not());
 
-        // Add listeners to the input text fields
         final List<StringProperty> fields = new ArrayList<StringProperty>() { {
             add(firstNumerator);
             add(firstDenominator);

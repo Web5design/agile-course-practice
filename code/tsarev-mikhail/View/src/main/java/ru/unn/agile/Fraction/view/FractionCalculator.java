@@ -38,7 +38,6 @@ public class FractionCalculator {
     @FXML
     void initialize() {
 
-        // Two-way binding hasn't supported by FXML yet, so place it in code-behind
         firstNumer.textProperty().bindBidirectional(viewModel.firstNumeratorProperty());
         firstDenom.textProperty().bindBidirectional(viewModel.firstDenominatorProperty());
         secondNumer.textProperty().bindBidirectional(viewModel.secondNumeratorProperty());
