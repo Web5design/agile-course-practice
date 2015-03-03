@@ -1,0 +1,11 @@
+apply from:   rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
+
+dependencies {
+    compile project(':pogorelsky-iliya-ViewModel')
+    compile project(':pogorelsky-iliya-Infrastructure')
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}

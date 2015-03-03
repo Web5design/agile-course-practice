@@ -1,0 +1,337 @@
+// Bevzuk Anton
+include "code/bevzuk-anton"
+project(":code/bevzuk-anton").name = "bevzuk-anton-Model"
+
+// Kornyakov Kirill, lab1
+include "code/kornyakov-kirill-lab1"
+project(":code/kornyakov-kirill-lab1").name = "kornyakov-kirill-lab1-Model"
+
+// Kornyakov Kirill, lab2-legacy
+include "code/kornyakov-kirill-lab2-legacy/Model"
+project(":code/kornyakov-kirill-lab2-legacy/Model").name = "kornyakov-kirill-lab2-Model-legacy"
+include "code/kornyakov-kirill-lab2-legacy/ViewModel"
+project(":code/kornyakov-kirill-lab2-legacy/ViewModel").name = "kornyakov-kirill-lab2-ViewModel-legacy"
+include "code/kornyakov-kirill-lab2-legacy/View"
+project(":code/kornyakov-kirill-lab2-legacy/View").name = "kornyakov-kirill-lab2-View-legacy"
+
+// Kornyakov Kirill, lab2
+include "code/kornyakov-kirill-lab2/Model"
+project(":code/kornyakov-kirill-lab2/Model").name = "kornyakov-kirill-lab2-Model"
+include "code/kornyakov-kirill-lab2/ViewModel"
+project(":code/kornyakov-kirill-lab2/ViewModel").name = "kornyakov-kirill-lab2-ViewModel"
+include "code/kornyakov-kirill-lab2/View"
+project(":code/kornyakov-kirill-lab2/View").name = "kornyakov-kirill-lab2-View"
+
+// Kornyakov Kirill, lab3-legacy
+include "code/kornyakov-kirill-lab3-legacy/Model"
+project(":code/kornyakov-kirill-lab3-legacy/Model").name = "kornyakov-kirill-lab3-Model-legacy"
+include "code/kornyakov-kirill-lab3-legacy/ViewModel"
+project(":code/kornyakov-kirill-lab3-legacy/ViewModel").name = "kornyakov-kirill-lab3-ViewModel-legacy"
+include "code/kornyakov-kirill-lab3-legacy/View"
+project(":code/kornyakov-kirill-lab3-legacy/View").name = "kornyakov-kirill-lab3-View-legacy"
+include "code/kornyakov-kirill-lab3-legacy/Infrastructure"
+project(":code/kornyakov-kirill-lab3-legacy/Infrastructure").name = "kornyakov-kirill-lab3-Infrastructure-legacy"
+
+// Kornyakov Kirill, lab3
+include "code/kornyakov-kirill-lab3/Model"
+project(":code/kornyakov-kirill-lab3/Model").name = "kornyakov-kirill-lab3-Model"
+include "code/kornyakov-kirill-lab3/ViewModel"
+project(":code/kornyakov-kirill-lab3/ViewModel").name = "kornyakov-kirill-lab3-ViewModel"
+include "code/kornyakov-kirill-lab3/View"
+project(":code/kornyakov-kirill-lab3/View").name = "kornyakov-kirill-lab3-View"
+include "code/kornyakov-kirill-lab3/Infrastructure"
+project(":code/kornyakov-kirill-lab3/Infrastructure").name = "kornyakov-kirill-lab3-Infrastructure"
+
+// Kornyakov Kirill, lab3
+//include "code/kornyakov-kirill-lab3/Model"
+//project(":code/kornyakov-kirill-lab3/Model").name = "kornyakov-kirill-Model"
+//include "code/kornyakov-kirill-lab3/ViewModel"
+//project(":code/kornyakov-kirill-lab3/ViewModel").name = "kornyakov-kirill-ViewModel"
+//include "code/kornyakov-kirill-lab3/View"
+//project(":code/kornyakov-kirill-lab3/View").name = "kornyakov-kirill-View"
+//include "code/kornyakov-kirill-lab3/Infrastructure"
+//project(":code/kornyakov-kirill-lab3/Infrastructure").name = "kornyakov-kirill-Infrastructure"
+
+// Abramov Dmitry
+include "code/abramov-dmitry/Model"
+project(":code/abramov-dmitry/Model").name = "abramov-dmitry-Model"
+include "code/abramov-dmitry/ViewModel"
+project(":code/abramov-dmitry/ViewModel").name = "abramov-dmitry-ViewModel"
+include "code/abramov-dmitry/View"
+project(":code/abramov-dmitry/View").name = "abramov-dmitry-View"
+include "code/abramov-dmitry/Infrastructure"
+project(":code/abramov-dmitry/Infrastructure").name = "abramov-dmitry-Infrastructure"
+
+// Anufriev Denis
+include "code/anufriev-denis/Model"
+project(":code/anufriev-denis/Model").name = "anufriev-denis-Model"
+include "code/anufriev-denis/View"
+project(":code/anufriev-denis/View").name = "anufriev-denis-View"
+include "code/anufriev-denis/ViewModel"
+project(":code/anufriev-denis/ViewModel").name = "anufriev-denis-ViewModel"
+include "code/anufriev-denis/Infrastructure"
+project(":code/anufriev-denis/Infrastructure").name = "anufriev-denis-Infrastructure"
+
+// Blinkova Ekaterina
+include "code/blinkova-ekaterina/Model"
+project(":code/blinkova-ekaterina/Model").name = "blinkova-ekaterina-Model"
+include "code/blinkova-ekaterina/View"
+project(":code/blinkova-ekaterina/View").name = "blinkova-ekaterina-View"
+include "code/blinkova-ekaterina/ViewModel"
+project(":code/blinkova-ekaterina/ViewModel").name = "blinkova-ekaterina-ViewModel"
+include "code/blinkova-ekaterina/Infrastructure"
+project(":code/blinkova-ekaterina/Infrastructure").name = "blinkova-ekaterina-Infrastructure"
+
+// Bobylkov Fedor
+include "code/bobylkov-fedor/Model"
+project(":code/bobylkov-fedor/Model").name = "bobylkov-fedor-Model"
+include "code/bobylkov-fedor/View"
+project(":code/bobylkov-fedor/View").name = "bobylkov-fedor-View"
+include "code/bobylkov-fedor/ViewModel"
+project(":code/bobylkov-fedor/ViewModel").name = "bobylkov-fedor-ViewModel"
+include "code/bobylkov-fedor/Infrastructure"
+project(":code/bobylkov-fedor/Infrastructure").name = "bobylkov-fedor-Infrastructure"
+
+// Borodulina Ljubov
+include "code/borodulina-ljubov/Model"
+project(":code/borodulina-ljubov/Model").name = "borodulina-ljubov-Model"
+include "code/borodulina-ljubov/ViewModel"
+project(":code/borodulina-ljubov/ViewModel").name = "borodulina-ljubov-ViewModel"
+include "code/borodulina-ljubov/View"
+project(":code/borodulina-ljubov/View").name = "borodulina-ljubov-View"
+include "code/borodulina-ljubov/Infrastructure"
+project(":code/borodulina-ljubov/Infrastructure").name = "borodulina-ljubov-Infrastructure"
+
+// Bysheva Tatyana
+include "code/bysheva-tatyana/Model"
+project(":code/bysheva-tatyana/Model").name = "bysheva-tatyana-Model"
+include "code/bysheva-tatyana/ViewModel"
+project(":code/bysheva-tatyana/ViewModel").name = "bysheva-tatyana-ViewModel"
+include "code/bysheva-tatyana/View"
+project(":code/bysheva-tatyana/View").name = "bysheva-tatyana-View"
+include "code/bysheva-tatyana/Infrastructure"
+project(":code/bysheva-tatyana/Infrastructure").name = "bysheva-tatyana-Infrastructure"
+
+// Izutov Evgenii
+include "code/izutov-evgenii/Model"
+project(":code/izutov-evgenii/Model").name = "izutov-evgenii-Model"
+include "code/izutov-evgenii/ViewModel"
+project(":code/izutov-evgenii/ViewModel").name = "izutov-evgenii-ViewModel"
+include "code/izutov-evgenii/View"
+project(":code/izutov-evgenii/View").name = "izutov-evgenii-View"
+include "code/izutov-evgenii/Infrastructure"
+project(":code/izutov-evgenii/Infrastructure").name = "izutov-evgenii-Infrastructure"
+
+// Izmailova Julia
+include "code/izmailova-julia/Model"
+project(":code/izmailova-julia/Model").name = "izmailova-julia-Model"
+include "code/izmailova-julia/View"
+project(":code/izmailova-julia/View").name = "izmailova-julia-View"
+include "code/izmailova-julia/ViewModel"
+project(":code/izmailova-julia/ViewModel").name = "izmailova-julia-ViewModel"
+
+// Karsakov Alexander
+include "code/karsakov-alexander/Model"
+project(":code/karsakov-alexander/Model").name = "karsakov-alexander-Model"
+include "code/karsakov-alexander/ViewModel"
+project(":code/karsakov-alexander/ViewModel").name = "karsakov-alexander-ViewModel"
+include "code/karsakov-alexander/View"
+project(":code/karsakov-alexander/View").name = "karsakov-alexander-View"
+include "code/karsakov-alexander/Infrastructure"
+project(":code/karsakov-alexander/Infrastructure").name = "karsakov-alexander-Infrastructure"
+
+// Klyan Sofiya
+include "code/klyan-sofiya/Model"
+project(":code/klyan-sofiya/Model").name = "klyan-sofiya-Model"
+include "code/klyan-sofiya/View"
+project(":code/klyan-sofiya/View").name = "klyan-sofiya-View"
+include "code/klyan-sofiya/ViewModel"
+project(":code/klyan-sofiya/ViewModel").name = "klyan-sofiya-ViewModel"
+include "code/klyan-sofiya/Infrastructure"
+project(":code/klyan-sofiya/Infrastructure").name = "klyan-sofiya-Infrastructure"
+
+
+// Krasnoyarov Nikita
+include "code/krasnoyarov-nikita/Model"
+project(":code/krasnoyarov-nikita/Model").name = "krasnoyarov-nikita-Model"
+include "code/krasnoyarov-nikita/View"
+project(":code/krasnoyarov-nikita/View").name = "krasnoyarov-nikita-View"
+include "code/krasnoyarov-nikita/ViewModel"
+project(":code/krasnoyarov-nikita/ViewModel").name = "krasnoyarov-nikita-ViewModel"
+include "code/krasnoyarov-nikita/Infrastructure"
+project(":code/krasnoyarov-nikita/Infrastructure").name = "krasnoyarov-nikita-Infrastructure"
+
+// Lazarev Anton
+include "code/lazarev-anton/Model"
+project(":code/lazarev-anton/Model").name = "lazarev-anton-Model"
+include "code/lazarev-anton/View"
+project(":code/lazarev-anton/View").name = "lazarev-anton-View"
+include "code/lazarev-anton/ViewModel"
+project(":code/lazarev-anton/ViewModel").name = "lazarev-anton-ViewModel"
+include "code/lazarev-anton/Infrastructure"
+project(":code/lazarev-anton/Infrastructure").name = "lazarev-anton-Infrastructure"
+
+// Ljaljushkin Nikolay
+include "code/Ljaljushkin-Nikolay/Model"
+project(":code/Ljaljushkin-Nikolay/Model").name = "ljaljushkin-nikolay-Model"
+include "code/Ljaljushkin-Nikolay/ViewModel"
+project(":code/Ljaljushkin-Nikolay/ViewModel").name = "ljaljushkin-nikolay-ViewModel"
+include "code/Ljaljushkin-Nikolay/View"
+project(":code/Ljaljushkin-Nikolay/View").name = "ljaljushkin-nikolay-View"
+include "code/Ljaljushkin-Nikolay/Infrastructure"
+project(":code/Ljaljushkin-Nikolay/Infrastructure").name = "ljaljushkin-nikolay-Infrastructure"
+
+// Myasnikov Alexander
+include "code/myasnikov-alexander/Model"
+project(":code/myasnikov-alexander/Model").name = "myasnikov-alexander-Model"
+include "code/myasnikov-alexander/View"
+project(":code/myasnikov-alexander/View").name = "myasnikov-alexander-View"
+include "code/myasnikov-alexander/ViewModel"
+project(":code/myasnikov-alexander/ViewModel").name = "myasnikov-alexander-ViewModel"
+include "code/myasnikov-alexander/Infrastructure"
+project(":code/myasnikov-alexander/Infrastructure").name = "myasnikov-alexander-Infrastructure"
+
+// Ovsuhno Andrey
+include "code/ovsuhno-andrey/Model"
+project(":code/ovsuhno-andrey/Model").name = "ovsuhno-andrey-Model"
+include "code/ovsuhno-andrey/View"
+project(":code/ovsuhno-andrey/View").name = "ovsuhno-andrey-View"
+include "code/ovsuhno-andrey/ViewModel"
+project(":code/ovsuhno-andrey/ViewModel").name = "ovsuhno-andrey-ViewModel"
+include "code/ovsuhno-andrey/Infrastructure"
+project(":code/ovsuhno-andrey/Infrastructure").name = "ovsuhno-andrey-Infrastructure"
+
+// Pashko Alena
+include "code/pashko-alena/Model"
+project(":code/pashko-alena/Model").name = "pashko-alena-Model"
+include "code/pashko-alena/View"
+project(":code/pashko-alena/View").name = "pashko-alena-View"
+include "code/pashko-alena/ViewModel"
+project(":code/pashko-alena/ViewModel").name = "pashko-alena-ViewModel"
+include "code/pashko-alena/Infrastructure"
+project(":code/pashko-alena/Infrastructure").name = "pashko-alena-Infrastructure"
+
+// Pogorelsky Iliya
+include "code/pogorelsky-iliya/Model"
+project(":code/pogorelsky-iliya/Model").name = "pogorelsky-iliya-Model"
+include "code/pogorelsky-iliya/ViewModel"
+project(":code/pogorelsky-iliya/ViewModel").name = "pogorelsky-iliya-ViewModel"
+include "code/pogorelsky-iliya/View"
+project(":code/pogorelsky-iliya/View").name = "pogorelsky-iliya-View"
+include "code/pogorelsky-iliya/Infrastructure"
+project(":code/pogorelsky-iliya/Infrastructure").name = "pogorelsky-iliya-Infrastructure"
+
+// Ryabenko Sergey
+include "code/ryabenko-sergey/Model"
+project(":code/ryabenko-sergey/Model").name = "ryabenko-sergey-Model"
+include "code/ryabenko-sergey/ViewModel"
+project(":code/ryabenko-sergey/ViewModel").name = "ryabenko-sergey-ViewModel"
+include "code/ryabenko-sergey/View"
+project(":code/ryabenko-sergey/View").name = "ryabenko-sergey-View"
+include "code/ryabenko-sergey/Infrastructure"
+project(":code/ryabenko-sergey/Infrastructure").name = "ryabenko-sergey-Infrastructure"
+
+// Ryabusheva Anna
+include "code/Ryabusheva-Anna/Model"
+project(":code/Ryabusheva-Anna/Model").name = "Ryabusheva-Anna-Model"
+include "code/Ryabusheva-Anna/ViewModel"
+project(":code/Ryabusheva-Anna/ViewModel").name = "Ryabusheva-Anna-ViewModel"
+include "code/Ryabusheva-Anna/View"
+project(":code/Ryabusheva-Anna/View").name = "Ryabusheva-Anna-View"
+include "code/Ryabusheva-Anna/Infrastructure"
+project(":code/Ryabusheva-Anna/Infrastructure").name = "Ryabusheva-Anna-Infrastructure"
+
+// Samokhvalov Maxim
+include "code/samokhvalov-maxim/Model"
+project(":code/samokhvalov-maxim/Model").name = "samokhvalov-maxim-Model"
+include "code/samokhvalov-maxim/ViewModel"
+project(":code/samokhvalov-maxim/ViewModel").name = "samokhvalov-maxim-ViewModel"
+include "code/samokhvalov-maxim/View"
+project(":code/samokhvalov-maxim/View").name = "samokhvalov-maxim-View"
+include "code/samokhvalov-maxim/Infrastructure"
+project(":code/samokhvalov-maxim/Infrastructure").name = "samokhvalov-maxim-Infrastructure"
+
+// Serov Alexey
+include "code/Serov-Alexey/Model"
+project(":code/Serov-Alexey/Model").name = "serov-alexey-Model"
+include "code/Serov-Alexey/View"
+project(":code/Serov-Alexey/View").name = "serov-alexey-View"
+include "code/Serov-Alexey/ViewModel"
+project(":code/Serov-Alexey/ViewModel").name = "serov-alexey-ViewModel"
+include "code/Serov-Alexey/Infrastructure"
+project(":code/Serov-Alexey/Infrastructure").name = "Serov-Alexey-Infrastructure"
+
+
+// Sharov Egor
+include "code/Sharov-Egor/Model"
+project(":code/Sharov-Egor/Model").name = "Sharov-Egor-Model"
+include "code/Sharov-Egor/View"
+project(":code/Sharov-Egor/View").name = "Sharov-Egor-View"
+include "code/Sharov-Egor/ViewModel"
+project(":code/Sharov-Egor/ViewModel").name = "Sharov-Egor-ViewModel"
+include "code/Sharov-Egor/Infrastructure"
+project(":code/Sharov-Egor/Infrastructure").name = "Sharov-Egor-Infrastructure"
+
+// Skachkova Natalia
+include "code/Skachkova-Natalia/Model"
+project(":code/Skachkova-Natalia/Model").name = "Skachkova-Natalia-Model"
+include "code/Skachkova-Natalia/ViewModel"
+project(":code/Skachkova-Natalia/ViewModel").name = "Skachkova-Natalia-ViewModel"
+include "code/Skachkova-Natalia/View"
+project(":code/Skachkova-Natalia/View").name = "Skachkova-Natalia-View"
+include "code/Skachkova-Natalia/Infrastructure"
+project(":code/Skachkova-Natalia/Infrastructure").name = "Skachkova-Natalia-Infrastructure"
+
+// Sokolov Mihail
+include "code/Sokolov-Mihail/Model"
+project(":code/Sokolov-Mihail/Model").name = "Sokolov-Mihail-Model"
+include "code/Sokolov-Mihail/ViewModel"
+project(":code/Sokolov-Mihail/ViewModel").name = "Sokolov-Mihail-ViewModel"
+include "code/Sokolov-Mihail/View"
+project(":code/Sokolov-Mihail/View").name = "Sokolov-Mihail-View"
+include "code/Sokolov-Mihail/Infrastructure"
+project(":code/Sokolov-Mihail/Infrastructure").name = "Sokolov-Mihail-Infrastructure"
+
+// Syainova Diana
+include "code/Syainova-Diana/Model"
+project(":code/Syainova-Diana/Model").name = "Syainova-Diana-Model"
+include "code/Syainova-Diana/View"
+project(":code/Syainova-Diana/View").name = "Syainova-Diana-View"
+include "code/Syainova-Diana/ViewModel"
+project(":code/Syainova-Diana/ViewModel").name = "Syainova-Diana-ViewModel"
+include "code/Syainova-Diana/Infrastructure"
+project(":code/Syainova-Diana/Infrastructure").name = "Syainova-Diana-Infrastructure"
+
+// Tsarev Mikhail
+include "code/tsarev-mikhail/Model"
+project(":code/tsarev-mikhail/Model").name = "tsarev-mikhail-Model"
+
+// Vilchinskii Aleksandr
+include "code/vilchinskii-aleksandr/Model"
+project(":code/vilchinskii-aleksandr/Model").name = "vilchinskii-aleksandr-Model"
+include "code/vilchinskii-aleksandr/ViewModel"
+project(":code/vilchinskii-aleksandr/ViewModel").name = "vilchinskii-aleksandr-ViewModel"
+include "code/vilchinskii-aleksandr/View"
+project(":code/vilchinskii-aleksandr/View").name = "vilchinskii-aleksandr-View"
+include "code/vilchinskii-aleksandr/Infrastructure"
+project(":code/vilchinskii-aleksandr/Infrastructure").name = "vilchinskii-aleksandr-Infrastructure"
+
+// Zolotov Andrey
+// include "code/Zolotov-Andrey/Model"
+// project(":code/Zolotov-Andrey/Model").name = "Zolotov-Andrey-Model"
+// include "code/Zolotov-Andrey/ViewModel"
+// project(":code/Zolotov-Andrey/ViewModel").name = "Zolotov-Andrey-ViewModel"
+// include "code/Zolotov-Andrey/View"
+// project(":code/Zolotov-Andrey/View").name = "Zolotov-Andrey-View"
+// include "code/Zolotov-Andrey/Infrastructure"
+// project(":code/Zolotov-Andrey/Infrastructure").name = "Zolotov-Andrey-Infrastructure"
+
+// Zotov Alexey
+include "code/Zotov-Alexey/Model"
+project(":code/Zotov-Alexey/Model").name = "Zotov-Alexey-Model"
+include "code/Zotov-Alexey/View"
+project(":code/Zotov-Alexey/View").name = "Zotov-Alexey-View"
+include "code/Zotov-Alexey/ViewModel"
+project(":code/Zotov-Alexey/ViewModel").name = "Zotov-Alexey-ViewModel"
+include "code/Zotov-Alexey/Infrastructure"
+project(":code/Zotov-Alexey/Infrastructure").name = "Zotov-Alexey-Infrastructure"

@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(':Sharov-Egor-Model')
+}
+
+sourceSets {
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}
