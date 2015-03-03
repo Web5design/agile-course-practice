@@ -92,6 +92,10 @@ project(":code/bobylkov-fedor/ViewModel").name = "bobylkov-fedor-ViewModel"
 include "code/bobylkov-fedor/Infrastructure"
 project(":code/bobylkov-fedor/Infrastructure").name = "bobylkov-fedor-Infrastructure"
 
+// Borisov Nikolay
+include "code/Borisov-Nikolay/Model"
+project(":code/Borisov-Nikolay/Model").name = "Borisov-Nikolay-Model"
+
 // Borodulina Ljubov
 include "code/borodulina-ljubov/Model"
 project(":code/borodulina-ljubov/Model").name = "borodulina-ljubov-Model"
