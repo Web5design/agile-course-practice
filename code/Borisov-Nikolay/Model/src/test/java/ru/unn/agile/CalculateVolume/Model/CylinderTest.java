@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class CylinderTest {
-    private static final double DELTA = 0.0001;
+    private static final double DELTA = 1e-10;
 
     @Test
     public void canInitializationHeightAndRadiusWithValues() {
