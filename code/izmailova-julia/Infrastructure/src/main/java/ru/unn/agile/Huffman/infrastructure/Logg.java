@@ -23,14 +23,14 @@ public class Logg implements ILogg {
         return sdf.format(cal.getTime());
     }
 
-    public Logg(final String filename) {
-        this.filename = filename;
+    public Logg(final String nameFile) {
+        this.filename = nameFile;
 
         BufferedWriter logWriter = null;
         try {
-            logWriter = new BufferedWriter(new FileWriter(filename));
-        } catch (Exception e) {
-            e.printStackTrace();
+            logWriter = new BufferedWriter(new FileWriter(nameFile));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         this.logWriter = logWriter;
     }
@@ -52,11 +52,11 @@ public class Logg implements ILogg {
         ArrayList<String> log = new ArrayList<String>();
         try {
             logReader = new BufferedReader(new FileReader(filename));
-            String line = logReader.readLine();
+            String logLine = logReader.readLine();
 
-            while (line != null) {
-                log.add(line);
-                line = logReader.readLine();
+            while (logLine != null) {
+                log.add(logLine);
+                logLine = logReader.readLine();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
