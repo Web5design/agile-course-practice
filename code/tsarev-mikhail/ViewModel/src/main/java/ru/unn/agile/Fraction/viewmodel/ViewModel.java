@@ -64,6 +64,7 @@ public class ViewModel {
             field.addListener(listener);
             inputChangedListeners.add(listener);
         }
+        operation.addListener(new OperationChangeListener());
 
         log = logger;
     }
@@ -153,13 +154,42 @@ public class ViewModel {
     }
 
     private void logInputUpdate() {
-        log.log("");
+        StringBuilder message = new StringBuilder(LogMessages.INPUT_UPDATED);
+        message.append("first numerator: ");
+        message.append(firstNumerator.get());
+        message.append(",first denominator: ");
+        message.append(firstDenominator.get());
+        message.append(",second numerator: ");
+        message.append(secondNumerator.get());
+        message.append(",second denominator: ");
+        message.append(secondDenominator.get());
+        log.log(message.toString());
+    }
+
+    private void logOperationUpdate() {
+        StringBuilder message = new StringBuilder(LogMessages.OPERATION_CHANGED);
+        message.append(operation.get().toString());
+        log.log(message.toString());
+    }
+
+    public final List<String> getLog() {
+        return log.getLog();
     }
 
     private class InputChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
+            logInputUpdate();
+            ioStatus.set(getIOStatus().toString());
+        }
+    }
+
+    private class OperationChangeListener implements ChangeListener<Operation> {
+        @Override
+        public void changed(final ObservableValue<? extends Operation> observable,
+                            final Operation oldValue, final Operation newValue) {
+            logOperationUpdate();
             ioStatus.set(getIOStatus().toString());
         }
     }
@@ -179,4 +209,11 @@ enum IOStatus {
     public String toString() {
         return name;
     }
+}
+
+final class LogMessages {
+    public static final String INPUT_UPDATED = "User updated input: ";
+    public static final String OPERATION_CHANGED = "Set operation: ";
+
+    private LogMessages() { }
 }

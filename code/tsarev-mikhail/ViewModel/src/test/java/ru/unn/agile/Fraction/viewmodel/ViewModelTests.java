@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
+import java.util.List;
+
 public class ViewModelTests {
     private ViewModel viewModel;
 
@@ -179,6 +181,37 @@ public class ViewModelTests {
         viewModel.calculate();
         assertEquals("3", viewModel.resultNumeratorProperty().get());
         assertEquals("4", viewModel.resultDenominatorProperty().get());
+    }
+
+    @Test
+    public void logIsEmptyWhenStarted() {
+        List<String> log = viewModel.getLog();
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void inputLoggedCorrectly() {
+        viewModel.firstNumeratorProperty().set("1");
+        String message = viewModel.getLog().get(0);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.INPUT_UPDATED);
+        expectedMessage.append("first numerator: ");
+        expectedMessage.append("1");
+        expectedMessage.append(",first denominator: ");
+        expectedMessage.append("");
+        expectedMessage.append(",second numerator: ");
+        expectedMessage.append("");
+        expectedMessage.append(",second denominator: ");
+        expectedMessage.append("");
+        assertEquals(expectedMessage.toString(), message);
+    }
+
+    @Test
+    public void operationChangedLoggedCorrectly() {
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        String message = viewModel.getLog().get(0);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.OPERATION_CHANGED);
+        expectedMessage.append(Operation.DIVIDE.toString());
+        assertEquals(expectedMessage.toString(), message);
     }
 
     private void setInputData() {
