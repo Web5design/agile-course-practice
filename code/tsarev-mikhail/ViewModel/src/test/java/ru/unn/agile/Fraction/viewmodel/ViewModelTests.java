@@ -14,6 +14,10 @@ import java.util.List;
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
         viewModel = new ViewModel(new FakeLogger());
@@ -202,7 +206,7 @@ public class ViewModelTests {
         expectedMessage.append("");
         expectedMessage.append(",second denominator: ");
         expectedMessage.append("");
-        assertEquals(expectedMessage.toString(), message);
+        assertTrue(message.contains(expectedMessage));
     }
 
     @Test
@@ -211,7 +215,7 @@ public class ViewModelTests {
         String message = viewModel.getLog().get(0);
         StringBuilder expectedMessage = new StringBuilder(LogMessages.OPERATION_CHANGED);
         expectedMessage.append(Operation.DIVIDE.toString());
-        assertEquals(expectedMessage.toString(), message);
+        assertTrue(message.contains(expectedMessage));
     }
 
     @Test
@@ -225,7 +229,7 @@ public class ViewModelTests {
         expectedMessage.append("3");
         expectedMessage.append("/");
         expectedMessage.append("4");
-        assertEquals(expectedMessage.toString(), message);
+        assertTrue(message.contains(expectedMessage));
     }
 
     private void setInputData() {
