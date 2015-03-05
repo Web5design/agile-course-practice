@@ -309,6 +309,8 @@ include "code/tsarev-mikhail/View"
 project(":code/tsarev-mikhail/View").name = "tsarev-mikhail-View"
 include "code/tsarev-mikhail/ViewModel"
 project(":code/tsarev-mikhail/ViewModel").name = "tsarev-mikhail-ViewModel"
+include "code/tsarev-mikhail/Infrastructure"
+project(":code/tsarev-mikhail/Infrastructure").name = "tsarev-mikhail-Infrastructure"
 
 // Vilchinskii Aleksandr
 include "code/vilchinskii-aleksandr/Model"
