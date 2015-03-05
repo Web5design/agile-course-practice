@@ -24,12 +24,12 @@ public class LoggTest {
     }
 
     @Test
-    public void canCreateLoggerWithFileName() {
+    public void canCreateLoggWithFileName() {
         assertNotNull(logg);
     }
 
     @Test
-    public void canCreateLogFileOnDisk() {
+    public void canCreateLogFile() {
         try {
             new BufferedReader(new FileReader(FILENAME));
         } catch (FileNotFoundException e) {
@@ -38,7 +38,7 @@ public class LoggTest {
     }
 
     @Test
-    public void canWriteLogMessage() {
+    public void canWriteInLogMessage() {
         String testMessage = "Test message";
 
         logg.log(testMessage);
@@ -48,7 +48,7 @@ public class LoggTest {
     }
 
     @Test
-    public void canWriteSeveralLogMessage() {
+    public void canWriteSomeLogMessage() {
         String[] messages = {"Test message 1", "Test message 2"};
 
         logg.log(messages[0]);
@@ -61,7 +61,7 @@ public class LoggTest {
     }
 
     @Test
-    public void doesLogContainDateAndTime() {
+    public void doesLogHaveDateAndTime() {
         String testMessage = "Test message";
 
         logg.log(testMessage);

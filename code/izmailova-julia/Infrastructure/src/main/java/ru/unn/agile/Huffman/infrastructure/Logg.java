@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class Logg implements ILogg {
-    private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
-    private final BufferedWriter writer;
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private final BufferedWriter logWriter;
     private final String filename;
 
     private static String now() {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW, Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         return sdf.format(cal.getTime());
     }
 
@@ -32,15 +32,15 @@ public class Logg implements ILogg {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        writer = logWriter;
+        this.logWriter = logWriter;
     }
 
     @Override
     public void log(final String s) {
         try {
-            writer.write(now() + " > " + s);
-            writer.newLine();
-            writer.flush();
+            logWriter.write(now() + " > " + s);
+            logWriter.newLine();
+            logWriter.flush();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -48,15 +48,15 @@ public class Logg implements ILogg {
 
     @Override
     public List<String> getLog() {
-        BufferedReader reader;
+        BufferedReader logReader;
         ArrayList<String> log = new ArrayList<String>();
         try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine();
+            logReader = new BufferedReader(new FileReader(filename));
+            String line = logReader.readLine();
 
             while (line != null) {
                 log.add(line);
-                line = reader.readLine();
+                line = logReader.readLine();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

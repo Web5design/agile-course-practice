@@ -11,8 +11,8 @@ public class Regex extends BaseMatcher {
         this.regex = regex;
     }
 
-    public boolean matches(final Object o) {
-        return ((String) o).matches(regex);
+    public boolean matches(final Object obj) {
+        return ((String) obj).matches(regex);
     }
 
     public void describeTo(final Description description) {
