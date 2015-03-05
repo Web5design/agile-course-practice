@@ -9,7 +9,7 @@ public class Fraction {
 
     public Fraction(final int numerator, final int denominator) {
         if (denominator == 0) {
-            throw new IllegalArgumentException("Denominator can not be zero!");
+            throw new ArithmeticException("Denominator can not be zero!");
         }
         if (numerator == 0) {
             this.numerator = 0;
@@ -92,5 +92,48 @@ public class Fraction {
 
     public int hashCode() {
         return numerator << ONE_HALF_OF_INT_LENGTH | (denominator & ONE_HALF_OF_INT_MASK);
+    }
+
+    public int getNumerator() {
+        return numerator;
+    }
+
+    public int getDenominator() {
+        return denominator;
+    }
+
+    public enum Operation {
+        ADD("Add") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.add(r);
+            }
+        },
+        SUBTRACT("Subtract") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.subtract(r);
+            }
+        },
+        MULTIPLY("Mul") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.multiplyBy(r);
+            }
+        },
+        DIVIDE("Divide") {
+            public Fraction apply(final Fraction l, final Fraction r) {
+                return l.divideBy(r);
+            }
+        };
+
+        private final String name;
+        Operation(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        public abstract Fraction apply(final Fraction l, final Fraction r);
     }
 }
