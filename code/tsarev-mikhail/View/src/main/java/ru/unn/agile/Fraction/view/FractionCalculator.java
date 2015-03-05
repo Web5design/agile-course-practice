@@ -11,8 +11,6 @@ import javafx.event.EventHandler;
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 import ru.unn.agile.Fraction.viewmodel.ViewModel;
 
-import java.awt.*;
-
 public class FractionCalculator {
     @FXML
     private ViewModel viewModel;
@@ -44,7 +42,7 @@ public class FractionCalculator {
         secondDenom.textProperty().bindBidirectional(viewModel.secondDenominatorProperty());
         resultDenom.textProperty().bind(viewModel.resultDenominatorProperty());
         resultNumer.textProperty().bind(viewModel.resultNumeratorProperty());
-        statusLabel.textProperty().bind(viewModel.statusProperty());
+        statusLabel.textProperty().bind(viewModel.ioStatusProperty());
 
         cbOperation.valueProperty().bindBidirectional(viewModel.operationProperty());
         cbOperation.itemsProperty().bind(viewModel.operationsProperty());

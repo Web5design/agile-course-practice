@@ -38,7 +38,7 @@ public class ViewModelTests {
 
     @Test
     public void defaultStateIsWaiting() {
-        assertEquals(Status.WAITING.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.WAITING.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test
@@ -54,28 +54,28 @@ public class ViewModelTests {
     @Test
     public void statusReadyWithGoodInput() {
         setInputData();
-        assertEquals(Status.READY.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.READY.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test
     public void statusWaitingWithClearField() {
         setInputData();
         viewModel.firstDenominatorProperty().set("");
-        assertEquals(Status.WAITING.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.WAITING.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test
     public void statusBadFormatWithBadInput() {
         setInputData();
         viewModel.firstDenominatorProperty().set("trash");
-        assertEquals(Status.BAD_FORMAT.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.BAD_FORMAT.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test
     public void statusDivByZeroWithBadDenominator() {
         setInputData();
         viewModel.firstDenominatorProperty().set("0");
-        assertEquals(Status.DIVISION_BY_ZERO.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.DIVISION_BY_ZERO.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ViewModelTests {
         setInputData();
         viewModel.operationProperty().set(Operation.DIVIDE);
         viewModel.secondNumeratorProperty().set("0");
-        assertEquals(Status.DIVISION_BY_ZERO.toString(), viewModel.statusProperty().get());
+        assertEquals(IOStatus.DIVISION_BY_ZERO.toString(), viewModel.ioStatusProperty().get());
     }
 
     @Test

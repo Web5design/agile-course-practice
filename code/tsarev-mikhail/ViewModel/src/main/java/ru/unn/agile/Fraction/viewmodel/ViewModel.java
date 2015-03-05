@@ -21,7 +21,7 @@ public class ViewModel {
     private final SimpleStringProperty secondNumerator = new SimpleStringProperty();
     private final SimpleStringProperty secondDenominator = new SimpleStringProperty();
 
-    private final StringProperty status = new SimpleStringProperty();
+    private final StringProperty ioStatus = new SimpleStringProperty();
     private final BooleanProperty calculationDisabled = new SimpleBooleanProperty();
 
     private final List<InputChangeListener> inputChangedListeners = new ArrayList<>();
@@ -37,7 +37,7 @@ public class ViewModel {
         secondDenominator.set("");
         secondNumerator.set("");
         operation.set(Operation.ADD);
-        status.set(Status.WAITING.toString());
+        ioStatus.set(IOStatus.WAITING.toString());
 
         BooleanBinding couldCalculate = new BooleanBinding() {
             {
@@ -45,7 +45,7 @@ public class ViewModel {
             }
             @Override
             protected boolean computeValue() {
-                return getInputStatus() == Status.READY;
+                return getIOStatus() == IOStatus.READY;
             }
         };
         calculationDisabled.bind(couldCalculate.not());
@@ -88,8 +88,8 @@ public class ViewModel {
         return secondDenominator;
     }
 
-    public StringProperty statusProperty() {
-        return status;
+    public StringProperty ioStatusProperty() {
+        return ioStatus;
     }
 
     public ObjectProperty<Operation> operationProperty() {
@@ -117,7 +117,7 @@ public class ViewModel {
         Fraction result = operation.get().apply(f1, f2);
         resultNumerator.set(Integer.toString(result.getNumerator()));
         resultDenominator.set(Integer.toString(result.getDenominator()));
-        status.set(Status.SUCCESS.toString());
+        ioStatus.set(IOStatus.SUCCESS.toString());
     }
 
     private boolean hasEmptyInputFields() {
@@ -125,10 +125,10 @@ public class ViewModel {
                 || secondDenominator.get().isEmpty() || secondNumerator.get().isEmpty();
     }
 
-    private Status getInputStatus() {
-        Status inputStatus = Status.READY;
+    private IOStatus getIOStatus() {
+        IOStatus status = IOStatus.READY;
         if (hasEmptyInputFields()) {
-            inputStatus = Status.WAITING;
+            status = IOStatus.WAITING;
         } else {
             try {
                 try {
@@ -138,26 +138,26 @@ public class ViewModel {
                             Integer.parseInt(secondDenominator.get()));
                     operation.get().apply(operand1, operand2);
                 } catch (ArithmeticException ex) {
-                    inputStatus = Status.DIVISION_BY_ZERO;
+                    status = IOStatus.DIVISION_BY_ZERO;
                 }
             } catch (NumberFormatException ex) {
-                inputStatus = Status.BAD_FORMAT;
+                status = IOStatus.BAD_FORMAT;
             }
         }
 
-        return inputStatus;
+        return status;
     }
 
     private class InputChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
-            status.set(getInputStatus().toString());
+            ioStatus.set(getIOStatus().toString());
         }
     }
 }
 
-enum Status {
+enum IOStatus {
     WAITING("Please provide input data"),
     READY("Press 'Calculate'"),
     BAD_FORMAT("Bad format"),
@@ -165,7 +165,7 @@ enum Status {
     SUCCESS("Success");
 
     private final String name;
-    private Status(final String name) {
+    private IOStatus(final String name) {
         this.name = name;
     }
     public String toString() {
