@@ -41,7 +41,7 @@ public class ViewModel {
         return this;
     }
     public List<String> getLog() {
-        return logg.getLog();
+        return logg.takeLog();
     }
 
     private String logInputMessage() {

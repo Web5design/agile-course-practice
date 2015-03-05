@@ -43,7 +43,7 @@ public class LoggTest {
 
         logg.log(testMessage);
 
-        String message = logg.getLog().get(0);
+        String message = logg.takeLog().get(0);
         assertThat(message, Regex.pattern(".*" + testMessage + "$"));
     }
 
@@ -54,7 +54,7 @@ public class LoggTest {
         logg.log(messages[0]);
         logg.log(messages[1]);
 
-        List<String> actualMessages = logg.getLog();
+        List<String> actualMessages = logg.takeLog();
         for (int i = 0; i < actualMessages.size(); i++) {
             assertThat(actualMessages.get(i), Regex.pattern(".*" + messages[i] + "$"));
         }
@@ -66,7 +66,7 @@ public class LoggTest {
 
         logg.log(testMessage);
 
-        String message = logg.getLog().get(0);
+        String message = logg.takeLog().get(0);
         assertThat(message, Regex.pattern("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} > .*"));
     }
 }

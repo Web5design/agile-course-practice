@@ -41,13 +41,13 @@ public class Logg implements ILogg {
             logWriter.write(now() + " > " + s);
             logWriter.newLine();
             logWriter.flush();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
     @Override
-    public List<String> getLog() {
+    public List<String> takeLog() {
         BufferedReader logReader;
         ArrayList<String> log = new ArrayList<String>();
         try {
@@ -58,8 +58,8 @@ public class Logg implements ILogg {
                 log.add(logLine);
                 logLine = logReader.readLine();
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
 
         return log;
