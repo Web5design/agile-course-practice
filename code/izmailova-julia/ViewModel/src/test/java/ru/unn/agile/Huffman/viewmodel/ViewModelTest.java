@@ -8,8 +8,8 @@ import static org.junit.Assert.*;
 public class ViewModelTest {
     private ViewModel viewModel;
 
-    public void setViewModel(ViewModel viewModel){
-        this.viewModel=viewModel;
+    public void setViewModel(ViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
     @Before
