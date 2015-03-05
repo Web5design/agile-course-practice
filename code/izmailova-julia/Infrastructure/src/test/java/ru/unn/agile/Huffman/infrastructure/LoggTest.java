@@ -38,6 +38,7 @@ public class LoggTest {
     public void canWriteInLogMessage() {
         String testMessage = "Test message";
         logg.log(testMessage);
+
         String message = logg.takeLog().get(0);
         assertThat(message, Regex.pattern(".*" + testMessage + "$"));
     }
@@ -47,6 +48,7 @@ public class LoggTest {
         String[] messages = {"Test message 1", "Test message 2"};
         logg.log(messages[0]);
         logg.log(messages[1]);
+
         List<String> actualMessages = logg.takeLog();
         assertThat(actualMessages.get(0), Regex.pattern(".*" + messages[0] + "$"));
         assertThat(actualMessages.get(1), Regex.pattern(".*" + messages[1] + "$"));
@@ -56,6 +58,7 @@ public class LoggTest {
     public void doesLogHaveDateAndTime() {
         String testMessage = "Test message";
         logg.log(testMessage);
+
         String message = logg.takeLog().get(0);
         assertThat(message, Regex.pattern("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2} > .*"));
     }
