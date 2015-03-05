@@ -21,7 +21,6 @@ public class ViewModel {
         status = CodeStatus.WAITING;
     }
 
-
     public ViewModel gettree() {
         if (message == "" || ((int) message.toCharArray()[0]) == 0) {
             codes = "";
@@ -40,14 +39,13 @@ public class ViewModel {
         status = CodeStatus.SUCCESS;
         return this;
     }
+
     public List<String> getLog() {
         return logg.takeLog();
     }
 
     private String logInputMessage() {
-        String logMessage =
-                LogMessages.MESSAGE_IS_INPUTED + message;
-
+        String logMessage = LogMessages.MESSAGE_IS_INPUTED + message;
         return logMessage;
     }
 

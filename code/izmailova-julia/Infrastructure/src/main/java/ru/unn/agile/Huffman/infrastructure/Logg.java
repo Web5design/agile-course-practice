@@ -1,7 +1,6 @@
 package ru.unn.agile.Huffman.infrastructure;
 
 import ru.unn.agile.Huffman.viewmodel.ILogg;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -25,7 +24,6 @@ public class Logg implements ILogg {
 
     public Logg(final String nameFile) {
         this.filename = nameFile;
-
         BufferedWriter logWriter = null;
         try {
             logWriter = new BufferedWriter(new FileWriter(nameFile));
@@ -53,7 +51,6 @@ public class Logg implements ILogg {
         try {
             logReader = new BufferedReader(new FileReader(filename));
             String logLine = logReader.readLine();
-
             while (logLine != null) {
                 log.add(logLine);
                 logLine = logReader.readLine();
@@ -61,8 +58,6 @@ public class Logg implements ILogg {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
         return log;
     }
-
 }

@@ -1,5 +1,5 @@
 dependencies {
-	compile project(':izmailova-julia-ViewModel')
+    compile project(':izmailova-julia-ViewModel')
     compile project(':izmailova-julia-Infrastructure')
 }
 
