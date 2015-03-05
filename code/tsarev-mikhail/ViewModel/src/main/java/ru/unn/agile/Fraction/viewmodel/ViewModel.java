@@ -120,18 +120,23 @@ public class ViewModel {
         status.set(Status.SUCCESS.toString());
     }
 
+    private boolean hasEmptyInputFields() {
+        return firstDenominator.get().isEmpty() || firstNumerator.get().isEmpty()
+                || secondDenominator.get().isEmpty() || secondNumerator.get().isEmpty();
+    }
+
     private Status getInputStatus() {
         Status inputStatus = Status.READY;
-        if (firstDenominator.get().isEmpty() || firstNumerator.get().isEmpty()
-                || secondDenominator.get().isEmpty() || secondNumerator.get().isEmpty()) {
+        if (hasEmptyInputFields()) {
             inputStatus = Status.WAITING;
         } else {
             try {
                 try {
-                    operation.get().apply(new Fraction(Integer.parseInt(firstNumerator.get()),
-                                    Integer.parseInt(firstDenominator.get())),
-                                            new Fraction(Integer.parseInt(secondNumerator.get()),
-                                                    Integer.parseInt(secondDenominator.get())));
+                    Fraction operand1 = new Fraction(Integer.parseInt(firstNumerator.get()),
+                                        Integer.parseInt(firstDenominator.get()));
+                    Fraction operand2 = new Fraction(Integer.parseInt(secondNumerator.get()),
+                            Integer.parseInt(secondDenominator.get()));
+                    operation.get().apply(operand1, operand2);
                 } catch (ArithmeticException ex) {
                     inputStatus = Status.DIVISION_BY_ZERO;
                 }
