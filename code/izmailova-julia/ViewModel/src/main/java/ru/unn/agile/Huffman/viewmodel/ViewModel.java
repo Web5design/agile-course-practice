@@ -8,7 +8,7 @@ public class ViewModel {
     private String codes;
     private String codeMessage;
     private String status;
-    private ILogg logg;
+    private final ILogg logg;
 
     public ViewModel(final ILogg logg) {
         if (logg == null) {
