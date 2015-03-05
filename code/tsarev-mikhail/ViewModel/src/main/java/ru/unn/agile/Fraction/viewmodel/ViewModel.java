@@ -109,6 +109,14 @@ public class ViewModel {
         return operations;
     }
 
+    private void logCalculation() {
+        StringBuilder message = new StringBuilder(LogMessages.CALCULATE_PRESSED);
+        message.append(resultNumerator.get());
+        message.append("/");
+        message.append(resultDenominator.get());
+        log.log(message.toString());
+    }
+
     public void calculate() {
         if (calculationDisabled.get()) {
             return;
@@ -123,6 +131,7 @@ public class ViewModel {
         resultNumerator.set(Integer.toString(result.getNumerator()));
         resultDenominator.set(Integer.toString(result.getDenominator()));
         ioStatus.set(IOStatus.SUCCESS.toString());
+        logCalculation();
     }
 
     private boolean hasEmptyInputFields() {
@@ -214,6 +223,7 @@ enum IOStatus {
 final class LogMessages {
     public static final String INPUT_UPDATED = "User updated input: ";
     public static final String OPERATION_CHANGED = "Set operation: ";
+    public static final String CALCULATE_PRESSED = "'Calculate' pressed, result: ";
 
     private LogMessages() { }
 }

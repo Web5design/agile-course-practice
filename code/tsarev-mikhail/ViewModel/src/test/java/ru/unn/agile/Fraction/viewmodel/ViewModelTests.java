@@ -214,6 +214,20 @@ public class ViewModelTests {
         assertEquals(expectedMessage.toString(), message);
     }
 
+    @Test
+    public void calculatePressedLoggedCorrectly() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        viewModel.calculate();
+        List<String> log = viewModel.getLog();
+        String message = log.get(log.size() - 1);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.CALCULATE_PRESSED);
+        expectedMessage.append("3");
+        expectedMessage.append("/");
+        expectedMessage.append("4");
+        assertEquals(expectedMessage.toString(), message);
+    }
+
     private void setInputData() {
         viewModel.firstNumeratorProperty().set("1");
         viewModel.firstDenominatorProperty().set("2");
