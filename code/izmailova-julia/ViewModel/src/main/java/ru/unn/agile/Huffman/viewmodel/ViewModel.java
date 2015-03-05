@@ -1,18 +1,26 @@
 package ru.unn.agile.Huffman.viewmodel;
 import ru.unn.agile.Huffman.model.Huffman;
 
+import java.util.List;
+
 public class ViewModel {
     private String message;
     private String codes;
     private String codeMessage;
     private String status;
+    private ILogg logg;
 
-    public ViewModel() {
+    public ViewModel(final ILogg logg) {
+        if (logg == null) {
+            throw new IllegalArgumentException("Logger parameter can't be null");
+        }
+        this.logg = logg;
         message = "";
         codes = "";
         codeMessage = "";
         status = CodeStatus.WAITING;
     }
+
 
     public ViewModel gettree() {
         if (message == "" || ((int) message.toCharArray()[0]) == 0) {
@@ -22,13 +30,25 @@ public class ViewModel {
             return this;
         }
         Huffman[] huff = Huffman.buildTree(message);
+        logg.log(LogMessages.TREE_IS_BUILD);
         String s = "";
         String[] st = new String[ (int) 'z'];
         Huffman.buildCode(st, huff, s, message.length(), -1);
         codes = Huffman.getcode(st);
         codeMessage = Huffman.writeCode(st, message.toCharArray());
+        logg.log(LogMessages.CODING_IS_COMPLITED + codeMessage);
         status = CodeStatus.SUCCESS;
         return this;
+    }
+    public List<String> getLog() {
+        return logg.getLog();
+    }
+
+    private String logInputMessage() {
+        String logMessage =
+                LogMessages.MESSAGE_IS_INPUTED +message;
+
+        return logMessage;
     }
 
     public void setMessage(final String message) {
@@ -40,6 +60,7 @@ public class ViewModel {
         }
         status = CodeStatus.READY;
         this.message = message;
+        logg.log(logInputMessage());
     }
 
     public String getCode() {
@@ -61,6 +82,14 @@ public class ViewModel {
         public static final String SUCCESS = "Success";
 
         private CodeStatus() { }
+    }
+
+    public final class LogMessages {
+        public static final String MESSAGE_IS_INPUTED = "Message: ";
+        public static final String TREE_IS_BUILD = "Tree is build";
+        public static final String CODING_IS_COMPLITED = "Codding message: ";
+
+        private LogMessages() { }
     }
 }
 
