@@ -26,15 +26,6 @@ public class LoggTest {
     }
 
     @Test
-    public void canCreateLogFile() {
-        try {
-            new BufferedReader(new FileReader(FILENAME));
-        } catch (FileNotFoundException e) {
-            fail("File " + FILENAME + " wasn't found!");
-        }
-    }
-
-    @Test
     public void canWriteInLogMessage() {
         String testMessage = "Test message";
         logg.log(testMessage);
