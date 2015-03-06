@@ -9,12 +9,18 @@ import static org.junit.Assert.assertTrue;
 
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 
+import java.util.List;
+
 public class ViewModelTests {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        viewModel = new ViewModel(new FakeLogger());
     }
 
     @After
@@ -179,6 +185,62 @@ public class ViewModelTests {
         viewModel.calculate();
         assertEquals("3", viewModel.resultNumeratorProperty().get());
         assertEquals("4", viewModel.resultDenominatorProperty().get());
+    }
+
+    @Test
+    public void logIsEmptyWhenStarted() {
+        List<String> log = viewModel.getLog();
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void inputLoggedCorrectly() {
+        viewModel.firstNumeratorProperty().set("1");
+        String message = viewModel.getLog().get(0);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.INPUT_UPDATED);
+        expectedMessage.append("first numerator: ");
+        expectedMessage.append("1");
+        expectedMessage.append(",first denominator: ");
+        expectedMessage.append("");
+        expectedMessage.append(",second numerator: ");
+        expectedMessage.append("");
+        expectedMessage.append(",second denominator: ");
+        expectedMessage.append("");
+        assertTrue(message.contains(expectedMessage));
+    }
+
+    @Test
+    public void operationChangedLoggedCorrectly() {
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        String message = viewModel.getLog().get(0);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.OPERATION_CHANGED);
+        expectedMessage.append(Operation.DIVIDE.toString());
+        assertTrue(message.contains(expectedMessage));
+    }
+
+    @Test
+    public void calculatePressedLoggedCorrectly() {
+        setInputData();
+        viewModel.operationProperty().set(Operation.DIVIDE);
+        viewModel.calculate();
+        List<String> log = viewModel.getLog();
+        String message = log.get(log.size() - 1);
+        StringBuilder expectedMessage = new StringBuilder(LogMessages.CALCULATE_PRESSED);
+        expectedMessage.append("3");
+        expectedMessage.append("/");
+        expectedMessage.append("4");
+        assertTrue(message.contains(expectedMessage));
+    }
+
+    @Test
+    public void logsPropertyAreCleanInBeginning() {
+        assertTrue(viewModel.logsProperty().get().isEmpty());
+    }
+
+    @Test
+    public void logsPropertyContainsLogs() {
+        setInputData();
+        assertTrue(viewModel.logsProperty().get().contains(LogMessages.INPUT_UPDATED));
     }
 
     private void setInputData() {

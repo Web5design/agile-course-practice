@@ -10,7 +10,7 @@
       <ViewModel fx:id="viewModel" />
    </fx:define>
    <children>
-      <GridPane alignment="CENTER" layoutX="-100.0" layoutY="-45.0" prefHeight="90.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane alignment="CENTER" layoutX="-100.0" layoutY="-45.0" prefHeight="190.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="0.0" prefWidth="150.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="200.0" />
@@ -23,6 +23,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="40.0" prefHeight="100.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Button fx:id="calculateButton" defaultButton="true" disable="${viewModel.calculationDisabled}"
@@ -43,6 +44,8 @@
             <Label text="Result numerator:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" />
             <Label text="Numerator:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
             <Label text="Numerator:" GridPane.halignment="RIGHT" />
+            <TextArea fx:id="logArea" GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="3"
+                      text="${viewModel.logs}" editable="false" />
          </children>
       </GridPane>
    </children>

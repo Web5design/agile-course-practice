@@ -29,7 +29,20 @@ public class ViewModel {
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> operation = new SimpleObjectProperty<>();
 
+    private ILogger logger;
+
+    private final StringProperty logs = new SimpleStringProperty();
+
     public ViewModel() {
+        init();
+    }
+
+    public ViewModel(final ILogger logger) {
+        init();
+        setLogger(logger);
+    }
+
+    private void init() {
         resultDenominator.set("");
         resultNumerator.set("");
         firstDenominator.set("");
@@ -38,6 +51,7 @@ public class ViewModel {
         secondNumerator.set("");
         operation.set(Operation.ADD);
         ioStatus.set(IOStatus.WAITING.toString());
+        logs.set("");
 
         BooleanBinding couldCalculate = new BooleanBinding() {
             {
@@ -62,6 +76,11 @@ public class ViewModel {
             field.addListener(listener);
             inputChangedListeners.add(listener);
         }
+        operation.addListener(new OperationChangeListener());
+    }
+
+    public void setLogger(final ILogger logger) {
+        this.logger = logger;
     }
 
     public StringProperty resultNumeratorProperty() {
@@ -104,6 +123,19 @@ public class ViewModel {
         return operations;
     }
 
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
+    private void logCalculation() {
+        StringBuilder message = new StringBuilder(LogMessages.CALCULATE_PRESSED);
+        message.append(resultNumerator.get());
+        message.append("/");
+        message.append(resultDenominator.get());
+        logger.log(message.toString());
+        updateLogs();
+    }
+
     public void calculate() {
         if (calculationDisabled.get()) {
             return;
@@ -118,6 +150,7 @@ public class ViewModel {
         resultNumerator.set(Integer.toString(result.getNumerator()));
         resultDenominator.set(Integer.toString(result.getDenominator()));
         ioStatus.set(IOStatus.SUCCESS.toString());
+        logCalculation();
     }
 
     private boolean hasEmptyInputFields() {
@@ -148,10 +181,54 @@ public class ViewModel {
         return status;
     }
 
+    private void updateLogs() {
+        StringBuilder text = new StringBuilder("");
+        for (String line : logger.getLog()) {
+            text.append(line);
+            text.append("\n");
+        }
+        logs.set(text.toString());
+    }
+
+    private void logInputUpdate() {
+        StringBuilder message = new StringBuilder(LogMessages.INPUT_UPDATED);
+        message.append("first numerator: ");
+        message.append(firstNumerator.get());
+        message.append(",first denominator: ");
+        message.append(firstDenominator.get());
+        message.append(",second numerator: ");
+        message.append(secondNumerator.get());
+        message.append(",second denominator: ");
+        message.append(secondDenominator.get());
+        logger.log(message.toString());
+        updateLogs();
+    }
+
+    private void logOperationUpdate() {
+        StringBuilder message = new StringBuilder(LogMessages.OPERATION_CHANGED);
+        message.append(operation.get().toString());
+        logger.log(message.toString());
+        updateLogs();
+    }
+
+    public final List<String> getLog() {
+        return logger.getLog();
+    }
+
     private class InputChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldValue, final String newValue) {
+            logInputUpdate();
+            ioStatus.set(getIOStatus().toString());
+        }
+    }
+
+    private class OperationChangeListener implements ChangeListener<Operation> {
+        @Override
+        public void changed(final ObservableValue<? extends Operation> observable,
+                            final Operation oldValue, final Operation newValue) {
+            logOperationUpdate();
             ioStatus.set(getIOStatus().toString());
         }
     }
@@ -171,4 +248,12 @@ enum IOStatus {
     public String toString() {
         return name;
     }
+}
+
+final class LogMessages {
+    public static final String INPUT_UPDATED = "User updated input: ";
+    public static final String OPERATION_CHANGED = "Set operation: ";
+    public static final String CALCULATE_PRESSED = "'Calculate' pressed, result: ";
+
+    private LogMessages() { }
 }
