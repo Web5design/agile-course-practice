@@ -209,9 +209,7 @@ public class ViewModel {
 
     private CalculateStatus getInputStatus() {
         CalculateStatus inputStatus = CalculateStatus.READY;
-        if (stringFirstParam.get().isEmpty() || stringSecondParam.get().isEmpty()
-                || stringThirdParam.get().isEmpty() && (figure.get().toString() == "Ellipsoid"
-                || figure.get().toString() == "Parallelepiped")) {
+        if (isInputDataFull()) {
             inputStatus = CalculateStatus.WAITING;
         }
         try {
@@ -229,6 +227,16 @@ public class ViewModel {
         }
         return inputStatus;
     }
+
+    private boolean isInputDataFull() {
+        boolean isFigureWithThreeParam = figure.get().toString() == "Ellipsoid"
+                || figure.get().toString() == "Parallelepiped";
+        boolean firstParamEmpty = stringFirstParam.get().isEmpty();
+        boolean secondParamEmpty = stringSecondParam.get().isEmpty();
+        boolean thirdParamEmpty = stringThirdParam.get().isEmpty() && isFigureWithThreeParam;
+        return firstParamEmpty || secondParamEmpty || thirdParamEmpty;
+    }
+
     private class ValueChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
