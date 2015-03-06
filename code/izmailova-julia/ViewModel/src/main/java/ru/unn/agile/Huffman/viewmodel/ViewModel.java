@@ -45,8 +45,7 @@ public class ViewModel {
     }
 
     private String logInputMessage() {
-        String logMessage = LogMessages.MESSAGE_IS_INPUTED + message;
-        return logMessage;
+        return LogMessages.MESSAGE_IS_INPUTED + message;
     }
 
     public void setMessage(final String message) {
