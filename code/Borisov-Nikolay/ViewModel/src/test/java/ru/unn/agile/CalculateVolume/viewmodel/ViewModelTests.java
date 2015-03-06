@@ -5,8 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class ViewModelTests {
@@ -145,14 +143,16 @@ public class ViewModelTests {
     public void statusIsBadFormatWhenFirstParamIsWrong() {
         viewModel.stringFirstParamProperty().set("trash");
         viewModel.stringSecondParamProperty().set("1");
-        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(), viewModel.calculateStatusProperty().get());
+        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(),
+                viewModel.calculateStatusProperty().get());
     }
 
     @Test
     public void statusIsBadFormatWhenSecondParamIsWrong() {
         viewModel.stringFirstParamProperty().set("1");
         viewModel.stringSecondParamProperty().set("trash");
-        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(), viewModel.calculateStatusProperty().get());
+        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(),
+                viewModel.calculateStatusProperty().get());
     }
 
     @Test
@@ -161,7 +161,8 @@ public class ViewModelTests {
         viewModel.stringFirstParamProperty().set("1");
         viewModel.stringSecondParamProperty().set("1");
         viewModel.stringThirdParamProperty().set("trash");
-        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(), viewModel.calculateStatusProperty().get());
+        assertEquals(CalculateStatus.BAD_FORMAT_OF_INPUT.toString(),
+                viewModel.calculateStatusProperty().get());
     }
 
     @Test
@@ -186,7 +187,8 @@ public class ViewModelTests {
         viewModel.stringFirstParamProperty().set("1");
         viewModel.stringSecondParamProperty().set("1");
         viewModel.calculate();
-        assertEquals(CalculateStatus.SUCCESS.toString(), viewModel.calculateStatusProperty().get());
+        assertEquals(CalculateStatus.SUCCESS.toString(),
+                viewModel.calculateStatusProperty().get());
     }
 
     @Test
@@ -195,6 +197,7 @@ public class ViewModelTests {
         viewModel.stringSecondParamProperty().set("1");
         viewModel.stringThirdParamProperty().set("1");
         viewModel.calculate();
-        assertEquals(CalculateStatus.SUCCESS.toString(), viewModel.calculateStatusProperty().get());
+        assertEquals(CalculateStatus.SUCCESS.toString(),
+                viewModel.calculateStatusProperty().get());
     }
 }

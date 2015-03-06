@@ -210,9 +210,8 @@ public class ViewModel {
     private CalculateStatus getInputStatus() {
         CalculateStatus inputStatus = CalculateStatus.READY;
         if (stringFirstParam.get().isEmpty() || stringSecondParam.get().isEmpty()
-                || stringThirdParam.get().isEmpty()
-                && ((figure.get().toString() == "Ellipsoid")
-                || (figure.get().toString() == "Parallelepiped"))) {
+                || stringThirdParam.get().isEmpty() && (figure.get().toString() == "Ellipsoid"
+                || figure.get().toString() == "Parallelepiped")) {
             inputStatus = CalculateStatus.WAITING;
         }
         try {
@@ -253,7 +252,7 @@ public class ViewModel {
                 labelThirdParamName.set("Height");
                 thirdParamDisabled.set(false);
             }
-            if ((figure.get().toString() == "Cone") || (figure.get().toString() == "Cylinder")) {
+            if (figure.get().toString() == "Cone" || figure.get().toString() == "Cylinder") {
                 labelFirstParamName.set("Radius");
                 labelSecondParamName.set("Height");
                 labelThirdParamName.set("");
