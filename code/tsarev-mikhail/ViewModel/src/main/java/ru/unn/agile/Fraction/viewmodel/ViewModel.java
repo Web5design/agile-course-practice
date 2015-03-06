@@ -29,9 +29,18 @@ public class ViewModel {
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> operation = new SimpleObjectProperty<>();
 
-    private final ILogger log;
+    private ILogger log;
+
+    public ViewModel() {
+        init();
+    }
 
     public ViewModel(final ILogger logger) {
+        init();
+        log = logger;
+    }
+
+    private void init() {
         resultDenominator.set("");
         resultNumerator.set("");
         firstDenominator.set("");
@@ -65,8 +74,6 @@ public class ViewModel {
             inputChangedListeners.add(listener);
         }
         operation.addListener(new OperationChangeListener());
-
-        log = logger;
     }
 
     public StringProperty resultNumeratorProperty() {
