@@ -124,18 +124,14 @@ public class ViewModelTests {
     @Test
     public void statusIsReadyWhenFieldsAreFillAndFigureEllipsoid() {
         viewModel.figureProperty().set("Ellipsoid");
-        viewModel.stringFirstParamProperty().set("1");
-        viewModel.stringSecondParamProperty().set("1");
-        viewModel.stringThirdParamProperty().set("1");
+        setInputDataWhenThreeParam();
         assertEquals(CalculateStatus.READY.toString(), viewModel.calculateStatusProperty().get());
     }
 
     @Test
     public void statusIsReadyWhenFieldsAreFillAndFigureParallelepiped() {
         viewModel.figureProperty().set("Parallelepiped");
-        viewModel.stringFirstParamProperty().set("1");
-        viewModel.stringSecondParamProperty().set("1");
-        viewModel.stringThirdParamProperty().set("1");
+        setInputDataWhenThreeParam();
         assertEquals(CalculateStatus.READY.toString(), viewModel.calculateStatusProperty().get());
     }
 
@@ -176,9 +172,7 @@ public class ViewModelTests {
     @Test
     public void statusIsReadyWhenInputCorrectWithThreeParam() {
         viewModel.figureProperty().set("Ellipsoid");
-        viewModel.stringFirstParamProperty().set("1");
-        viewModel.stringSecondParamProperty().set("1");
-        viewModel.stringThirdParamProperty().set("1");
+        setInputDataWhenThreeParam();
         assertEquals(CalculateStatus.READY.toString(), viewModel.calculateStatusProperty().get());
     }
 
@@ -193,11 +187,15 @@ public class ViewModelTests {
 
     @Test
     public void statusIsSuccessWhenCalculateWithThreeParam() {
-        viewModel.stringFirstParamProperty().set("1");
-        viewModel.stringSecondParamProperty().set("1");
-        viewModel.stringThirdParamProperty().set("1");
+        setInputDataWhenThreeParam();
         viewModel.calculate();
         assertEquals(CalculateStatus.SUCCESS.toString(),
                 viewModel.calculateStatusProperty().get());
+    }
+
+    private void setInputDataWhenThreeParam() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.stringThirdParamProperty().set("1");
     }
 }
