@@ -44,6 +44,8 @@
             <Label text="Result numerator:" GridPane.columnIndex="4" GridPane.halignment="RIGHT" />
             <Label text="Numerator:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
             <Label text="Numerator:" GridPane.halignment="RIGHT" />
+            <TextArea fx:id="logArea" GridPane.columnIndex="0" GridPane.columnSpan="6" GridPane.rowIndex="3"
+                      text="${viewModel.logs}" editable="false" />
          </children>
       </GridPane>
    </children>

@@ -232,6 +232,17 @@ public class ViewModelTests {
         assertTrue(message.contains(expectedMessage));
     }
 
+    @Test
+    public void logsPropertyAreCleanInBeginning() {
+        assertTrue(viewModel.logsProperty().get().isEmpty());
+    }
+
+    @Test
+    public void logsPropertyContainsLogs() {
+        setInputData();
+        assertTrue(viewModel.logsProperty().get().contains(LogMessages.INPUT_UPDATED));
+    }
+
     private void setInputData() {
         viewModel.firstNumeratorProperty().set("1");
         viewModel.firstDenominatorProperty().set("2");

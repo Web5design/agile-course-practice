@@ -29,7 +29,9 @@ public class ViewModel {
             new SimpleObjectProperty<>(FXCollections.observableArrayList(Operation.values()));
     private final ObjectProperty<Operation> operation = new SimpleObjectProperty<>();
 
-    private ILogger log;
+    private ILogger logger;
+
+    private final StringProperty logs = new SimpleStringProperty();
 
     public ViewModel() {
         init();
@@ -37,7 +39,7 @@ public class ViewModel {
 
     public ViewModel(final ILogger logger) {
         init();
-        log = logger;
+        setLogger(logger);
     }
 
     private void init() {
@@ -49,6 +51,7 @@ public class ViewModel {
         secondNumerator.set("");
         operation.set(Operation.ADD);
         ioStatus.set(IOStatus.WAITING.toString());
+        logs.set("");
 
         BooleanBinding couldCalculate = new BooleanBinding() {
             {
@@ -74,6 +77,10 @@ public class ViewModel {
             inputChangedListeners.add(listener);
         }
         operation.addListener(new OperationChangeListener());
+    }
+
+    public void setLogger(final ILogger logger) {
+        this.logger = logger;
     }
 
     public StringProperty resultNumeratorProperty() {
@@ -116,12 +123,17 @@ public class ViewModel {
         return operations;
     }
 
+    public StringProperty logsProperty() {
+        return logs;
+    }
+
     private void logCalculation() {
         StringBuilder message = new StringBuilder(LogMessages.CALCULATE_PRESSED);
         message.append(resultNumerator.get());
         message.append("/");
         message.append(resultDenominator.get());
-        log.log(message.toString());
+        logger.log(message.toString());
+        updateLogs();
     }
 
     public void calculate() {
@@ -169,6 +181,15 @@ public class ViewModel {
         return status;
     }
 
+    private void updateLogs() {
+        StringBuilder text = new StringBuilder("");
+        for (String line : logger.getLog()) {
+            text.append(line);
+            text.append("\n");
+        }
+        logs.set(text.toString());
+    }
+
     private void logInputUpdate() {
         StringBuilder message = new StringBuilder(LogMessages.INPUT_UPDATED);
         message.append("first numerator: ");
@@ -179,17 +200,19 @@ public class ViewModel {
         message.append(secondNumerator.get());
         message.append(",second denominator: ");
         message.append(secondDenominator.get());
-        log.log(message.toString());
+        logger.log(message.toString());
+        updateLogs();
     }
 
     private void logOperationUpdate() {
         StringBuilder message = new StringBuilder(LogMessages.OPERATION_CHANGED);
         message.append(operation.get().toString());
-        log.log(message.toString());
+        logger.log(message.toString());
+        updateLogs();
     }
 
     public final List<String> getLog() {
-        return log.getLog();
+        return logger.getLog();
     }
 
     private class InputChangeListener implements ChangeListener<String> {

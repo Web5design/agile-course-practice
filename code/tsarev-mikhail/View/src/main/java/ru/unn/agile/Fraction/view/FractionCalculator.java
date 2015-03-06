@@ -5,11 +5,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import ru.unn.agile.Fraction.Model.Fraction.Operation;
 import ru.unn.agile.Fraction.viewmodel.ViewModel;
+import ru.unn.agile.Fraction.infrastructure.TextLogger;
+
+import java.awt.*;
 
 public class FractionCalculator {
     @FXML
@@ -32,9 +36,14 @@ public class FractionCalculator {
     private ComboBox<Operation> cbOperation;
     @FXML
     private Button calculateButton;
+    @FXML
+    private TextArea logArea;
+
+    private static final String LOG_FILE = "./lab3.log";
 
     @FXML
     void initialize() {
+        viewModel.setLogger(new TextLogger(LOG_FILE));
 
         firstNumer.textProperty().bindBidirectional(viewModel.firstNumeratorProperty());
         firstDenom.textProperty().bindBidirectional(viewModel.firstDenominatorProperty());
@@ -43,6 +52,7 @@ public class FractionCalculator {
         resultDenom.textProperty().bind(viewModel.resultDenominatorProperty());
         resultNumer.textProperty().bind(viewModel.resultNumeratorProperty());
         statusLabel.textProperty().bind(viewModel.ioStatusProperty());
+        logArea.textProperty().bind(viewModel.logsProperty());
 
         cbOperation.valueProperty().bindBidirectional(viewModel.operationProperty());
         cbOperation.itemsProperty().bind(viewModel.operationsProperty());
