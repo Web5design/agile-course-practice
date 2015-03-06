@@ -129,6 +129,8 @@ include "code/izmailova-julia/View"
 project(":code/izmailova-julia/View").name = "izmailova-julia-View"
 include "code/izmailova-julia/ViewModel"
 project(":code/izmailova-julia/ViewModel").name = "izmailova-julia-ViewModel"
+include "code/izmailova-julia/Infrastructure"
+project(":code/izmailova-julia/Infrastructure").name = "izmailova-julia-Infrastructure"
 
 // Karsakov Alexander
 include "code/karsakov-alexander/Model"

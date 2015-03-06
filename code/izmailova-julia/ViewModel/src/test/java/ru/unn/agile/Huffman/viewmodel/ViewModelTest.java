@@ -8,9 +8,14 @@ import static org.junit.Assert.*;
 public class ViewModelTest {
     private ViewModel viewModel;
 
+    public void setViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        FakeLogg logg = new FakeLogg();
+        viewModel = new ViewModel(logg);
     }
 
     @After
