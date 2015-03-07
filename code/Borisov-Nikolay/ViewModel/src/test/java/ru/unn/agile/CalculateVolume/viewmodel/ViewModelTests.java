@@ -225,8 +225,8 @@ public class ViewModelTests {
         myView.figureProperty().set("Ellipsoid");
         setInputDataWhenThreeParam();
         myView.calculate();
-        String message = myView.getLog().get(0);
-        assertTrue(message.matches(".*" + myView.stringFirstParamProperty().get()
+        String parameters = myView.getLog().get(0);
+        assertTrue(parameters.matches(".*" + myView.stringFirstParamProperty().get()
                 + ".*" + myView.stringSecondParamProperty().get()
                 + ".*" + myView.stringThirdParamProperty().get() + ".*"));
     }
@@ -246,8 +246,8 @@ public class ViewModelTests {
         myView.figureProperty().set("Cylinder");
         setInputDataWhenTwoParam();
         myView.calculate();
-        String message = myView.getLog().get(0);
-        assertTrue(message.matches(".*Arguments"
+        String messages = myView.getLog().get(0);
+        assertTrue(messages.matches(".*Arguments"
                 + ".*" + myView.labelFirstParamNameProperty().get()
                 + ".*" + myView.labelSecondParamNameProperty().get() + ".*"));
     }
@@ -269,8 +269,8 @@ public class ViewModelTests {
         myView.figureProperty().set("Parallelepiped");
         setInputDataWhenThreeParam();
         myView.calculate();
-        String message = myView.getLog().get(0);
-        assertTrue(message.matches(".*Arguments"
+        String arguments = myView.getLog().get(0);
+        assertTrue(arguments.matches(".*Arguments"
                 + ".*" + myView.labelFirstParamNameProperty().get()
                 + ".*" + myView.labelSecondParamNameProperty().get()
                 + ".*" + myView.labelThirdParamNameProperty().get() + ".*"));

@@ -28,7 +28,7 @@ public class CalculateVolume {
     @FXML
     void initialize() {
         viewModel.setLog(new TxtLogger("./txtLog.log"));
-        final ChangeListener<Boolean> focusChangeListener = new ChangeListener<Boolean>() {
+        final ChangeListener<Boolean> focusChangeParamListener = new ChangeListener<Boolean>() {
             @Override
             public void changed(final ObservableValue<? extends Boolean> observable,
                                 final Boolean oldValue, final Boolean newValue) {
@@ -36,11 +36,11 @@ public class CalculateVolume {
             }
         };
         txtFirstParam.textProperty().bindBidirectional(viewModel.stringFirstParamProperty());
-        txtFirstParam.focusedProperty().addListener(focusChangeListener);
+        txtFirstParam.focusedProperty().addListener(focusChangeParamListener);
         txtSecondParam.textProperty().bindBidirectional(viewModel.stringSecondParamProperty());
-        txtSecondParam.focusedProperty().addListener(focusChangeListener);
+        txtSecondParam.focusedProperty().addListener(focusChangeParamListener);
         txtThirdParam.textProperty().bindBidirectional(viewModel.stringThirdParamProperty());
-        txtThirdParam.focusedProperty().addListener(focusChangeListener);
+        txtThirdParam.focusedProperty().addListener(focusChangeParamListener);
         cbFigure.valueProperty().bindBidirectional(viewModel.figureProperty());
         cbFigure.valueProperty().addListener(new ChangeListener<String>() {
             @Override
