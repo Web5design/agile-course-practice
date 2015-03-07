@@ -257,8 +257,8 @@ public class ViewModelTests {
         myView.figureProperty().set("Ellipsoid");
         setInputDataWhenThreeParam();
         myView.calculate();
-        String messages = myView.getLog().get(0);
-        assertTrue(messages.matches(".*Arguments"
+        String args = myView.getLog().get(0);
+        assertTrue(args.matches(".*Arguments"
                 + ".*" + myView.labelFirstParamNameProperty().get()
                 + ".*" + myView.labelSecondParamNameProperty().get()
                 + ".*" + myView.labelThirdParamNameProperty().get() + ".*"));
