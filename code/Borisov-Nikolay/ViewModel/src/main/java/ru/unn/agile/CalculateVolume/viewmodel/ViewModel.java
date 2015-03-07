@@ -31,7 +31,7 @@ public class ViewModel {
     private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
     private final List<ComboBoxElementChangeListener> comboBoxElementChangeListener =
             new ArrayList<>();
-    private List<ValCachChangeListener> valueCachingChangedListeners;
+    private List<ValCashChangeListener> valueCachingChangedListeners;
     private ILogger logger;
 
     public void setLog(final ILogger logger) {
@@ -95,9 +95,9 @@ public class ViewModel {
             }
         };
         for (StringProperty val : fieldsText) {
-            final ValCachChangeListener listenerCashing = new ValCachChangeListener();
-            val.addListener(listenerCashing);
-            valueCachingChangedListeners.add(listenerCashing);
+            final ValCashChangeListener listenerCash = new ValCashChangeListener();
+            val.addListener(listenerCash);
+            valueCachingChangedListeners.add(listenerCash);
         }
         for (StringProperty field : fieldsText) {
             final ValueChangeListener listener = new ValueChangeListener();
@@ -120,7 +120,7 @@ public class ViewModel {
         if (!oldVal && newVal) {
             return;
         }
-        for (ValCachChangeListener listener : valueCachingChangedListeners) {
+        for (ValCashChangeListener listener : valueCachingChangedListeners) {
             if (listener.isChanged()) {
                 StringBuilder message = new StringBuilder(LoggingInfo.FINIS_EDITD.toString());
                 message.append("Input arguments are: [")
@@ -148,9 +148,9 @@ public class ViewModel {
         updateLogs();
     }
 
-    private class ValCachChangeListener implements ChangeListener<String> {
-        private String lastVal = new String();
-        private String nowVal = new String();
+    private class ValCashChangeListener implements ChangeListener<String> {
+        private String lastValue = new String();
+        private String nowValue = new String();
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldVal, final String newVal) {
@@ -158,13 +158,13 @@ public class ViewModel {
                 return;
             }
             calculateStatus.set(getInputStatus().toString());
-            nowVal = newVal;
+            nowValue = newVal;
         }
         public boolean isChanged() {
-            return !lastVal.equals(nowVal);
+            return !lastValue.equals(nowValue);
         }
         public void cache() {
-            lastVal = nowVal;
+            lastValue = nowValue;
         }
     }
     private void updateLogs() {

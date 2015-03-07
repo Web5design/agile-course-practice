@@ -37,9 +37,9 @@ public class TxtLoggerTests {
         String[] messages = {"Message 1", "Message 2"};
         textLog.log(messages[0]);
         textLog.log(messages[1]);
-        List<String> nowMessages = textLog.getLog();
-        assertThat(nowMessages.get(0), matchesPattern(".*" + messages[0] + "$"));
-        assertThat(nowMessages.get(1), matchesPattern(".*" + messages[1] + "$"));
+        List<String> curMessages = textLog.getLog();
+        assertThat(curMessages.get(0), matchesPattern(".*" + messages[0] + "$"));
+        assertThat(curMessages.get(1), matchesPattern(".*" + messages[1] + "$"));
     }
     @Test
     public void doesLogContainDateAndTime() {

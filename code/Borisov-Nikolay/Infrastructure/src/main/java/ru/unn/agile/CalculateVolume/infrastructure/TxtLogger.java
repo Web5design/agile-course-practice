@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class TxtLogger implements ILogger {
     private static final String FORMAT_DATE_NOW = "yyyy-MM-dd HH:mm:ss";
-    private final BufferedWriter bufferWriter;
+    private final BufferedWriter logBufferWriter;
     private final String fileName;
     private static String now() {
         Calendar cal = Calendar.getInstance();
@@ -22,34 +22,34 @@ public class TxtLogger implements ILogger {
     }
     public TxtLogger(final String filename) {
         this.fileName = filename;
-        BufferedWriter loggerWriter = null;
+        BufferedWriter logWriter = null;
         try {
-            loggerWriter = new BufferedWriter(new FileWriter(filename));
+            logWriter = new BufferedWriter(new FileWriter(filename));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        bufferWriter = loggerWriter;
+        logBufferWriter = logWriter;
     }
     @Override
     public void log(final String s) {
         try {
-            bufferWriter.write(now() + " > " + s);
-            bufferWriter.newLine();
-            bufferWriter.flush();
+            logBufferWriter.write(now() + " > " + s);
+            logBufferWriter.newLine();
+            logBufferWriter.flush();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
     @Override
     public List<String> getLog() {
-        BufferedReader bufferReader;
+        BufferedReader lohBufferReader;
         ArrayList<String> log = new ArrayList<String>();
         try {
-            bufferReader = new BufferedReader(new FileReader(fileName));
-            String line = bufferReader.readLine();
+            lohBufferReader = new BufferedReader(new FileReader(fileName));
+            String line = lohBufferReader.readLine();
             while (line != null) {
                 log.add(line);
-                line = bufferReader.readLine();
+                line = lohBufferReader.readLine();
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
