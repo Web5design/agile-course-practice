@@ -5,6 +5,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ViewModelTests {
@@ -16,7 +18,9 @@ public class ViewModelTests {
 
     @Before
     public void setUp() {
-        viewModel = new ViewModel();
+        if (viewModel == null) {
+            viewModel = new ViewModel(new FakeLogger());
+        }
     }
 
     @After
@@ -191,6 +195,127 @@ public class ViewModelTests {
         viewModel.calculate();
         assertEquals(CalculateStatus.SUCCESS.toString(),
                 viewModel.calculateStatusProperty().get());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void viewModelConstructorThrowsExceptionIfLoggerNull() {
+        new ViewModel(null);
+    }
+
+    @Test
+    public void logIsEmptyInTheStart() {
+        List<String> log = viewModel.getLog();
+        assertTrue(log.isEmpty());
+    }
+
+    @Test
+    public void logContainsTrueMessageAfterCalculation() {
+        viewModel.figureProperty().set("Ellipsoid");
+        setInputDataWhenThreeParam();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + LoggingInfo.PRESSED_CALCULATE + ".*"));
+    }
+
+    @Test
+    public void logContainsTwoInputParametersAfterCalculation() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + viewModel.stringFirstParamProperty().get()
+                + ".*" + viewModel.stringSecondParamProperty().get() + ".*"));
+    }
+
+    @Test
+    public void logContainsThreeInputParametersAfterCalculation() {
+        viewModel.figureProperty().set("Ellipsoid");
+        setInputDataWhenThreeParam();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + viewModel.stringFirstParamProperty().get()
+                + ".*" + viewModel.stringSecondParamProperty().get()
+                + ".*" + viewModel.stringThirdParamProperty().get() + ".*"));
+    }
+
+    @Test
+     public void logContainsCorrectArgumentsWhenFigureCone() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Arguments"
+                + ".*" + viewModel.labelFirstParamNameProperty().get()
+                + ".*" + viewModel.labelSecondParamNameProperty().get() + ".*"));
+    }
+
+    @Test
+    public void logContainsCorrectArgumentsWhenFigureCylinder() {
+        viewModel.figureProperty().set("Cylinder");
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Arguments"
+                + ".*" + viewModel.labelFirstParamNameProperty().get()
+                + ".*" + viewModel.labelSecondParamNameProperty().get() + ".*"));
+    }
+
+    @Test
+    public void logContainsCorrectArgumentsWhenFigureEllipsoid() {
+        viewModel.figureProperty().set("Ellipsoid");
+        setInputDataWhenThreeParam();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Arguments"
+                + ".*" + viewModel.labelFirstParamNameProperty().get()
+                + ".*" + viewModel.labelSecondParamNameProperty().get()
+                + ".*" + viewModel.labelThirdParamNameProperty().get() + ".*"));
+    }
+
+    @Test
+    public void logContainsCorrectArgumentsWhenFigureParallelepiped() {
+        viewModel.figureProperty().set("Parallelepiped");
+        setInputDataWhenThreeParam();
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Arguments"
+                + ".*" + viewModel.labelFirstParamNameProperty().get()
+                + ".*" + viewModel.labelSecondParamNameProperty().get()
+                + ".*" + viewModel.labelThirdParamNameProperty().get() + ".*"));
+    }
+
+    @Test
+    public void figureTypeIsDisplayedInTheLog() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.calculate();
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*Cone.*"));
+    }
+    @Test
+    public void canDisplayFewLogMessages() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.calculate();
+        viewModel.calculate();
+        viewModel.calculate();
+        assertEquals(3, viewModel.getLog().size());
+    }
+
+    @Test
+    public void canDisplayOperationChangeInLog() {
+        viewModel.stringFirstParamProperty().set("1");
+        viewModel.stringSecondParamProperty().set("1");
+        viewModel.onOperationChanged("Cone", "Cylinder");
+        String message = viewModel.getLog().get(0);
+        assertTrue(message.matches(".*" + LoggingInfo.CHANGED_OPERATION + "Cylinder.*"));
+    }
+
+    @Test
+    public void calculateIsNotCalledWhenButtonIsDisabled() {
+        viewModel.calculate();
+        assertTrue(viewModel.getLog().isEmpty());
     }
 
     private void setInputDataWhenThreeParam() {
