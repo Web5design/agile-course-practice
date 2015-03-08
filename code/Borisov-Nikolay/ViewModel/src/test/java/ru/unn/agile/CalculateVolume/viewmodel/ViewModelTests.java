@@ -58,7 +58,7 @@ public class ViewModelTests {
     }
 
     @Test
-      public void thirdParamIsDisabledWhenFigureIsCone() {
+    public void thirdParamIsDisabledWhenFigureIsCone() {
         assertEquals(true, myView.thirdParamDisabledProperty().get());
     }
 
@@ -232,7 +232,7 @@ public class ViewModelTests {
     }
 
     @Test
-     public void logContainsCorrectArgumentsWhenFigureCone() {
+    public void logContainsCorrectArgumentsWhenFigureCone() {
         setInputDataWhenTwoParam();
         myView.calculate();
         String message = myView.getLog().get(0);
@@ -283,6 +283,7 @@ public class ViewModelTests {
         String message = myView.getLog().get(0);
         assertTrue(message.matches(".*Cone.*"));
     }
+
     @Test
     public void canDisplayFewLogMessages() {
         setInputDataWhenTwoParam();

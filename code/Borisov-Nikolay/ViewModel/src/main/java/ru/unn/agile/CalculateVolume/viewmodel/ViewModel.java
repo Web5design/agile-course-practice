@@ -44,6 +44,7 @@ public class ViewModel {
     public ViewModel() {
         initialization();
     }
+
     public ViewModel(final ILogger logger) {
         setLog(logger);
         initialization();
@@ -151,6 +152,7 @@ public class ViewModel {
     private class ValCashChangeListener implements ChangeListener<String> {
         private String lastValue = new String();
         private String nowValue = new String();
+
         @Override
         public void changed(final ObservableValue<? extends String> observable,
                             final String oldVal, final String newVal) {
@@ -160,13 +162,16 @@ public class ViewModel {
             calculateStatus.set(getInputStatus().toString());
             nowValue = newVal;
         }
+
         public boolean isChanged() {
             return !lastValue.equals(nowValue);
         }
+
         public void cache() {
             lastValue = nowValue;
         }
     }
+
     private void updateLogs() {
         List<String> fullLog = logger.getLog();
         String record = new String();
@@ -175,6 +180,7 @@ public class ViewModel {
         }
         calculateLogs.set(record);
     }
+
     public final List<String> getLog() {
         return logger.getLog();
     }

@@ -1,4 +1,4 @@
-apply from:   rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
+apply from: rootDir.getAbsolutePath() + '/code/config/scripts/javafx.plugin'
 
 dependencies {
     compile project(':Borisov-Nikolay-ViewModel')

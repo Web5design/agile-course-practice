@@ -1,6 +1,7 @@
 package ru.unn.agile.CalculateVolume.infrastructure;
 
 import ru.unn.agile.CalculateVolume.viewmodel.ILogger;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -15,11 +16,13 @@ public class TxtLogger implements ILogger {
     private static final String FORMAT_DATE_NOW = "yyyy-MM-dd HH:mm:ss";
     private final BufferedWriter logBufferWriter;
     private final String fileName;
+
     private static String now() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE_NOW, Locale.ENGLISH);
         return sdf.format(cal.getTime());
     }
+
     public TxtLogger(final String filename) {
         this.fileName = filename;
         BufferedWriter logWriter = null;
@@ -30,6 +33,7 @@ public class TxtLogger implements ILogger {
         }
         logBufferWriter = logWriter;
     }
+
     @Override
     public void log(final String s) {
         try {
@@ -40,6 +44,7 @@ public class TxtLogger implements ILogger {
             System.out.println(ex.getMessage());
         }
     }
+
     @Override
     public List<String> getLog() {
         BufferedReader lohBufferReader;
