@@ -5,25 +5,36 @@
 <?import javafx.scene.layout.*?>
 <?import ru.unn.agile.CalculateVolume.viewmodel.*?>
 
-<AnchorPane prefHeight="525.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.unn.agile.CalculateVolume.view.CalculateVolume">
-   <fx:define>
-       <ViewModel fx:id="viewModel"/>
-   </fx:define>
-   <children>
-       <Label layoutX="198.0" layoutY="28.0" prefHeight="21.0" prefWidth="245.0" text="Choose figure" />
-       <ComboBox layoutX="198.0" layoutY="58.0" prefHeight="31.0" prefWidth="245.0" fx:id="cbFigure" items="${viewModel.figures}"/>
+<AnchorPane prefHeight="855.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.unn.agile.CalculateVolume.view.CalculateVolume">
+    <fx:define>
+        <ViewModel fx:id="viewModel"/>
+    </fx:define>
+    <children>
+        <Label layoutX="198.0" layoutY="28.0" prefHeight="21.0" prefWidth="245.0" text="Choose figure"/>
+        <ComboBox layoutX="198.0" layoutY="58.0" prefHeight="31.0" prefWidth="245.0" fx:id="cbFigure"
+                  items="${viewModel.figures}"/>
 
-       <Label layoutX="198.0" layoutY="146.0" prefHeight="21.0" prefWidth="245.0" text="${viewModel.labelFirstParamName}" />
-       <TextField layoutX="198.0" layoutY="167.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtFirstParam"/>
-       <Label layoutX="198.0" layoutY="217.0" prefHeight="21.0" prefWidth="245.0" text="${viewModel.labelSecondParamName}" />
-       <TextField layoutX="198.0" layoutY="238.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtSecondParam"/>
-       <Label layoutX="198.0" layoutY="288.0" prefHeight="21.0" prefWidth="245.0" text="${viewModel.labelThirdParamName}" />
-       <TextField layoutX="198.0" layoutY="309.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtThirdParam" disable="${viewModel.thirdParamDisabled}"/>
+        <Label layoutX="198.0" layoutY="146.0" prefHeight="21.0" prefWidth="245.0"
+               text="${viewModel.labelFirstParamName}"/>
+        <TextField layoutX="198.0" layoutY="167.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtFirstParam"/>
+        <Label layoutX="198.0" layoutY="217.0" prefHeight="21.0" prefWidth="245.0"
+               text="${viewModel.labelSecondParamName}"/>
+        <TextField layoutX="198.0" layoutY="238.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtSecondParam"/>
+        <Label layoutX="198.0" layoutY="288.0" prefHeight="21.0" prefWidth="245.0"
+               text="${viewModel.labelThirdParamName}"/>
+        <TextField layoutX="198.0" layoutY="309.0" prefHeight="31.0" prefWidth="245.0" fx:id="txtThirdParam"
+                   disable="${viewModel.thirdParamDisabled}"/>
 
-       <Button defaultButton="true" layoutX="283.0" layoutY="372.0" mnemonicParsing="false" text="Calculate" fx:id="btnCalculateVolume" disable="${viewModel.calculateDisabled}"/>
-       <Label layoutX="198.0" layoutY="448.0" text="Result:" />
-       <Label layoutX="248.0" layoutY="444.0" prefHeight="21.0" prefWidth="186.0" text="${viewModel.calculateResult}"/>
-       <Label layoutX="198.0" layoutY="480.0" text="Status:" />
-       <Label layoutX="248.0" layoutY="476.0" prefHeight="21.0" prefWidth="186.0" text="${viewModel.calculateStatus}"/>
-   </children>
+        <Button defaultButton="true" layoutX="283.0" layoutY="372.0" mnemonicParsing="false" text="Calculate"
+                fx:id="btnCalculateVolume" disable="${viewModel.calculateDisabled}"/>
+        <Label layoutX="198.0" layoutY="448.0" text="Result:"/>
+        <Label layoutX="248.0" layoutY="444.0" prefHeight="21.0" prefWidth="186.0" text="${viewModel.calculateResult}"/>
+        <Label layoutX="198.0" layoutY="480.0" text="Status:"/>
+        <Label layoutX="248.0" layoutY="476.0" prefHeight="21.0" prefWidth="186.0" text="${viewModel.calculateStatus}"/>
+
+
+        <TextArea editable="false" layoutX="19.0" layoutY="507.0" prefHeight="324.0" prefWidth="602.0"
+                  text="${viewModel.calculateLogs}" VBox.vgrow="ALWAYS"/>
+    </children>
 </AnchorPane>

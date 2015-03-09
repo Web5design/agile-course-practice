@@ -7,6 +7,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ru.unn.agile.CalculateVolume.Model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ViewModel {
     private final StringProperty labelFirstParamName = new SimpleStringProperty();
     private final StringProperty labelSecondParamName = new SimpleStringProperty();
     private final StringProperty labelThirdParamName = new SimpleStringProperty();
+    private final StringProperty calculateLogs = new SimpleStringProperty();
     private final StringProperty figure = new SimpleStringProperty();
     private final ObjectProperty<ObservableList<String>> figures =
             new SimpleObjectProperty<>(FXCollections.
@@ -29,9 +31,26 @@ public class ViewModel {
     private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
     private final List<ComboBoxElementChangeListener> comboBoxElementChangeListener =
             new ArrayList<>();
+    private List<ValCashChangeListener> valueCachingChangedListeners;
+    private ILogger logger;
 
+    public void setLog(final ILogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger parameter can't be null");
+        }
+        this.logger = logger;
+    }
 
     public ViewModel() {
+        initialization();
+    }
+
+    public ViewModel(final ILogger logger) {
+        setLog(logger);
+        initialization();
+    }
+
+    private void initialization() {
         calculateStatus.set(CalculateStatus.WAITING.toString());
         calculateDisabled.set(true);
         thirdParamDisabled.set(true);
@@ -51,6 +70,7 @@ public class ViewModel {
                 super.bind(stringSecondParam);
                 super.bind(stringThirdParam);
             }
+
             @Override
             protected boolean computeValue() {
                 return getInputStatus() == CalculateStatus.READY;
@@ -61,29 +81,108 @@ public class ViewModel {
             {
                 super.bind(figure);
             }
+
             @Override
             protected boolean computeValue() {
                 return getInputStatus() == CalculateStatus.READY;
             }
         };
-        final List<StringProperty> fieldsText = new ArrayList<StringProperty>() { {
-            add(stringFirstParam);
-            add(stringSecondParam);
-            add(stringThirdParam);
-        } };
+        valueCachingChangedListeners = new ArrayList<>();
+        final List<StringProperty> fieldsText = new ArrayList<StringProperty>() {
+            {
+                add(stringFirstParam);
+                add(stringSecondParam);
+                add(stringThirdParam);
+            }
+        };
+        for (StringProperty val : fieldsText) {
+            final ValCashChangeListener listenerCash = new ValCashChangeListener();
+            val.addListener(listenerCash);
+            valueCachingChangedListeners.add(listenerCash);
+        }
         for (StringProperty field : fieldsText) {
             final ValueChangeListener listener = new ValueChangeListener();
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
-        final List<StringProperty> fieldsComboBox = new ArrayList<StringProperty>() { {
-            add(figure);
-        } };
+        final List<StringProperty> fieldsComboBox = new ArrayList<StringProperty>() {
+            {
+                add(figure);
+            }
+        };
         for (StringProperty field : fieldsComboBox) {
             final ComboBoxElementChangeListener listener = new ComboBoxElementChangeListener();
             field.addListener(listener);
             comboBoxElementChangeListener.add(listener);
         }
+    }
+
+    public void onFocusChanged(final Boolean oldVal, final Boolean newVal) {
+        if (!oldVal && newVal) {
+            return;
+        }
+        for (ValCashChangeListener listener : valueCachingChangedListeners) {
+            if (listener.isChanged()) {
+                StringBuilder message = new StringBuilder(LoggingInfo.FINIS_EDITD.toString());
+                message.append("Input arguments are: [")
+                        .append(stringFirstParam.get()).append("; ")
+                        .append(stringSecondParam.get());
+                if (!getThirdParamDisabled()) {
+                    message.append("; ").append(stringThirdParam.get());
+                }
+                message.append("] ");
+                logger.log(message.toString());
+                updateLogs();
+                listener.cache();
+                break;
+            }
+        }
+    }
+
+    public void onOperationChanged(final String oldValue, final String newValue) {
+        if (oldValue.equals(newValue)) {
+            return;
+        }
+        StringBuilder mes = new StringBuilder(LoggingInfo.CHANGED_OPERATION.toString());
+        mes.append(newValue.toString());
+        logger.log(mes.toString());
+        updateLogs();
+    }
+
+    private class ValCashChangeListener implements ChangeListener<String> {
+        private String lastValue = new String();
+        private String nowValue = new String();
+
+        @Override
+        public void changed(final ObservableValue<? extends String> observable,
+                            final String oldVal, final String newVal) {
+            if (oldVal.equals(newVal)) {
+                return;
+            }
+            calculateStatus.set(getInputStatus().toString());
+            nowValue = newVal;
+        }
+
+        public boolean isChanged() {
+            return !lastValue.equals(nowValue);
+        }
+
+        public void cache() {
+            lastValue = nowValue;
+        }
+    }
+
+    private void updateLogs() {
+        List<String> fullLog = logger.getLog();
+        String record = new String();
+        for (String log : fullLog) {
+            record += log + "\n";
+        }
+        calculateLogs.set(record);
+    }
+
+    public final List<String> getLog() {
+        return logger.getLog();
     }
 
     public StringProperty stringFirstParamProperty() {
@@ -132,6 +231,14 @@ public class ViewModel {
 
     public final String getLabelThirdParamName() {
         return labelThirdParamName.get();
+    }
+
+    public StringProperty calculateLogsProperty() {
+        return calculateLogs;
+    }
+
+    public final String getCalculateLogs() {
+        return calculateLogs.get();
     }
 
     public StringProperty figureProperty() {
@@ -205,6 +312,20 @@ public class ViewModel {
             calculateResult.set(Double.toString(parallelepiped.calculateVolume()));
         }
         calculateStatus.set(CalculateStatus.SUCCESS.toString());
+
+        StringBuilder message = new StringBuilder(LoggingInfo.PRESSED_CALCULATE.toString());
+        message.append("Arguments")
+                .append(": ").append(labelFirstParamName.get()).append(" = ")
+                .append(stringFirstParam.get())
+                .append("; ").append(labelSecondParamName.get()).append(" = ")
+                .append(stringSecondParam.get());
+        if (!getThirdParamDisabled()) {
+            message.append("; ").append(labelThirdParamName.get())
+                    .append(" = ").append(stringThirdParam.get());
+        }
+        message.append(" Figure: ").append(figure.get().toString()).append(".");
+        logger.log(message.toString());
+        updateLogs();
     }
 
     private CalculateStatus getInputStatus() {
@@ -244,6 +365,7 @@ public class ViewModel {
             calculateStatus.set(getInputStatus().toString());
         }
     }
+
     private class ComboBoxElementChangeListener implements ChangeListener<String> {
         @Override
         public void changed(final ObservableValue<? extends String> observable,
@@ -269,6 +391,7 @@ public class ViewModel {
             stringFirstParam.set("");
             stringSecondParam.set("");
             stringThirdParam.set("");
+            calculateResult.set("");
         }
     }
 }
@@ -286,5 +409,20 @@ enum CalculateStatus {
 
     public String toString() {
         return name;
+    }
+}
+
+enum LoggingInfo {
+    PRESSED_CALCULATE("Calculate. "),
+    CHANGED_OPERATION("Operation was changed to "),
+    FINIS_EDITD("Updated input. ");
+    private final String info;
+
+    private LoggingInfo(final String info) {
+        this.info = info;
+    }
+
+    public String toString() {
+        return info;
     }
 }

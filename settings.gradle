@@ -99,6 +99,8 @@ include "code/Borisov-Nikolay/ViewModel"
 project(":code/Borisov-Nikolay/ViewModel").name = "Borisov-Nikolay-ViewModel"
 include "code/Borisov-Nikolay/View"
 project(":code/Borisov-Nikolay/View").name = "Borisov-Nikolay-View"
+include "code/Borisov-Nikolay/Infrastructure"
+project(":code/Borisov-Nikolay/Infrastructure").name = "Borisov-Nikolay-Infrastructure"
 
 // Borodulina Ljubov
 include "code/borodulina-ljubov/Model"
